@@ -9,48 +9,19 @@ $(function(){
             showMap(data);
         },
         error:function(){
-            
+            alert("init error");
         }
     });
-    function showMap(data){
+    function showMap(datas){
         var color=new Array();
         var i;
-        for(i = 0; i < data.userMap.length; i++){
-            color[data.userMap[i][0]-1]=data.userMap[i][1];
+        for(i = 0; i < datas.userMap.length; i++){
+            color[datas.userMap[i][0]-1]=datas.userMap[i][1];
         }
         for(i=0; i< 35; i++){
             (typeof(color[i]) == "undefined") ? color[i]=0 : ""
         }
-        var data = [
-            {name: '海门', value: 9},
-            {name: '鄂尔多斯', value: 12},
-            {name: '招远', value: 12},
-            {name: '舟山', value: 12},
-            {name: '齐齐哈尔', value: 14},
-            {name: '盐城', value: 15},
-            {name: '赤峰', value: 16},
-            {name: '青岛', value: 18},
-            {name: '乳山', value: 18},
-            {name: '金昌', value: 19},
-            {name: '泉州', value: 21},
-            {name: '南通', value: 23},
-            {name: '拉萨', value: 24},
-            {name: '云浮', value: 24},
-            {name: '上海', value: 25},
-            {name: '攀枝花', value: 25},
-            {name: '承德', value: 25},
-            {name: '汕尾', value: 26},
-            {name: '丹东', value: 27},
-            {name: '瓦房店', value: 30},
-            {name: '延安', value: 38},
-            {name: '咸阳', value: 43},
-            {name: '南昌', value: 54},
-            {name: '柳州', value: 54},
-            {name: '三亚', value: 54},
-            {name: '泸州', value: 57},
-            {name: '克拉玛依', value: 72}
-        ];
-        var geoCoordMap = {
+        var data = {
            '海门':[121.15,31.89],
            '鄂尔多斯':[109.781327,39.608266],
            '招远':[120.38,37.35],
@@ -243,9 +214,11 @@ $(function(){
            '大庆':[125.03,46.58]
         };
         function convertData(data) {
-           var res = [];
-           for (var i = 0; i < data.length; i++) {
+/*           var res = [];
+           for (i = 0; i < data.length; i++) {
+               console.log("name->"+data[i].name);
                var geoCoord = geoCoordMap[data[i].name];
+               console.log("geo->"+geoCoord);
                if (geoCoord) {
                    res.push({
                        name: data[i].name,
@@ -253,12 +226,15 @@ $(function(){
                    });
                }
            }
-           return res;
+            for(i=0;i<res.length;i++){
+            console.log(res.pop(i));
+            }
+           return res;*/
         };
         var myChart=echarts.init(document.getElementById("personalmap"));
         option = {
             tooltip:{
-                formatter:"{b}:{c}"
+                formatter:"{b} : {c}"
             },
             visualMap: {
                 min: 0,
@@ -268,7 +244,7 @@ $(function(){
                 //text: ['High','Low'],
                 seriesIndex: [1],   //collect data from series
                 inRange: {
-                    color: ['#f2f2f2', '#0A1451']
+                    color: ['#f0f0f0', '#0A1451']
                 },
                 calculable : true   //triangle and the limit number
             },
@@ -287,6 +263,7 @@ $(function(){
                         }
                     },
                     emphasis:{
+                        show: false,
                         textStyle:{
                             color:'rgba(255,255,255)'
                         }
@@ -302,11 +279,12 @@ $(function(){
                         shadowBlur: 20,
                         shadowColor: 'rgba(0, 0, 0, 0.5)',
                         borderWidth: 0,
-                        color:'#fff', //highlight color
+                        color:'#0A1451', //highlight color
                     }
                 }
             },
-            series : [{
+            series : [
+            {
                type: 'scatter',
                coordinateSystem: 'geo',
                data: convertData(data),
@@ -327,11 +305,10 @@ $(function(){
                    }
                }*/
             },
-            {
-                name: '',
+                {
+                name: 'color of each province',
                 type: 'map',
                 geoIndex: 0,
-                // tooltip: {show: false},
                 data:[
                     {name: '安徽', value: color[0]},
                     {name: '澳门', value: color[1]},
