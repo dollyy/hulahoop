@@ -1,0 +1,31 @@
+html,body{
+    height: 100%;
+}
+#container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+#strategyMap,#strategyPie{
+    flex: 1;
+}
+#strategyMap{
+    /*display: none;*/
+}
+#strategyPie{
+    display: none;
+}
+#pageDot{
+    padding-top: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+#mapDot,#pieDot{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: red;
+    margin-right: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
