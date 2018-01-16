@@ -1,0 +1,15 @@
+$(function(){
+    $("#signin").click(function(){
+        $("#signinContainer").slideDown();
+        $("#bg").slideDown();
+    });
+    $("#signup").click(function(){
+        $("#signupContainer").slideDown();
+        $("#bg").slideDown();
+    });
+    $("#bg").click(function(){
+        $(this).slideUp();
+        $("#signinContainer").slideUp();
+        $("#signupContainer").slideUp();
+    })
+});

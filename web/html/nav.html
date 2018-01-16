@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nav</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/nav.css">
+</head>
+<body>
+   <div id="bg"></div>
+   <!--导航-->
+    <nav>
+        <a>hulahoop</a>
+        <span id="sign">
+            <span id="signin">登录</span>
+            <span id="signup">注册</span>
+        </span>
+    </nav>
+    <!--登录容器-->
+    <div id="signinContainer">
+        <input type="text" id="username" name="username" placeholder="Username"><br>
+        <span id="userwarn"></span><br>
+        <input type="text" id="password" name="password" placeholder="Password"><br>
+        <span id="pwdwarn"></span><br>
+        <input type="button" id="btnSubmit" value="登录">
+    </div>
+    <!--注册容器-->
+    <div id="signupContainer">
+        <input type="text" id="username" name="username" placeholder="input username"><br>
+        <input type="text" id="password" name="password" placeholder="input password"><br>
+        <input type="text" id="passwordRe" name="passwordRe" placeholder="input password"><br>
+        <input type="button" id="btnSubmit" value="注册">
+    </div>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/nav.js"></script>
+</body>
+</html>

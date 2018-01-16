@@ -102,7 +102,7 @@ $(function(){
                 //text: ['High','Low'],
                 seriesIndex: [1],   //collect data from series
                 inRange: {
-                    color: ['#f0f0f0', '#0A1451']
+                    color: ['#d8dcf9', '#0A1451']
                 },
                 calculable : true   //triangle and the limit number
             },
@@ -125,7 +125,7 @@ $(function(){
                     emphasis:{
                         shadowBlur: 20,
                         shadowColor: 'rgba(0, 0, 0, 0.5)',
-                        color:'#0A1451', //highlight color
+                        color:'#000211', //highlight color
                     }
                 }
             },

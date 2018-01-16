@@ -1,13 +1,13 @@
-html,body{
-    height: 100%;
-}
 #container{
     height: 100%;
     display: flex;
     flex-direction: column;
 }
-#strategyMap,#strategyPie{
+#echarts{
     flex: 1;
+}
+#strategyMap,#strategyPie{
+    height: 100%;
 }
 #strategyMap{
     /*display: none;*/

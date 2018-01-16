@@ -3,3 +3,6 @@
     margin: 0;
     font-family: "Microsoft Yahei";
 }
+html,body{
+    height: 100%;
+}
