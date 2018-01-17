@@ -9,21 +9,68 @@
 }
 /*nav*/
 nav{
-    padding: 20px 50px;
+    padding: 5px 50px;
     background: #f2f2f2;
     box-shadow: 0px 2px 10px #666;
+    font-size: 14px;
+    line-height: 50px;
 }
-#sign{
+nav img{
+    height: 45px;
+    vertical-align: middle;
+}
+#sign,#userIcon{
     position: absolute;
-    right: 50px;
+    right: 30px;
 }
-#signin{
+#userIcon{
+    display: none;
+}
+#signin,#signup,#userIcon img,#msgTip{
     margin-right: 20px;
+    vertical-align: middle;
 }
-#signin,#signup{
+#signin,#signup,#logout{
     cursor: pointer;
 }
-/*signin*/
+#userIcon img{
+    height: 40px;
+    border-radius: 50%;
+}
+#msgTip{
+    display: inline-block;
+    position: relative;
+}
+#msgDot{
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 16px;
+    right: 3px;
+}
+/* back to top */
+#backTop{
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    display: none;
+}
+#backTop span{
+    display: inline-block;
+    width: 15px;
+    line-height: 12px;
+    color: #E95C8F;
+    font-size: 10px;
+    font-weight: bold;
+}
+#toTop{
+    width: 50px;
+    cursor: pointer;
+}
+/*signinContainer + signupContainer*/
 #signinContainer,#signupContainer{
     width: 40%;
     height: auto;

@@ -5,15 +5,24 @@
     <title>nav</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../font/iconfont.css">
 </head>
 <body>
    <div id="bg"></div>
    <!--导航-->
     <nav>
-        <a>hulahoop</a>
+        <a><img src="../images/icon1.jpg"></a>
         <span id="sign">
             <span id="signin">登录</span>
             <span id="signup">注册</span>
+        </span>
+        <span id="userIcon">
+            <img src="../images/icon2.jpg">
+            <span id="msgTip">
+                <span class="iconfont icon-lingdang"></span>
+                <span id="msgDot"></span>
+            </span>
+            <span id="logout">退出</span>
         </span>
     </nav>
     <!--登录容器-->
@@ -26,11 +35,17 @@
     </div>
     <!--注册容器-->
     <div id="signupContainer">
-        <input type="text" id="username" name="username" placeholder="input username"><br>
-        <input type="text" id="password" name="password" placeholder="input password"><br>
-        <input type="text" id="passwordRe" name="passwordRe" placeholder="input password"><br>
+        <input type="text" id="username" name="username" placeholder="Username"><br>
+        <input type="text" id="password" name="password" placeholder="Password"><br>
+        <input type="text" id="passwordRe" name="passwordRe" placeholder="Password again"><br>
         <input type="button" id="btnSubmit" value="注册">
     </div>
+    <!--up to top-->
+    <div id="backTop">
+        <img id="toTop" src="../images/toTop.png" title="back to top">
+        <span>返回顶部</span>
+    </div>
+    
     <script src="../js/jquery-3.2.1.min.js"></script>
     <script src="../js/nav.js"></script>
 </body>

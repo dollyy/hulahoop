@@ -11,5 +11,18 @@ $(function(){
         $(this).slideUp();
         $("#signinContainer").slideUp();
         $("#signupContainer").slideUp();
-    })
+    });
+    /* toggle toTop icon*/
+    $(window).scroll(function(){
+        var heightTop=$(window).scrollTop();
+        if(heightTop > 300){
+            $("#backTop").slideDown();
+        }else{
+            $("#backTop").slideUp();
+        }
+    });
+    /* back to top */
+    $("#toTop").click(function(){
+        $("body,html").animate({scrollTop:0},500);
+    });
 });

@@ -1,0 +1,15 @@
+.HolyGrail{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+header{
+    height: 60px;
+}
+footer{
+    height: 65px;
+}
+.HolyGrailBody{
+    display: flex;
+    flex: 1;
+}
