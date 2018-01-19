@@ -72,7 +72,7 @@ nav img{
 }
 /*signinContainer + signupContainer*/
 #signinContainer,#signupContainer{
-    width: 40%;
+    width: 300px;
     height: auto;
     position: absolute;
     top: 50%;
