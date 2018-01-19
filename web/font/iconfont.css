@@ -19,6 +19,7 @@
     content: "\e8c0";
     font-size: 22px;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .icon-yihuifu_fuzhi:before {

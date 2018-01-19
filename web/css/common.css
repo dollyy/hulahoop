@@ -10,3 +10,29 @@ a{
     text-decoration: none;
     color: #000;
 }
+.tips{
+    min-width: 100px;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    background: #fff;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px dotted #00728a;
+    display: none;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.warnBorder{
+    border: 1px solid red;
+}
+.mr10{
+    margin-right: 10px;
+}
+.mr20{
+    margin-right: 20px;
+}

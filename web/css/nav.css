@@ -27,15 +27,18 @@ nav img{
     display: none;
 }
 #signin,#signup,#userIcon img,#msgTip{
-    margin-right: 20px;
     vertical-align: middle;
 }
 #signin,#signup,#logout{
     cursor: pointer;
 }
+#signin:hover,#signup:hover,#logout:hover{
+    text-shadow: 0 0 6px #666;
+}
 #userIcon img{
     height: 40px;
     border-radius: 50%;
+    cursor: pointer;
 }
 #msgTip{
     display: inline-block;
@@ -83,4 +86,10 @@ nav img{
     padding: 50px 0;
     text-align: center;
     display: none;
+}
+#signupContainer{
+    display: none;
+}
+.tips{
+    z-index: 3;
 }
