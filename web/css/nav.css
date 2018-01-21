@@ -1,7 +1,9 @@
+.tips{
+    z-index: 4;
+}
 /*bg*/
 #bg{
     width: 100%;
-    height: 100%;
     position: absolute;
     z-index: 2;
     background: rgba(0,0,0,0.5);
@@ -27,15 +29,18 @@ nav img{
     display: none;
 }
 #signin,#signup,#userIcon img,#msgTip{
-    margin-right: 20px;
     vertical-align: middle;
 }
 #signin,#signup,#logout{
     cursor: pointer;
 }
+#signin:hover,#signup:hover,#logout:hover{
+    text-shadow: 0 0 6px #999;
+}
 #userIcon img{
     height: 40px;
     border-radius: 50%;
+    cursor: pointer;
 }
 #msgTip{
     display: inline-block;
@@ -72,15 +77,50 @@ nav img{
 }
 /*signinContainer + signupContainer*/
 #signinContainer,#signupContainer{
-    width: 300px;
-    height: auto;
+    width: 400px;
+    height: 235px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     background: #fff;
     z-index: 3;
-    padding: 50px 0;
-    text-align: center;
+    border-radius: 10px;
     display: none;
 }
+#signinContainer{
+    background: url("../images/signin.jpg");
+}
+#inName,#inPwd,#inBtn{
+    position: relative;
+    top: 65px;
+    left: 75px;
+    margin-bottom: 10px;
+}
+#signupContainer{
+    width: 254px;
+    background: url(../images/signup.jpg);
+    text-align: center;
+}
+#upName,#upPwd,#upPwdRe,#upEmail,#upBtn{
+    position: relative;
+    top: 55px;
+    margin-bottom: 10px;
+}
+#inBtn,#upBtn{
+    width: 157px;
+}
+#signinContainer>div,#signupContainer>div{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+#goUp,#goIn{
+    cursor: pointer;
+    color: #fff;
+    font-size: 13px;
+}
+#goUp:hover,#goIn:hover{
+    text-shadow: 0 0 5px #fff;
+}
+/**/

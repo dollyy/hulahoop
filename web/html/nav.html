@@ -8,17 +8,19 @@
     <link rel="stylesheet" href="../font/iconfont.css">
 </head>
 <body>
+   <div class="tips"></div>
    <div id="bg"></div>
    <!--导航-->
     <nav>
-        <a><img src="../images/icon1.jpg"></a>
+        <a href="index.html"><img src="../images/icon1.jpg"></a>
         <span id="sign">
-            <span id="signin">登录</span>
-            <span id="signup">注册</span>
+            <span class="mr20" id="signin">登录</span>
+            <span class="mr20" id="signup">注册</span>
         </span>
         <span id="userIcon">
-            <img src="../images/icon2.jpg">
-            <span id="msgTip">
+            <img class="mr10" src="">
+            <span class="mr20" id="username"></span>
+            <span class="mr20" id="msgTip">
                 <span class="iconfont icon-lingdang"></span>
                 <span id="msgDot"></span>
             </span>
@@ -26,24 +28,35 @@
         </span>
     </nav>
     <!--登录容器-->
-    <div id="signinContainer">
-        <input type="text" id="username" name="username" placeholder="Username"><br>
+    <form id="signinContainer">
+        <div>
+            <span id="goUp">去注册</span>
+            <span class="iconfont icon-feiji"></span>
+        </div>
+        <input type="text" id="inName" name="username" value="" placeholder="Username"><br>
         <span id="userwarn"></span><br>
-        <input type="text" id="password" name="password" placeholder="Password"><br>
+        <input type="text" id="inPwd" name="password" value="" placeholder="Password"><br>
         <span id="pwdwarn"></span><br>
-        <input type="button" id="btnSubmit" value="登录">
-    </div>
+        <input type="button" id="inBtn" value="登录">
+    </form>
     <!--注册容器-->
-    <div id="signupContainer">
-        <input type="text" id="username" name="username" placeholder="Username"><br>
-        <input type="text" id="password" name="password" placeholder="Password"><br>
-        <input type="text" id="passwordRe" name="passwordRe" placeholder="Password again"><br>
-        <input type="button" id="btnSubmit" value="注册">
-    </div>
+    <form id="signupContainer">
+        <div>
+            <span id="goIn">去登录</span>
+            <span class="iconfont icon-feiji"></span>
+        </div>
+        <div class="upHead"></div>
+        <input type="text" id="upName" name="username" value="" placeholder="Username"><br>
+        <input type="text" id="upPwd" name="password" value="" placeholder="Password"><br>
+        <input type="text" id="upPwdRe" name="passwordRe" value="" placeholder="Password again"><br>
+        <input type="text" id="upEmail" name="email" value="" placeholder="Email"><br>
+        <input type="button" id="upBtn" value="注册">
+        <div class="upTail"></div>
+    </form>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!--up to top-->
     <div id="backTop">
-        <img id="toTop" src="../images/toTop.png" title="back to top">
+        <img id="toTop" src="../images/toTop.png" title="返回顶部">
         <span>返回顶部</span>
     </div>
     
