@@ -108,7 +108,7 @@ nav img{
     margin-bottom: 10px;
 }
 #inBtn,#upBtn{
-    width: 157px;
+    height: 23px;
 }
 #signinContainer>div,#signupContainer>div{
     position: absolute;

@@ -1,0 +1,83 @@
+/* catalog */
+.catalog,.content{
+    width: 80%;
+    height: auto;
+    background: #fff;
+    position: relative;
+    border-radius: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    padding: 15px 25px;
+    box-sizing: border-box;
+}
+.provinceTab,.DurationTab{
+    display: flex;
+}
+.provinceTab>span:first-child,.DurationTab>span:first-child{
+    display: inline-block;
+    font-weight: bold;
+    margin: 10px 15px 0 0;
+}
+.province,.duration{
+    flex: 1;
+}
+.province>span,.duration>span{
+    display: inline-block;
+    min-width: 65px;
+    height: 23px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 10px;
+    line-height: 23px;
+    cursor: pointer;
+}
+
+/* content */
+.content{
+    overflow: hidden;
+}
+.container{
+    width: 25%;
+    height: auto;
+    float: left;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.strategy{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background: #f2f2f2;
+    border-radius: 10px;
+    border: 2px dotted #333;
+}
+.strategy img{
+    width: 98px;
+    border-radius: 10px;
+}
+.s_msg{
+    font-size: 13px;
+    margin: 0 5px;
+}
+.s_msg>div{
+    margin: 5px 0;
+}
+.s_msg>div>span:nth-child(2){
+    font-weight: bold;
+}
+@media (max-width:750px){
+    .container{
+        width: 50%;
+    }
+}
+@media (min-width:750px) and (max-width:1000px){
+    .container{
+        width: 33%;
+    }
+}
+@media (min-width:1200px){
+    .container{
+        width: 20%;
+    }
+}
