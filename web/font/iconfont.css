@@ -17,11 +17,13 @@
 
 .icon-ren:before { 
     content: "\e682";
+    margin-right: 10px;
 }
 
 .icon-icontag:before {
     content: "\e61d";
     color: yellow;
+    margin-right: 10px;
 }
 
 .icon-lingdang:before {
@@ -34,6 +36,7 @@
 .icon-dizhi:before {
     content: "\e63e";
     color: red;
+    margin-right: 10px;
 }
 
 .icon-feiji:before {

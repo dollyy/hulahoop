@@ -19,7 +19,7 @@ input{
     width: 157px;
     box-sizing: border-box;
 }
-input[type="button"]{
+select,input{
     outline: none;
     cursor: pointer;
 }
@@ -48,8 +48,4 @@ input[type="button"]{
 }
 .mr20{
     margin-right: 20px;
-}
-.hover{
-    background: #333;
-    color: #fff;
 }

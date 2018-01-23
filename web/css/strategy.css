@@ -3,39 +3,30 @@
     width: 80%;
     height: auto;
     background: #fff;
-    position: relative;
     border-radius: 10px;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 30px;
     padding: 15px 25px;
     box-sizing: border-box;
+    box-shadow: 0 0 15px #999;
 }
-.provinceTab,.DurationTab{
+.catalog{
+    position: fixed;
+    top: 20px;
+    z-index: 2;
     display: flex;
+    justify-content: space-between;
 }
-.provinceTab>span:first-child,.DurationTab>span:first-child{
-    display: inline-block;
-    font-weight: bold;
-    margin: 10px 15px 0 0;
-}
-.province,.duration{
-    flex: 1;
-}
-.province>span,.duration>span{
-    display: inline-block;
-    min-width: 65px;
-    height: 23px;
-    border-radius: 5px;
-    text-align: center;
-    margin: 10px;
-    line-height: 23px;
-    cursor: pointer;
+.js-example-basic-single{
+    width: 260px;
 }
 
 /* content */
 .content{
     overflow: hidden;
+    position: relative;
+    top: 120px;
+    margin-bottom: 30px;
 }
 .container{
     width: 25%;
@@ -50,10 +41,16 @@
     height: 100%;
     background: #f2f2f2;
     border-radius: 10px;
-    border: 2px dotted #333;
+    cursor: pointer;
+    box-shadow: 0 0 10px #999;
+    transition: all 0.3s linear;
+}
+.strategy:hover{
+    box-shadow: 0 0 30px #999;
+    transition: all 0.3s linear;
 }
 .strategy img{
-    width: 98px;
+    width: 100%;
     border-radius: 10px;
 }
 .s_msg{
@@ -69,6 +66,13 @@
 @media (max-width:750px){
     .container{
         width: 50%;
+    }
+    .catalog{
+        flex-direction: column;
+        align-items: center;
+    }
+    .provTab{
+        margin-bottom: 20px;
     }
 }
 @media (min-width:750px) and (max-width:1000px){
