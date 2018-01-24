@@ -46,7 +46,14 @@
     color: #fff;
 }
 
-.icon-zan11:before { content: "\e603"; }
+.icon-zan11:before { 
+    content: "\e603"; 
+    vertical-align: sub;
+    cursor: pointer;
+}
 
-.icon-zan1:before { content: "\e604"; }
+.icon-zan1:before { 
+    content: "\e604";
+    cursor: pointer;
+}
 

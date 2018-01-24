@@ -1,6 +1,5 @@
 var level;   //level of each comment; 
 $(function(){
-    
     //list all the comments --start
     $.ajax({
 /*        type:"post",
@@ -27,7 +26,7 @@ $(function(){
                     ["2.3","4","4","user4","4","user1","emmmm","2017-12-11 12:11:18",'0','4']
                 ]
             ]};
-            console.log(JSON.stringify(data));
+            //console.log(JSON.stringify(data));
             
             var commentPadding;   //padding-left of each comment
             for(var i=0;i<data.comments.length;i++){
@@ -37,7 +36,7 @@ $(function(){
                     level=data.comments[i][j][0];
                     commentPadding=(level.indexOf(".") != -1) ? 40*(level.split(".").length-1) : 0; //calculate the padding-left                    
                     //add each div
-                    $(".comment"+i).append("<div class='each' level='"+level+"'><div><div class='user' style='padding-left: "+commentPadding+"px'><img src='../images/icon"+data.comments[i][j][1]+".jpg'><span class='responseUid' uid='"+data.comments[i][j][2]+"'>"+data.comments[i][j][3]+"</span></div><div class='content'><div><span class='response'>"+(data.comments[i][j][4] == 0 ? "" : "@"+data.comments[i][j][5])+"</span><span>"+data.comments[i][j][6]+"</span></div><div class='operation'><span class='commentTime'>"+data.comments[i][j][7]+"</span><span class='addComment'>回复</span><i class='iconfont icon-zan1'>"+data.comments[i][j][8]+"</i><i class='iconfont icon-zan11'>"+data.comments[i][j][9]+"</i></div></div></div><div class='commentContent' style='padding-left: "+commentPadding+"px'><div><span class='currentUser'>currentuser</span><textarea class='currentComment'></textarea></div><div class='btns'><input type='button' class='btnAdd' value='add'><input type='button' class='btnCancle' value='cancle'></div></div></div>");
+                    $(".comment"+i).append("<div class='each' level='"+level+"'><div><div class='user' style='padding-left: "+commentPadding+"px'><img src='../images/icon"+data.comments[i][j][1]+".jpg'><span class='responseUid' uid='"+data.comments[i][j][2]+"'>"+data.comments[i][j][3]+"</span></div><div class='content'><div><span class='response'>"+(data.comments[i][j][4] == 0 ? "" : "@"+data.comments[i][j][5])+"</span><span>"+data.comments[i][j][6]+"</span></div><div class='operation'><span class='commentTime'>"+currentTime()+"</span><i class='iconfont icon-zan11'></i><span class='for'>0</span><i class='iconfont icon-zan1'></i><span class='against'>0</span><span class='addComment'>回复</span></div></div></div><div class='commentContent' style='padding-left: "+commentPadding+"px'><div><span class='currentUser'>currentuser</span><textarea class='currentComment'></textarea></div><div class='btns'><input type='button' class='btnAdd' value='add'><input type='button' class='btnCancle' value='cancle'></div></div></div>");
                     
                     //click 回复 to show the addComment div
                     $(".addComment").unbind("click").bind("click",showAddComment);
@@ -49,10 +48,10 @@ $(function(){
                     $(".btnAdd").unbind("click").bind("click",addComment);
                     
                     //click against, add against number
-                    $(".icon-zan1").unbind("click").bind("click",operateNumber);
+                    $(".icon-zan1").unbind("click").bind("click",calNumber);
                     
                     //click for, add for number
-                    $(".icon-zan11").unbind("click").bind("click",operateNumber);
+                    $(".icon-zan11").unbind("click").bind("click",calNumber);
                 }
             }
         },
@@ -147,30 +146,15 @@ function formatNum(num){
 //format number --end
 
 //operate for or against --start
-function operateNumber(){
-    var prevClass=$(this).prev().attr("class");
-    var nextClass=$(this).next().attr("class");
-    if(nextClass && (nextClass.indexOf("colorBlack") != -1)){
-        $(".tips").html("already clicked against").show().fadeOut(2000);
-        return;
-    }else if(prevClass && (prevClass.indexOf("colorBlack") != -1)){
-        $(".tips").html("already clicked for").show().fadeOut(2000);
+function calNumber(){
+    var that=$(this);
+    if(!operateNumber(that)){
         return;
     }
-    var number=$(this).html();
-    if($(this).attr("class").indexOf("colorBlack") != -1){
-        $(this).removeClass("colorBlack");
-        $(this).html(--number);
-    }else{
-        $(this).addClass("colorBlack");
-        $(this).html(++number);
-    }
-    var numberType="for";
-    if($(this).attr("class").indexOf("icon-zan11") != -1){
-        numberType="against";
-    }
-    level=$(this).parent().parent().parent().parent().attr("level");
-    console.log(level+","+numberType+","+number);
+    var numberType=that.attr("class").indexOf("icon-zan11") != -1 ? "against" : "for"
+    var number=that.next().html();
+    var level=that.parent().parent().parent().parent().attr("level");
+    console.log(numberType,number,level);
     $.ajax({
 /*        type:"post",
         url:"",

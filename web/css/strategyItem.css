@@ -1,41 +1,97 @@
-nav,.content,.comments{
-    width: 80%;
-    height: auto;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
+/* ---catalog start--- */
+.catalog{
+    float: left;
+    background: #fff;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px #999;
+    position: fixed;
+}
+.current{
+    color: #00728a;
+    font-weight: bold;
+}
+/* ---catalog end--- */
+
+.ItemRight{
+    width: 90%;
+    float: right;
+    border-radius: 10px;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
 }
 nav{
-    margin: 50px 0 5px 0;
-    padding: 0 5px;
-    box-sizing: border-box;
+    margin-bottom: 5px;
+    padding-left: 5px;
     font-size: 14px;
 }
-.content,.comments{
-    height: 100px;
-    background: #fff;
-    border-radius: 10px;
+
+/* ---content start--- */
+.content{
     margin-bottom: 20px;
 }
+.day{
+    background: #fff;
+}
+.day:first-child{
+    border-radius: 10px 10px 0 0;
+}
+.content div:nth-child(5){
+    border-radius: 0 0 10px 10px;
+}
+#day1,#day2,#day3,#day4,#day5{
+    padding: 10px;
+    box-sizing: border-box;
+}
+.dayTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+.commentTitle{
+    font-size: 20px;
+    border-bottom: 2px solid #00728a;
+    margin: 10px 0 0 0;
+    color: #666;
+    background: none;
+}
+/* ---content end--- */
+
+/* ---conmment start--- */
 .comments{
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    height: auto;
     padding: 10px;
     box-sizing: border-box;
 }
 .comment{
     height: auto;
-    background: #f2f2f2;
+    box-sizing: border-box;
     display: flex;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-bottom: 1px dashed #ccc;
+}
+.comments>div:last-child{
+    border: none;
+    margin-bottom: 0;
 }
 .comment img{
     height: 50px;
     border-radius: 50%;
     border: 2px solid #999;
     box-sizing: border-box;
-    margin-right: 20px;
+    margin-right: 15px;
 }
 .response{
     flex: 1;
-    background: lightblue;
+    overflow: hidden;
 }
 .commInfo{
     font-size: 12px;
@@ -43,32 +99,16 @@ nav{
 }
 .commContent{
     font-size: 15px;
-    margin: 10px 0;
+    margin: 5px 0 10px 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.commOperation{
+    font-size: 12px;
+    float: right;
+    color: #666;
+}
+/* ---conmment end--- */

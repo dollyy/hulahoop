@@ -57,14 +57,13 @@
     font-size: 13px;
     color: #666;
     margin: 10px 0;
-}
-.commentTime{
-    cursor: pointer;
-}
-.icon-zan11,.icon-zan1,.addComment{
-    margin-right: 10px;
-    cursor: pointer;
     float: right;
+}
+.commentTime,.icon-zan11,.icon-zan1,.addComment{
+    cursor: pointer;
+}
+.commentTime,.against,.for,.addComment{
+    margin-right: 10px;
 }
 /*list comments --end*/
 
@@ -94,6 +93,3 @@
     float: right;
 }
 /*addcomment div --end*/
-.colorBlack{
-    color: #000;
-}

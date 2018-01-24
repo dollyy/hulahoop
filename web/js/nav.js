@@ -4,20 +4,6 @@
 //******4.check whether the username is valid when signup
 $(function(){
     $("#bg").height($(document).height());
-    /* 1. to top */
-    /* toggle toTop icon*/
-    $(window).scroll(function(){
-        var heightTop=$(window).scrollTop();
-        if(heightTop > 300){
-            $("#backTop").slideDown();
-        }else{
-            $("#backTop").slideUp();
-        }
-    });
-    /* back to top */
-    $("#toTop").click(function(){
-        $("body,html").animate({scrollTop:0},500);
-    });
     
     $("#goUp").hover(function(){
         $(".icon-feiji").css("transform","rotateZ(-45deg)");
@@ -73,13 +59,26 @@ $(function(){
             $(".tips").html("please input username").show().fadeOut(3000);
             $("#upName").addClass("warnBorder");
         }else{
+/*            var data=packageAjax("post","",{"username":upName},"text");
+            if(data){
+                if(data == 1){
+                    upNameFlag=false;
+                    $("#upName").removeClass("warnBorder");
+                }else{
+                    upNameFlag==true;
+                    $(".tips").html("username has been used").show().fadeOut(3000);
+                    $("#upName").addClass("warnBorder");
+                }
+            }else{
+                alert("nameValid error");
+            }*/
             $.ajax({
 /*                type:"post",
                 url:"",
                 data:{"username":upName},
                 dataType:"text",*/
                 success:function(data){
-                    var data=1;
+                    var data=-1;
                     if(data == 1){
                         upNameFlag=false;
                         $("#upName").removeClass("warnBorder");

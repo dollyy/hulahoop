@@ -8,11 +8,30 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/strategy.css">
 </head>
-<body>
-    <div class="catalog">
-        <span class="provTab">省份: <select class="js-example-basic-single province" name="state"><option value="0">全部</option></select></span>
-        <span class="durTab">时长: <select class="js-example-basic-single duration" name="state"><option>全部</option></select></span>
+<body class="plf20">
+   <!--up to top-->
+    <div id="backTop">
+        <img id="toTop" src="../images/toTop.png" title="返回顶部">
+        <span>返回顶部</span>
     </div>
+    
+    <!-- catalog -->
+    <div class="catalog">
+        <div class="provTab mb10">
+            省份: 
+            <select class="js-example-basic-single province" name="state">
+                <option value="0">全部</option>
+            </select>
+        </div>
+        <div class="durTab">
+            时长: 
+            <select class="js-example-basic-single duration" name="state">
+                <option>全部</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- content -->
     <div class="content">
 <!--        <div class="container">
             <div class="strategy">
@@ -38,5 +57,6 @@
     <script src="../js/jquery-3.2.1.min.js"></script>
     <script src="../select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
     <script src="../js/strategy.js"></script>
+    <script src="../js/common.js"></script>
 </body>
 </html>

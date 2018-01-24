@@ -7,10 +7,13 @@ html,body{
     height: 100%;
     background: #f2f2f2;
 }
+/* No1.a */
 a{
     text-decoration: none;
     color: #000;
 }
+
+/* No2.input */
 input{
     height: 21px;
     padding-left: 5px;
@@ -18,11 +21,38 @@ input{
     border: none;
     width: 157px;
     box-sizing: border-box;
+    outline: none;
 }
-select,input{
+select{
     outline: none;
     cursor: pointer;
 }
+
+/* No3.border*/
+.warnBorder{
+    border: 1px solid red;
+}
+
+/* No4.margin */
+.mr10{
+    margin-right: 10px;
+}
+.mr20{
+    margin-right: 20px;
+}
+.mb10{
+    margin-bottom: 10px;
+}
+.mtb10{
+    margin: 10px 0;
+}
+
+/* No5.color */
+.colorBlack{
+    color: #000;
+}
+
+/* No6.tips */
 .tips{
     min-width: 100px;
     height: 40px;
@@ -40,12 +70,33 @@ select,input{
     padding: 0 10px;
     box-sizing: border-box;
 }
-.warnBorder{
-    border: 1px solid red;
+
+/* No7.back to top */
+#backTop{
+    position: fixed;
+    left: 20px;
+    bottom: 30px;
+    display: none;
 }
-.mr10{
-    margin-right: 10px;
+#backTop span{
+    display: inline-block;
+    width: 15px;
+    line-height: 12px;
+    color: #E95C8F;
+    font-size: 10px;
+    font-weight: bold;
 }
-.mr20{
-    margin-right: 20px;
+#toTop{
+    width: 50px;
+    cursor: pointer;
+}
+
+/* No8.ul*/
+ul{
+    list-style: none;
+}
+
+/* No9.padding */
+.plf20{
+    padding: 0 20px;
 }

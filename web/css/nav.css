@@ -56,25 +56,6 @@ nav img{
     top: 16px;
     right: 3px;
 }
-/* back to top */
-#backTop{
-    position: fixed;
-    bottom: 50px;
-    right: 50px;
-    display: none;
-}
-#backTop span{
-    display: inline-block;
-    width: 15px;
-    line-height: 12px;
-    color: #E95C8F;
-    font-size: 10px;
-    font-weight: bold;
-}
-#toTop{
-    width: 50px;
-    cursor: pointer;
-}
 /*signinContainer + signupContainer*/
 #signinContainer,#signupContainer{
     width: 400px;
