@@ -23,6 +23,9 @@ input{
     box-sizing: border-box;
     outline: none;
 }
+input[type="button"]{
+    padding: 0;
+}
 select{
     outline: none;
     cursor: pointer;

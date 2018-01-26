@@ -1,0 +1,77 @@
+body{
+    padding: 0 10%;
+}
+/*strategy*/
+.strategyContainer{
+    width: 100%;
+    height: auto;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #999;
+    margin-bottom: 20px;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+}
+#title{
+    height: 27px;
+    width: 100%;
+    border: 2px dashed #666;
+    font-size: 15px;
+    margin: 10px 0 20px 0;
+    border-radius: 0;
+}
+.iconhelp{
+    float: right;
+    margin: 10px 10px 0 0;
+}
+.helpPage{
+    position: absolute;
+    z-index: 2;
+    background: #fff;
+    box-shadow: 0 0 15px #999;
+    padding: 10px;
+    display: none;
+}
+#subBtn,#addBtn{
+    width: 50px;
+    height: 23px;
+    margin-top: 10px;
+    float: right;
+    background: #999;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+#subBtn:hover,#addBtn:hover{
+    box-shadow: 0 0 15px #999;
+}
+.day{
+    border: 2px dashed #666;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.dayTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+.icon-bianji,.icon-delete,.icon-baocun{
+    float: right;
+    margin: 5px 0 0 15px;
+    cursor: pointer;
+}
+.icon-baocun{
+    display: none;
+}
+
+/*wangEditor*/
+#editor{
+    background: #fff;
+    box-shadow: 0 0 15px #999;
+}
