@@ -21,18 +21,47 @@ body{
     margin: 10px 0 20px 0;
     border-radius: 0;
 }
-.iconhelp{
+/* help start */
+.icon-iconhelp{
     float: right;
     margin: 10px 10px 0 0;
 }
 .helpPage{
+    width: 300px;
+    max-height: 500px;
+    overflow: scroll;
     position: absolute;
+    top: 5%;
+    left: 50%;
     z-index: 2;
+    transform: translateX(-50%);
     background: #fff;
     box-shadow: 0 0 15px #999;
     padding: 10px;
     display: none;
 }
+#helpClose{
+    text-align: right;
+    cursor: pointer;
+}
+.tip{
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    float: left;
+    margin: 10px 0 20px 0;
+}
+.tip>div{
+    text-align: left;
+    margin-bottom: 5px;
+}
+.tip>div:first-child{
+    font-weight: bold;
+    text-align: center;
+}
+/* help end */
+
+/* addBtn + subBtn start */
 #subBtn,#addBtn{
     width: 50px;
     height: 23px;
@@ -48,6 +77,9 @@ body{
 #subBtn:hover,#addBtn:hover{
     box-shadow: 0 0 15px #999;
 }
+/* addBtn + subBtn end */
+
+/* day start */
 .day{
     border: 2px dashed #666;
     padding: 10px;
@@ -69,9 +101,12 @@ body{
 .icon-baocun{
     display: none;
 }
+/* day end */
 
 /*wangEditor*/
 #editor{
     background: #fff;
     box-shadow: 0 0 15px #999;
+    position: relative;
+    z-index: 1;
 }

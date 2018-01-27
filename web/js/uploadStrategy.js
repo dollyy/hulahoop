@@ -1,6 +1,6 @@
-//todo 1.after add the strategy, clean the content of simditor if use simditor
-//todo ******2.drag to change the order of day
-//todo 3.describe how to drag to change the order of the day
+//todo ***1.after add the strategy, clean the content of simditor if use simditor
+//todo ***2.drag to change the order of day
+//todo ***3.describe how to drag to change the order of the day
 
 //wangEidtor
 var E = window.wangEditor;
@@ -12,6 +12,24 @@ editor.create();
 var data,that;
 
 $(function(){
+    
+    $.ajax({
+/*        type:"post",
+        url:"",
+        dataType:"json",*/
+        success:function(data){
+            var data={"tips":[["--- tip1.交换Days ---","../images/help/uploadStrategy1.png","../images/help/uploadStrategy2.png","../images/help/uploadStrategy3.png"]]};
+            for(i=0;i<data.tips.length;i++){
+                $(".helpPage").append("<div class='tip' id='tip"+i+"'><div>"+data.tips[i][0]+"</div></div>");
+                for(j=1;j<data.tips[i].length;j++){
+                    $("#tip"+i).append("<div>&#8226;step"+j+":</div><img src='"+data.tips[i][j]+"'><br>");
+                }
+            }
+        },
+        error:function(){
+            
+        }
+    });
     
     /* strategy title */
     $("#title").change(function(){
@@ -50,16 +68,15 @@ $(function(){
         }
     });
     
-    $(".icon-iconhelp").mouseenter(function(){
-        $(".helpPage").css("display","block");
-    }).mouseleave(function(){
-        if(!$(".helpPage").mouseenter){
-            $(".helpPage").css("display","none");
-        }
+    /* hide help */
+    $("#helpClose").click(function(){
+        $(".helpPage").hide();
     });
-    $(".helpPage").mouseleave(function(){
-        $(".helpPage").css("display","none");
-    })
+    
+    /* show help */
+    $(".icon-iconhelp").click(function(){
+        $(".helpPage").show();
+    });
     
 });
 
@@ -87,8 +104,8 @@ function drop(ev,divdom){   //exchange data
 //edit day's content
 function editDay(){
     //1.css
-    $(this).next().css("display","block");
-    $(this).css("display","none");
+    $(this).next().show();
+    $(this).hide();
     //2.data
     that=$(this).parent().parent().find(".content");
     data=that.html();
@@ -108,8 +125,8 @@ function saveDay(){
     data=formatData(data);
     if(data){
         //1.css
-        $(this).prev().css("display","block");
-        $(this).css("display","none");
+        $(this).prev().show();
+        $(this).hide();
         //2.data
         that.empty().append(data);
     }
