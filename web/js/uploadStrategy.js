@@ -12,18 +12,37 @@ editor.create();
 var data,that;
 
 $(function(){
-    
+    //select2
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
+    $(".form-control").select2({
+        tags: true,
+    });
+
     $.ajax({
 /*        type:"post",
         url:"",
         dataType:"json",*/
         success:function(data){
-            var data={"tips":[["--- tip1.交换Days ---","../images/help/uploadStrategy1.png","../images/help/uploadStrategy2.png","../images/help/uploadStrategy3.png"]]};
+            var data={"tips":[["--- tip1.攻略标签是什么？ ---","从下拉框中为这篇攻略打上关于地点、时长的tag吧！"],["--- tip2.交换Days ---","&#8226;step1:<br><img src='../images/help/uploadStrategy1.png'>","&#8226;step2:<br><img src='../images/help/uploadStrategy2.png'>","&#8226;step3:<br><img src='../images/help/uploadStrategy3.png'>"]],"tags":[["省份",[['1','安徽'],['2','澳门'],['3','北京'],['4','重庆'],['5','福建'],['6','吉林'],['7','江苏'],['8','江西'],['9','海南'],['10','河北'],['11','河南'],['12','黑龙江'],['13','湖北'],['14','湖南'],['15','甘肃'],['16','广东'],['17','广西'],['18','贵州'],['19','辽宁'],['20','南海诸岛'],['21','内蒙古'],['22','宁夏'],['23','青海'],['24','山东'],['25','山西'],['26','陕西'],['27','上海'],['28','四川'],['29','台湾'],['30','天津'],['31','西藏'],['32','香港'],['33','新疆'],['34','云南'],['35','浙江']]],["时长",[["1","3天"],["1","5天"],["1","7天"],["1","15天"],["1","30天+"]]]]};
+            //tips
             for(i=0;i<data.tips.length;i++){
                 $(".helpPage").append("<div class='tip' id='tip"+i+"'><div>"+data.tips[i][0]+"</div></div>");
                 for(j=1;j<data.tips[i].length;j++){
-                    $("#tip"+i).append("<div>&#8226;step"+j+":</div><img src='"+data.tips[i][j]+"'><br>");
+                    $("#tip"+i).append("<div>"+data.tips[i][j]+"</div>");
                 }
+            }
+            //tags
+            //console.log(data.tags.length);
+            for(i=0;i<data.tags.length;i++){
+                console.log(data.tags[i][0]);
+                $("#id_label_multiple").append("<optgroup id='group' label="+data.tags[i][0]+"></optgroup>");
+                //console.log(data.tags[i][1].length);
+/*                for(j=0;j<data.tags[i][1].length;j++){
+                    console.log(data.tags[i][1][j][0]+","+data.tags[i][1][j][1]);
+                    $("#group"+i).append("<option value='"+data.tags[i][1][j][0]+"'>"+data.tags[i][1][j][1]+"</option>");
+                }*/
             }
         },
         error:function(){

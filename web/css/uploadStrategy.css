@@ -13,13 +13,9 @@ body{
     padding: 0 10px 10px 10px;
     box-sizing: border-box;
 }
-#title{
-    height: 27px;
-    width: 100%;
-    border: 2px dashed #666;
-    font-size: 15px;
-    margin: 10px 0 20px 0;
-    border-radius: 0;
+.st{
+    overflow: hidden;
+    margin-bottom: 10px;
 }
 /* help start */
 .icon-iconhelp{
@@ -49,10 +45,9 @@ body{
     text-align: center;
     display: inline-block;
     float: left;
-    margin: 10px 0 20px 0;
+    margin: 10px 0 10px 0;
 }
 .tip>div{
-    text-align: left;
     margin-bottom: 5px;
 }
 .tip>div:first-child{
@@ -60,6 +55,28 @@ body{
     text-align: center;
 }
 /* help end */
+
+/* tags start */
+.tags{
+    display: flex;
+    align-items: center;
+}
+.a{
+    min-width: 80px;
+}
+#id_label_multiple{
+    flex: 1;
+}
+/* tags end */
+
+#title{
+    height: 27px;
+    width: 100%;
+    border: 2px dashed #666;
+    font-size: 15px;
+    margin: 15px 0 20px 0;
+    border-radius: 0;
+}
 
 /* addBtn + subBtn start */
 #subBtn,#addBtn{
@@ -110,3 +127,4 @@ body{
     position: relative;
     z-index: 1;
 }
+
