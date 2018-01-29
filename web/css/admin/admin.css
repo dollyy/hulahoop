@@ -91,3 +91,54 @@ nav img{
 .resContainer{
     
 }
+
+.opeContainer{
+    width: 50%;
+    height: auto;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 25%;
+    z-index: 3;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+#title{
+    width: 100%;
+    border: 2px dashed #333;
+    margin-bottom: 15px;
+    padding: 10px 5px;
+}
+#addBtn{
+    width: 50px;
+    height: 23px;
+    margin-top: 10px;
+    float: right;
+    background: #999;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

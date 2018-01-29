@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../css/admin/admin.css">
 </head>
 <body>
+   <div id="bg"></div>
     <nav>
         <img src="../images/icon6.jpg">
         <span>
@@ -27,7 +28,7 @@
                 <li class="indexContainer">Hi</li>
                 <li class="helpContainer">
                     <span class="iconfont icon-xinzeng" title="新增"></span>
-                    <table border="0">
+                    <table border="0" class="helpTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -38,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+<!--                            <tr>
                                 <td>1</td>
                                 <td>攻略标签是什么？</td>
                                 <td>2018-01-22 12:12:12</td>
@@ -59,16 +60,24 @@
                                     <span class="iconfont icon-bianji" title="编辑"></span>
                                     <span class="iconfont icon-delete" title="删除"></span>
                                 </td>
-                            </tr>
+                            </tr>-->
                         </tbody>
                     </table>
                 </li>
                 <li class="resContainer">789</li>
             </ul>
+            <div class="opeContainer">
+                <input type="text" id="title" placeholder="Help Title. No more than 20 words">
+                <div id="editor"></div>
+                <input type="button" value="添 加"  id="addBtn">
+            </div>
         </div>
     </div>
     
     <script src="../js/jquery-3.2.1.min.js"></script>
+    <!-- wangEditor -->
+    <script src="../plugins/wangEditor-3.0.15/release/wangEditor.min.js"></script>
+    
     <script src="../js/admin/admin.js"></script>
 </body>
 </html>

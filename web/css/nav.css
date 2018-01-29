@@ -1,14 +1,6 @@
 .tips{
     z-index: 4;
 }
-/*bg*/
-#bg{
-    width: 100%;
-    position: absolute;
-    z-index: 2;
-    background: rgba(0,0,0,0.5);
-    display: none;
-}
 /*nav*/
 nav{
     padding: 5px 50px;
