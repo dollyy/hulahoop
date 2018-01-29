@@ -103,3 +103,7 @@ ul{
 .plf20{
     padding: 0 20px;
 }
+
+ul{
+    list-style: none;
+}

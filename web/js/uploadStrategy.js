@@ -26,23 +26,20 @@ $(function(){
         dataType:"json",*/
         success:function(data){
             var data={"tips":[["--- tip1.攻略标签是什么？ ---","从下拉框中为这篇攻略打上关于地点、时长的tag吧！"],["--- tip2.交换Days ---","&#8226;step1:<br><img src='../images/help/uploadStrategy1.png'>","&#8226;step2:<br><img src='../images/help/uploadStrategy2.png'>","&#8226;step3:<br><img src='../images/help/uploadStrategy3.png'>"]],"tags":[["省份",[['1','安徽'],['2','澳门'],['3','北京'],['4','重庆'],['5','福建'],['6','吉林'],['7','江苏'],['8','江西'],['9','海南'],['10','河北'],['11','河南'],['12','黑龙江'],['13','湖北'],['14','湖南'],['15','甘肃'],['16','广东'],['17','广西'],['18','贵州'],['19','辽宁'],['20','南海诸岛'],['21','内蒙古'],['22','宁夏'],['23','青海'],['24','山东'],['25','山西'],['26','陕西'],['27','上海'],['28','四川'],['29','台湾'],['30','天津'],['31','西藏'],['32','香港'],['33','新疆'],['34','云南'],['35','浙江']]],["时长",[["1","3天"],["1","5天"],["1","7天"],["1","15天"],["1","30天+"]]]]};
-            //tips
+            //1.tips
             for(i=0;i<data.tips.length;i++){
                 $(".helpPage").append("<div class='tip' id='tip"+i+"'><div>"+data.tips[i][0]+"</div></div>");
                 for(j=1;j<data.tips[i].length;j++){
                     $("#tip"+i).append("<div>"+data.tips[i][j]+"</div>");
                 }
             }
-            //tags
-            //console.log(data.tags.length);
+            
+            //2.tags
             for(i=0;i<data.tags.length;i++){
-                console.log(data.tags[i][0]);
-                $("#id_label_multiple").append("<optgroup id='group' label="+data.tags[i][0]+"></optgroup>");
-                //console.log(data.tags[i][1].length);
-/*                for(j=0;j<data.tags[i][1].length;j++){
-                    console.log(data.tags[i][1][j][0]+","+data.tags[i][1][j][1]);
+                $("#id_label_multiple").append("<optgroup id='group"+i+"' label="+data.tags[i][0]+"></optgroup>");
+                for(j=0;j<data.tags[i][1].length;j++){
                     $("#group"+i).append("<option value='"+data.tags[i][1][j][0]+"'>"+data.tags[i][1][j][1]+"</option>");
-                }*/
+                }
             }
         },
         error:function(){
@@ -59,15 +56,26 @@ $(function(){
         }
     });
     
+    /* sub title */
+    $("#subTitle").change(function(){
+        if($(this).val().trim() == ""){
+            $("#subTitle").css("border-color","red");
+        }else{
+            $("#subTitle").css("border-color","#999");
+        }
+    });
+    
     /* add day */
     $("#addBtn").click(function(){
+        var subTitle=$("#subTitle").val();
         data=$(".w-e-text").html();
-        data=formatData(data);
+        data=formatData(subTitle.trim(),data);
         if(data){
             var day=($(".strategyContainer").find(".day").length+1);
-            $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'><div class='dayTitle mb10'><span>Day "+day+"</span><span class='iconfont icon-delete' title='删除'></span><span class='iconfont icon-bianji' title='编辑'></span><span class='iconfont icon-baocun' title='保存'></span></div><div class='content' id='day"+day+"'>"+data+"</div></div>");
+            $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'><div class='dayTitle mb10'><input id='daySub' type='text' value="+subTitle+" readonly><span class='iconfont icon-delete' title='删除'></span><span class='iconfont icon-bianji' title='编辑'></span><span class='iconfont icon-baocun' title='保存'></span></div><div class='content' id='day"+day+"'>"+data+"</div></div>");
             //clean content
             $(".w-e-text").html("");
+            $("#subTitle").val("");
             //click event
             $(".strategyContainer .day .icon-bianji").off("click").on("click", editDay);
             $(".strategyContainer .day .icon-baocun").off("click").on("click", saveDay);
@@ -125,6 +133,8 @@ function editDay(){
     //1.css
     $(this).next().show();
     $(this).hide();
+    $(this).parent().find("#daySub").removeAttr("readonly");
+    $(this).parent().find("#daySub").css("background","#ccc");
     //2.data
     that=$(this).parent().parent().find(".content");
     data=that.html();
@@ -140,12 +150,15 @@ function editDay(){
 //save day's content
 function saveDay(){
     that=$(this).parent().parent().find(".content");
+    subTitle=$(this).parent().find("#daySub").val();
     data=that.find(".w-e-text").html();
-    data=formatData(data);
+    data=formatData(subTitle.trim(),data);
     if(data){
         //1.css
         $(this).prev().show();
         $(this).hide();
+        $(this).parent().find("#daySub").attr("readonly");
+        $(this).parent().find("#daySub").css("background","#fff");
         //2.data
         that.empty().append(data);
     }
@@ -166,7 +179,12 @@ function exchangeDay(){
 }
 
 //judge day's content 
-function formatData(data){
+function formatData(subTitle,data){
+    if(subTitle == null || subTitle == ""){
+        $("#subTitle").css("border-color","red");
+        $(".tips").html("please enter content").show().fadeOut(2000);
+        return false;
+    }
     while(data.indexOf("<p>") != -1){
         data=data.replace("<p>","");
     }

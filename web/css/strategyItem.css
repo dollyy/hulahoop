@@ -32,16 +32,16 @@ nav{
 .content{
     margin-bottom: 20px;
 }
-.day{
+.cata{
     background: #fff;
 }
-.day:first-child{
+.cata:first-child{
     border-radius: 10px 10px 0 0;
 }
 .content div:nth-child(5){
     border-radius: 0 0 10px 10px;
 }
-#day1,#day2,#day3,#day4,#day5{
+#cata,#cata,#cata,#cata,#cata{
     padding: 10px;
     box-sizing: border-box;
 }

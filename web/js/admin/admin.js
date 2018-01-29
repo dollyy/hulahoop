@@ -1,0 +1,11 @@
+$(function(){
+    $(".index").click(function(){
+        $(".indexContainer").show().siblings().hide();
+    });
+    $(".help").click(function(){
+        $(".helpContainer").show().siblings().hide();
+    });
+    $(".res").click(function(){
+        $(".resContainer").show().siblings().hide();
+    });
+});

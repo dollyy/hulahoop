@@ -1,0 +1,93 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+nav{
+    background: #1051A5;
+    color: #fff;
+    height: 65px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+nav img{
+    height: 50px;
+}
+.holyContainer{
+    flex: 1;
+    display: flex;
+}
+.catalog{
+    width: 200px;
+    height: 100%;
+    background: #333;
+    color: #fff;
+}
+.catalog li{
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.content{
+    height: 100%;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.content .location{
+    padding: 5px;
+    border-bottom: 2px dashed #333;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.content ul{
+    flex: 1;
+}
+.indexContainer,.helpContainer,.resContainer{
+    height: 100%;
+    display: none;
+    padding: 0 150px;
+}
+.indexContainer{
+    text-align: center;
+}
+.helpContainer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.icon-xinzeng{
+    align-self: flex-end;
+    margin: 10px 0 5px 0
+}
+.icon-chakan,.icon-bianji,.icon-delete{
+    font-weight: bold;
+    margin-right: 10px;
+}
+.helpContainer table{
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 12px #999;
+}
+.helpContainer table thead tr{
+    border-bottom: 2px solid #ccc;
+}
+.helpContainer table tbody tr{
+    border-bottom: 1px solid #ccc;
+}
+.helpContainer table tbody tr:last-child{
+    border: none;
+}
+.helpContainer table td,.helpContainer table th{
+    padding: 10px;
+}
+.helpContainer table td:first-child{
+    font-weight: bold;
+}
+.resContainer{
+    
+}
