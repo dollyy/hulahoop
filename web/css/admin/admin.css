@@ -2,8 +2,11 @@ body{
     display: flex;
     flex-direction: column;
 }
+#bg{
+    height: 100%;
+}
 nav{
-    background: #1051A5;
+    background: #2980B9;
     color: #fff;
     height: 65px;
     width: 100%;
@@ -12,9 +15,13 @@ nav{
     padding: 0 20px;
     box-sizing: border-box;
     justify-content: space-between;
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+    font-weight: bold;
 }
-nav img{
-    height: 50px;
+.hulahoop{
+    font-size: 35px;
+    vertical-align: sub;
+    margin-left: -10px;
 }
 .holyContainer{
     flex: 1;
@@ -23,7 +30,7 @@ nav img{
 .catalog{
     width: 200px;
     height: 100%;
-    background: #333;
+    background: #38424D;
     color: #fff;
 }
 .catalog li{
@@ -49,12 +56,15 @@ nav img{
 }
 .indexContainer,.helpContainer,.resContainer{
     height: 100%;
-    display: none;
+    /*display: none;*/
     padding: 0 150px;
 }
+/**/
 .indexContainer{
     text-align: center;
+    display: none;
 }
+/**/
 .helpContainer{
     display: flex;
     align-items: center;
@@ -88,8 +98,9 @@ nav img{
 .helpContainer table td:first-child{
     font-weight: bold;
 }
+/**/
 .resContainer{
-    
+    display: none;
 }
 
 .opeContainer{
@@ -104,8 +115,9 @@ nav img{
     padding: 15px;
     box-sizing: border-box;
     border-radius: 5px;
+    display: none;
 }
-#title{
+#helpTitle{
     width: 100%;
     border: 2px dashed #333;
     margin-bottom: 15px;

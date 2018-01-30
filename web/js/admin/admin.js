@@ -8,13 +8,11 @@ editor.create();
 $(function(){
     var helpData,resData;
     
-    $("#bg").height($(document).height());
-    
     /*index*/
     $(".index").click(function(){
         $(".indexContainer").show().siblings().hide();
     });
-    $("#editor").html("");
+    
     /* help */
     $(".help").click(function(){
         $(".helpContainer").show().siblings().hide();
@@ -39,12 +37,16 @@ $(function(){
     });
     $(".icon-xinzeng").click(function(){
         $("#bg").slideDown();
+        $(".opeContainer").slideDown();
     });
     $("#bg").click(function(){
         $(this).slideUp();
     });
     $("#addBtn").click(function(){
-        console.log($("#editor").html());
+        var title=$("#helpTitle").val();
+        var data=$(".w-e-text").html();
+        data=formatData(title, data);
+        console.log(data);
     });
     
     /* res */

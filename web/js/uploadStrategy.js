@@ -179,6 +179,7 @@ function exchangeDay(){
 }
 
 //judge day's content 
+/*
 function formatData(subTitle,data){
     if(subTitle == null || subTitle == ""){
         $("#subTitle").css("border-color","red");
@@ -209,6 +210,7 @@ function formatData(subTitle,data){
     }
     return data;
 }
+*/
 
 //simditor
 /*var editor=new Simditor({

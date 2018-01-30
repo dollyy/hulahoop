@@ -24,7 +24,6 @@
 
 .icon-icon:before { 
     content: "\e60f";
-    font-weight: bold;
     cursor: pointer;
     vertical-align: bottom;
     margin-left: 20px;

@@ -17,6 +17,43 @@ function operateNumber(that){
     return true;
 }
 
+function formatData(subTitle,data){
+    if(subTitle == null || subTitle == ""){
+        $("#subTitle").css("border-color","red");
+        $(".tips").html("please enter content").show().fadeOut(2000);
+        return false;
+    }
+    while(data.indexOf("<p>") || data.indexOf("</p>") || data.indexOf("<div>") || data.indexOf("</div>") || data.indexOf("&nbsp;") || data.indexOf("<br>")){
+        data.replace("<p>","");
+        data.replace("</p>","");
+        data.replace("<div>","");
+        data.replace("</div>","");
+        data.replace("&nbsp;","");
+        data.replace("<br>","");
+    }
+/*    while(data.indexOf("</p>") != -1){
+        data.replace("</p>","");
+    }
+    while(data.indexOf("<div>") != -1){
+        data.replace("<div>","");
+    }
+    while(data.indexOf("</div>") != -1){
+        data.replace("</div>","");
+    }
+    while(data.indexOf("&nbsp;") != -1){
+        data.replace("&nbsp;","");
+    }
+    while(data.indexOf("<br>") != -1){
+        data.replace("<br>","");
+    }*/
+    if(data.trim() == ""){
+        $(".tips").html("please enter content").show().fadeOut(2000);
+        return false;
+    }
+    return data;
+}
+
+
 function packageAjax(type,url,data,dataType){
     console.log(2);
     $.ajax({
