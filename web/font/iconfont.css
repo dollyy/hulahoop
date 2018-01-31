@@ -66,6 +66,8 @@
 
 .icon-baocun:before { 
     content: "\e63b";
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .icon-lingdang:before { 
@@ -84,6 +86,7 @@
 .icon-bianji:before { 
     content: "\e688";
     cursor: pointer;
+    font-weight: bold;
 }
 
 .icon-feiji:before { 

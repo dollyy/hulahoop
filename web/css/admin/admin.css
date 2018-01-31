@@ -98,6 +98,9 @@ nav{
 .helpContainer table td:first-child{
     font-weight: bold;
 }
+.trContent{
+    display: none;
+}
 /**/
 .resContainer{
 }

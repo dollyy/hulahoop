@@ -52,16 +52,16 @@ function formatData(subTitle,data){
 function getformatDate(){
     var date=new Date();
     var year=date.getFullYear();
-    var month=date.getMonth()+1;
-    var day=date.getDate();
-    var hour=date.getHours();
-    var min=date.getMinutes();
-    var sec=date.getSeconds();
+    var month=formatNumber(date.getMonth()+1);
+    var day=formatNumber(date.getDate());
+    var hour=formatNumber(date.getHours());
+    var min=formatNumber(date.getMinutes());
+    var sec=formatNumber(date.getSeconds());
     return year+"-"+month+"-"+day+" "+hour+":"+min+":"+sec
 }
 
 function formatNumber(number){
-    
+    return (number < 10) ? "0"+number : number;
 }
 
 
