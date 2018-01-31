@@ -23,34 +23,45 @@ function formatData(subTitle,data){
         $(".tips").html("please enter content").show().fadeOut(2000);
         return false;
     }
-    while(data.indexOf("<p>") || data.indexOf("</p>") || data.indexOf("<div>") || data.indexOf("</div>") || data.indexOf("&nbsp;") || data.indexOf("<br>")){
-        data.replace("<p>","");
-        data.replace("</p>","");
-        data.replace("<div>","");
-        data.replace("</div>","");
-        data.replace("&nbsp;","");
-        data.replace("<br>","");
+    var testData=data;
+    while(testData.indexOf("<p>") != -1){
+        testData=testData.replace("<p>","");
     }
-/*    while(data.indexOf("</p>") != -1){
-        data.replace("</p>","");
+    while(testData.indexOf("</p>") != -1){
+        testData=testData.replace("</p>","");
     }
-    while(data.indexOf("<div>") != -1){
-        data.replace("<div>","");
+    while(testData.indexOf("<div>") != -1){
+        testData=testData.replace("<div>","");
     }
-    while(data.indexOf("</div>") != -1){
-        data.replace("</div>","");
+    while(testData.indexOf("</div>") != -1){
+        testData=testData.replace("</div>","");
     }
-    while(data.indexOf("&nbsp;") != -1){
-        data.replace("&nbsp;","");
+    while(testData.indexOf("&nbsp;") != -1){
+        testData=testData.replace("&nbsp;","");
     }
-    while(data.indexOf("<br>") != -1){
-        data.replace("<br>","");
-    }*/
-    if(data.trim() == ""){
+    while(testData.indexOf("<br>") != -1){
+        testData=testData.replace("<br>","");
+    }
+    if(testData.trim() == ""){
         $(".tips").html("please enter content").show().fadeOut(2000);
         return false;
     }
     return data;
+}
+
+function getformatDate(){
+    var date=new Date();
+    var year=date.getFullYear();
+    var month=date.getMonth()+1;
+    var day=date.getDate();
+    var hour=date.getHours();
+    var min=date.getMinutes();
+    var sec=date.getSeconds();
+    return year+"-"+month+"-"+day+" "+hour+":"+min+":"+sec
+}
+
+function formatNumber(number){
+    
 }
 
 
