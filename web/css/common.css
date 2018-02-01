@@ -1,7 +1,8 @@
 *{
     padding: 0;
     margin: 0;
-    font-family: "Microsoft Yahei";
+    /*font-family: "Microsoft Yahei";*/
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
 }
 html,body{
     height: 100%;

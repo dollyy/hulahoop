@@ -8,79 +8,76 @@
     <link rel="stylesheet" href="../css/admin/admin.css">
 </head>
 <body>
-   <div id="bg"></div>
-    <nav>
-        <span>
-            <span class="iconfont icon-bianji"></span>
-            <span class="hulahoop">hulahoop</span>
-        </span>
-        <span>
-            <span class="username">Hi, admin</span>
-            <span class="iconfont icon-icon" title="退出"></span>
-        </span>
-    </nav>
-    <div class="holyContainer">
-        <ul class="catalog">
-            <li class="index">index</li>
-            <li class="help">help page</li>
-            <li class="res">update resource</li>
+    <div id="bg"></div>
+    <div class="tips"></div>
+    <div class="left">
+       <div class="head">
+           <span>
+               <span class="username">Hi, admin</span>
+               <span class="iconfont icon-icon" title="退出"></span>
+           </span>
+           <div class="hulahoop">hulahoop</div>
+       </div>
+       <ul class="catalog">
+            <li class="index clicked"><span class="iconfont icon-iconindexnor1"></span><span>index</span></li>
+            <li class="help"><span class="iconfont icon-iconhelp"></span><span>help page</span></li>
+            <li class="res"><span class="iconfont icon-update"></span><span>update resource</span></li>
         </ul>
-        <div class="content">
-            <div class="location">当前位置 > </div>
-            <ul>
-                <li class="indexContainer">Hi</li>
-                <li class="helpContainer">
-                    <span class="iconfont icon-xinzeng" title="新增"></span>
-                    <table border="0" class="helpTable">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Title</th>
-                                <th>Create Time</th>
-                                <th>Update Time</th>
-                                <th>Operation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-<!--                            <tr>
-                                <td>1</td>
-                                <td>攻略标签是什么？</td>
-                                <td>2018-01-22 12:12:12</td>
-                                <td>2018-01-26 16:16:16</td>
-                                <td>
-                                    <span class="iconfont icon-chakan" title="查看"></span>
-                                    <span class="iconfont icon-bianji" title="编辑"></span>
-                                    <span class="iconfont icon-delete" title="删除"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>交换Days</td>
-                                <td>2018-01-28 19:34:26</td>
-                                <td>2018-01-28 22:02:45</td>
-                                <td>
-                                    <span class="iconfont icon-chakan" title="查看"></span>
-                                    <span class="iconfont icon-bianji" title="编辑"></span>
-                                    <span class="iconfont icon-delete" title="删除"></span>
-                                </td>
-                            </tr>-->
-                        </tbody>
-                    </table>
-                </li>
-                <li class="resContainer">789</li>
-            </ul>
-            <div class="opeContainer">
-                <input type="text" id="helpTitle" placeholder="Help Title. No more than 20 words">
-                <div id="editor"></div>
-                <input type="button" value="添 加"  id="addBtn">
-            </div>
-        </div>
     </div>
-    
+    <div class="right">
+       <div class="location">当前位置 > <span>index</span></div>
+        <ul>
+            <li class="indexContainer">Hi</li>
+            <li class="helpContainer">
+                <span class="iconfont icon-xinzeng" title="新增"></span>
+                <div class='nothing'>no help yet, add a new one...</div>
+                <table border="0" class="helpTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Create Time</th>
+                            <th>Update Time</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<!--                        <tr id='"+data[i][0]+"'>
+                            <td>"+$(".helpTable tr").length+"</td>
+                            <td class='trTitle'>"+data[i][1]+"</td>
+                            <td>"+data[i][3]+"</td>
+                            <td>"+data[i][4]+"</td>
+                            <td>
+                                <span class="iconfont icon-close-eye" title="隐藏"></span>
+                                <span class='iconfont icon-chakan' title='查看'></span>
+                                <span class='iconfont icon-bianji' title='编辑'></span>
+                                <span class='iconfont icon-delete' title='删除'></span>
+                            </td>
+                        </tr>
+                        <tr><td colspan='5' style="padding: 0"><div class="inner">"+data[i][2]+"</div></td></tr>
+                        <tr id='"+data[i][0]+"'>
+                            <td>"+$(".helpTable tr").length+"</td>
+                            <td class='trTitle'>"+data[i][1]+"</td>
+                            <td>"+data[i][3]+"</td>
+                            <td>"+data[i][4]+"</td>
+                            <td>
+                                <span class='iconfont icon-chakan' title='查看'></span>
+                                <span class='iconfont icon-bianji' title='编辑'></span>
+                                <span class='iconfont icon-delete' title='删除'></span>
+                            </td>
+                        </tr>-->
+                    </tbody>
+                </table>
+            </li>
+            <li class="resContainer">789</li>
+        </ul>
+        <div class="opeContainer"></div>
+    </div>
+
     <script src="../js/jquery-3.2.1.min.js"></script>
     <!-- wangEditor -->
-    <script src="../plugins/wangEditor-3.0.15/release/wangEditor.min.js"></script>
-    
+    <script src="../vendors/wangEditor-3.0.15/release/wangEditor.min.js"></script>
+
     <script src="../js/common.js"></script>
     <script src="../js/admin/admin.js"></script>
 </body>

@@ -20,7 +20,7 @@ function operateNumber(that){
 function formatData(subTitle,data){
     if(subTitle == null || subTitle == ""){
         $("#subTitle").css("border-color","red");
-        $(".tips").html("please enter content").show().fadeOut(2000);
+        $(".tips").html("please enter title").show().fadeOut(2000);
         return false;
     }
     var testData=data;
