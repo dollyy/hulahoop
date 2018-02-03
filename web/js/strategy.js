@@ -44,7 +44,7 @@ function packageData(data){
     if(data.strategies){
         $(".content").empty();
         for(i=0;i<data.strategies.length;i++){
-            $(".content").append("<div value='"+data.strategies[i][0]+"' class='container'><div class='strategy'><img src='../images/icon"+data.strategies[i][1]+".jpg'><div class='s_msg'><div><span class='iconfont icon-dizhi'></span><span class='title'>"+data.strategies[i][2]+"</span></div><div><span class='iconfont icon-ren'></span><span class='user'>"+data.strategies[i][3]+"</span></div><div><span class='iconfont icon-icontag'></span><span class='tags'>"+data.strategies[i][4]+"</span></div></div></div></div>");
+            $(".content").append("<div value='"+data.strategies[i][0]+"' class='container'><div class='strategy'><img src='../images/icons/icon"+data.strategies[i][1]+".jpg'><div class='s_msg'><div><span class='iconfont icon-dizhi'></span><span class='title'>"+data.strategies[i][2]+"</span></div><div><span class='iconfont icon-ren'></span><span class='user'>"+data.strategies[i][3]+"</span></div><div><span class='iconfont icon-icontag'></span><span class='tags'>"+data.strategies[i][4]+"</span></div></div></div></div>");
         }
         //strategies click
         $(".content .container").off("click").on("click",function(){

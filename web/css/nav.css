@@ -1,6 +1,10 @@
 .tips{
     z-index: 4;
 }
+input{
+    border-radius: 5px;
+    border: 1px solid #999;
+}
 /*nav*/
 nav{
     padding: 5px 50px;
@@ -48,31 +52,45 @@ nav img{
     top: 16px;
     right: 3px;
 }
-/*signinContainer + signupContainer*/
-#signinContainer,#signupContainer{
-    width: 400px;
-    height: 235px;
+/* signContainer */
+.signContainer{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background: #fff;
     z-index: 3;
+}
+#signinContainer,#signupContainer{
+    height: 235px;
     border-radius: 10px;
     display: none;
 }
 #signinContainer{
-    background: url("../images/signin.jpg");
+    width: 400px;
+    background: url("../images/sign/signin.jpg");
 }
-#inName,#inPwd,#inBtn{
+#inName,#inPwd,#inBtn,#pwdOperation{
+    display: block;
     position: relative;
-    top: 65px;
-    left: 75px;
-    margin-bottom: 10px;
+    top: 58px;
+    left: 60px;
 }
+#pwdOperation{
+    width: 157px;
+    font-size: 12px;
+}
+#savePwd{
+    width: 15px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+#resetPwd{
+    float: right;
+}
+/* signupContainer */
 #signupContainer{
     width: 254px;
-    background: url(../images/signup.jpg);
+    background: url(../images/sign/signup.jpg);
     text-align: center;
 }
 #upName,#upPwd,#upPwdRe,#upEmail,#upBtn{
@@ -82,6 +100,7 @@ nav img{
 }
 #inBtn,#upBtn{
     height: 23px;
+    cursor: pointer;
 }
 #signinContainer>div,#signupContainer>div{
     position: absolute;

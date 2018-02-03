@@ -28,8 +28,6 @@ a{
 input{
     height: 21px;
     padding-left: 5px;
-    /*border-radius: 5px;*/
-    border: none;
     width: 157px;
     box-sizing: border-box;
     outline: none;
