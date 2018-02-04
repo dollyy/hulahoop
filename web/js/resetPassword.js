@@ -7,24 +7,42 @@ $(function(){
     $("#code").keyup(checkAccountValue);
     $("#confirmBtn").click(function(){
         console.log("phone->"+value1+",code->"+value2);
-        $(".step2").show().siblings().hide();
+        $(".step1").hide();
+        $(".step2").css("display","flex");
+        $("ul li").eq(1).addClass("success");
     });
     
     //step2
     $("#password").keyup(checkPasswordValue);
     $("#passwordRe").keyup(checkPasswordValue);
     $("#resetBtn").click(function(){
-        console.log("phone->"+value1+",code->"+value2);
-        //step3
-        $(".step3").show().siblings().hide();
-        var time=$("#counttime").html();
-        setInterval(function(){
-            if(time == 0){
-                window.location.href="index.html";
-                return;
+        $.ajax({
+/*            type:"post",
+            url:"",
+            data:{"phone":phone,"password":value1},
+            dataType:"text",*/
+            success:function(data){
+                var data=1;
+                if(data != 1){
+                    $(".error").html("修改密码失败").show();
+                    return;
+                }
+                //step3
+                $(".step3").show().siblings().hide();
+                $("ul li").eq(2).addClass("success");
+                var time=$("#counttime").html();
+                setInterval(function(){
+                    if(time == 0){
+                        //window.location.href="index.html";
+                        return;
+                    }
+                    $("#counttime").html(--time);
+                },1000);
+            },
+            error:function(){
+                alert("reset password error");
             }
-            $("#counttime").html(--time);
-        },1000);
+        });
     });
 });
 function checkAccountValue(){
