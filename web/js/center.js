@@ -1,4 +1,5 @@
-//todo 1.highlight color of province?
+//todo 
+//1.highlight color of province?
 //2.the gradient color of map
 $(function(){
     
@@ -6,23 +7,41 @@ $(function(){
 /*        type:"post",
         url:"",
         dataType:"json",*/
-        success:function(){
+        success:function(data){
 /*            var data={"userMap":[[1,7],[2,11],[3,15],[4,12],[5,7],[6,10],[7,2],[8,11],[9,2],[10,1],[11,5],[12,1],[13,3],[14,11],[15,2],[16,1],[17,5],[18,1],[19,2],[20,11],[21,11],[22,4],[23,5],[24,1],[25,2],[26,11],[27,1],[28,1],[29,5],[30,1],[31,2],[32,11],[34,1],[35,9]]};*/
-            var datas={"userMap":[[1,15,'安徽'],[2,2,'澳门'],[3,1,'北京'],[4,2,'重庆'],[5,1,'福建'],[6,1,'吉林'],[8,8,'江西'],[12,2,'黑龙江'],[15,2,'甘肃'],[18,2,'贵州'],[20,1,'南海诸岛'],[23,8,'青海'],[27,4,'上海'],[35,4,'浙江']]};
+            var datas={"userMap":[[1,15,'安徽'],[2,2,'澳门'],[3,1,'北京'],[4,2,'重庆'],[5,1,'福建'],[6,1,'吉林'],[8,8,'江西'],[12,2,'黑龙江'],[15,2,'甘肃'],[18,2,'贵州'],[20,1,'南海诸岛'],[23,8,'青海'],[27,4,'上海'],[35,4,'浙江']],"stStrategy":[["1","../images/icons/icon1.jpg","123"],["2","../images/icons/icon2.jpg","123"],["3","../images/icons/icon3.jpg","123"],["4","../images/icons/icon4.jpg","123"],["5","../images/icons/icon5.jpg","123"],["6","../images/icons/icon6.jpg","123"],["7","../images/notfound.jpg","123"],["8","../images/systemerror.jpg","123"]]};
             data=datas;
-            showMap(datas);
+            //showMap(datas);
+            for(i=0;i<data.userMap.length;i++){
+                if(i == 0){
+                    $("#strategies").append("<div class='strategy'><div class='province'><span>"+data.userMap[i][2]+"</span><span class='bracket'> (</span><span class='number'> "+data.userMap[i][1]+" </span><span class='bracket'>)</span><span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span></div><div class='all' id='all0'></div></div>");
+                    for(j=0;j<data.stStrategy.length;j++){
+                        $("#all0").append("<div class='each' value='"+data.stStrategy[j][0]+"'><img src='"+data.stStrategy[j][1]+"'><span>"+data.stStrategy[j][2]+"</span></div>");
+                    }
+                }else{
+                    $("#strategies").append("<div class='strategy'><div class='province'><span>"+data.userMap[i][2]+"</span><span class='bracket'> (</span><span class='number'> "+data.userMap[i][1]+" </span><span class='bracket'>)</span><span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span></div></div></div>");
+                }
+            }
+            $("#strategies .strategy").eq(0).find(".icon-zhankai").hide();
+            $("#strategies .strategy").filter(':not(:eq(0))').find(".icon-shouqi").hide();
+            $("#strategies .strategy .icon-zhankai").off("click").on("click",function(){
+                $(this).hide().siblings().show();
+                $(this).parent().next().show();
+            });
+            $("#strategies .strategy .icon-shouqi").off("click").on("click",function(){
+                $(this).hide().siblings().show();
+                $(this).parent().next().hide();
+            });
         },
         error:function(){
             alert("init error");
         }
     });
     
-    $("#strategies .strategy").eq(0).find(".icon-zhankai").hide();
-    $("#strategies .strategy").filter(':not(:eq(0))').find(".icon-shouqi").hide();
-    
     $("#navStrategy").click(function(){
         $("#strategyContainer").show().siblings().hide();
     });
+    
     $("#navCollect").click(function(){
         $("#collectContainer").show().siblings().hide();
     });
