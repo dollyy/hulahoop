@@ -5,15 +5,98 @@
     <title>personal center</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/center.css">
+    <link rel="stylesheet" href="../font/iconfont.css">
 </head>
 <body>
-<!--    <div id="container">
-        <div id="echarts">
-            <div id="strategyMap"></div>
-            <div id="strategyPie"></div>
+    <ul class="catalog">
+        <li id="navStrategy">我的攻略</li>
+        <li id="navCollect">我的收藏</li>
+        <li id="navUpload">上传攻略</li>
+        <li id="navEdit">修改资料</li>
+        <li id="navMsg">消息中心</li>
+    </ul>
+    <div class="content">
+        <div id="strategyContainer">
+            <div id="container">
+                <div id="echarts">
+                    <div id="strategyMap"></div>
+                    <div id="strategyPie"></div>
+                </div>
+                <div id="pageDot"><span id="mapDot"></span><span id="pieDot"></span></div>
+            </div>
+            <div id="separate"></div>
+            <div id="strategies">
+                <div class="strategy">
+                    <div class="province">
+                        <span>Anhui</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">(</span>
+                        <span style="font-size: 14px;color: #666;">8</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">)</span>
+                        <span class="iconfont icon-zhankai"></span>
+                        <span class="iconfont icon-shouqi"></span>
+                    </div>
+                    <div class="all">
+                        <div class="each">
+                            <img src="../images/icons/icon1.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/icons/icon2.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/icons/icon3.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/icons/icon4.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/icons/icon5.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/icons/icon6.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/notfound.jpg">
+                            <span>123</span>
+                        </div>
+                        <div class="each">
+                            <img src="../images/systemerror.jpg">
+                            <span>123</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="strategy">
+                    <div class="province">
+                        <span>Anhui</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">(</span>
+                        <span style="font-size: 14px;color: #666;">8</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">)</span>
+                        <span class="iconfont icon-zhankai"></span>
+                        <span class="iconfont icon-shouqi"></span>
+                    </div>
+                </div>
+                <div class="strategy">
+                    <div class="province">
+                        <span>Anhui</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">(</span>
+                        <span style="font-size: 14px;color: #666;">8</span>
+                        <span style="font-size: 13px;color: #666; vertical-align: top">)</span>
+                        <span class="iconfont icon-zhankai"></span>
+                        <span class="iconfont icon-shouqi"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="pageDot"><span id="mapDot"></span><span id="pieDot"></span></div>
-    </div>-->
+        <div id="collectContainer"></div>
+        <div id="uploadContainer"></div>
+        <div id="editContainer"></div>
+        <div id="msgContainer"></div>
+    </div>
 
     <script src="../js/jquery-3.2.1.min.js"></script>
     <!-- echarts -->

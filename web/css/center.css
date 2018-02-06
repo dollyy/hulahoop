@@ -1,3 +1,41 @@
+body{
+    padding: 0 15%;
+}
+/* catalog */
+ul{
+    display: flex;
+    justify-content: space-around;
+}
+ul li{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* content*/
+.content{
+    width: 100%;
+    height: auto;
+    background: #fff;
+    overflow: hidden;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+.content>div{
+    width: 100%;
+    height: 100%;
+}
+/* strategyContainer */
+#strategyContainer{
+    
+}
 /* echarts */
 #container{
     height: 100%;
@@ -8,10 +46,7 @@
     flex: 1;
 }
 #strategyMap,#strategyPie{
-    height: 100%;
-}
-#strategyMap{
-    /*display: none;*/
+    height: 500px;
 }
 #strategyPie{
     display: none;
@@ -25,8 +60,59 @@
     display: inline-block;
     width: 10px;
     height: 10px;
-    background: red;
+    background: #333;
     margin-right: 20px;
     border-radius: 50%;
     cursor: pointer;
+}
+#separate{
+    background: #f2f2f2;
+    width: 100%;
+    height: 20px;
+}
+#strategies{
+    padding: 15px 20px;
+}
+.strategy{
+    margin-bottom: 20px;
+}
+.province{
+    padding: 5px;
+    border-bottom: 2px dashed #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.all{
+    display: flex;
+    flex-wrap: wrap;
+}
+.each{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+.each img{
+    height: 170px;
+    border-radius: 5%;
+    border: 2px solid #333;
+    background: rgba(0,0,0,0.5);
+}
+.each span{
+    position: absolute;
+}
+
+
+/**/
+#collectContainer{
+    background: blue;
+}
+#uploadContainer{
+    background: green;
+}
+#editContainer{
+    background: pink;
+}
+#msgContainer{
+    background: purple;
 }

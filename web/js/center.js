@@ -1,22 +1,6 @@
 //todo 1.highlight color of province?
 //2.the gradient color of map
 $(function(){
-    //echarts
-    var myChart,data;
-    $(window).resize(function(){
-        myChart.resize();
-    });
-    
-    $("#mapDot").click(function(){
-        $("#strategyMap").css("display","block");
-        $("#strategyPie").css("display","none");
-    });
-    
-    $("#pieDot").click(function(){
-        $("#strategyMap").css("display","none");
-        $("#strategyPie").css("display","block");
-        showPie(data);
-    });
     
     $.ajax({
 /*        type:"post",
@@ -31,6 +15,39 @@ $(function(){
         error:function(){
             alert("init error");
         }
+    });
+    
+    $("#strategies .strategy").eq(0).find(".icon-zhankai").hide();
+    $("#strategies .strategy").filter(':not(:eq(0))').find(".icon-shouqi").hide();
+    
+    $("#navStrategy").click(function(){
+        $("#strategyContainer").show().siblings().hide();
+    });
+    $("#navCollect").click(function(){
+        $("#collectContainer").show().siblings().hide();
+    });
+    $("#navUpload").click(function(){
+        $("#uploadContainer").show().siblings().hide();
+    });
+    $("#navEdit").click(function(){
+        $("#editContainer").show().siblings().hide();
+    });
+    $("#navMsg").click(function(){
+        $("#msgContainer").show().siblings().hide();
+    });
+    
+    //echarts
+    var myChart,data;
+    $(window).resize(function(){
+        myChart.resize();
+    });
+    $("#mapDot").click(function(){
+        $("#strategyMap").show().siblings().hide();
+    });
+    
+    $("#pieDot").click(function(){
+        $("#strategyPie").show().siblings().hide();
+        showPie(data);
     });
     
 });
