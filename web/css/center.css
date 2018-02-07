@@ -84,25 +84,22 @@ ul li{
     flex-wrap: wrap;
     justify-content: center;
 }
-.row3{
+.each{
     width: 200px;
     height: 200px;
     border: 2px solid #333;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
-.pic1_1{
-    width: 200px;
-    height: 100px;
-    background: url("../images/icons/icon1.jpg") no-repeat;
+.each img{
+    height: 100%;
+    opacity: 0.5;
 }
-.head1{
-    height: 70px;
-    width: 70px;
-    background:url("../images/notfound.jpg");
-}
-.title11{
+.title{
+    position: absolute;
 }
 /*.each span{
     position: absolute;
