@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/uploadStrategy.css">
     <link rel="stylesheet" href="../font/iconfont.css">
-    <!-- simditor -->
-<!--    <link rel="stylesheet" href="../vendors/simditor-2.3.11/styles/simditor.css">-->
 </head>
 <body>
     <div class="tips"></div>
@@ -19,49 +17,11 @@
         </div>
         <div class="helpPage">
             <div id="helpClose">x</div>
-<!--            <div class="tip">
-                <div>--- tip1.攻略标签是什么？ ---</div>
-                <div>从下拉框中为这篇攻略打上关于地点、时长的tag吧！</div>
-            </div>
-            <div class="tip">
-                <div>--- tip2.交换Days ---</div>
-                <div>&#8226;step1:<br>
-                <img src="../images/help/uploadStrategy1.png">
-                </div>
-                <div>&#8226;step2:<br><img src="../images/help/uploadStrategy2.png"></div>
-                <div>&#8226;step3:<br><img src="../images/help/uploadStrategy3.png"></div>
-            </div>-->
         </div>
         <div class="tags"><span class="a">攻略标签：</span>
-            <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple" multiple="multiple">
-<!--               <optgroup label="aaaa">
-                   <option>a</option>
-               </optgroup>
-               <optgroup label="bbbbb">
-                <option value="">1</option>
-                <option value="">2</option>
-               </optgroup>-->
-            </select>
+            <select class="js-example-basic-multiple js-states form-control" id="id_label_multiple" multiple="multiple"></select>
         </div>
         <input type="text" id="title" placeholder="Strategy Title. No more than 20 words">
-        
-<!--    <div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'>
-        <div class='dayTitle mb10'>
-            <input id="daySub" type="text" value="+subTitle+" readonly>
-            <span class='iconfont icon-delete' title='删除'></span>
-            <span class='iconfont icon-bianji' title='编辑'></span>
-            <span class='iconfont icon-baocun' title='保存'></span>
-        </div>
-        <div class='content' id='day"+day+"'>"+data+"</div>
-    </div>-->
-        
-    </div>
-    
-    <!-- simeditor -->
-    <!--<textarea id="editor"></textarea>-->
-    
-    <div>
-        
     </div>
     <input type="text" id="subTitle" placeholder="Sub Title. No more than 10 words">
     <!-- wangEditor -->
@@ -69,16 +29,10 @@
     <input type="button" value="添 加" id="addBtn">
     
     <script src="../js/jquery-3.2.1.min.js"></script>
-    <!-- simditor -->
-<!--    <script src="../vendors/simditor-2.3.11/site/assets/scripts/module.js"></script>
-    <script src="../vendors/simditor-2.3.11/site/assets/scripts/hotkeys.js"></script>
-    <script src="../vendors/simditor-2.3.11/site/assets/scripts/uploader.js"></script>
-    <script src="../vendors/simditor-2.3.11/site/assets/scripts/simditor.js"></script>-->
     <!-- wangEditor -->
     <script src="../vendors/wangEditor-3.0.15/release/wangEditor.min.js"></script>
-    
+    <!-- select2 -->
     <script src="../vendors/select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
-    
     <script src="../js/common.js"></script>
     <script src="../js/uploadStrategy.js"></script>
 </body>

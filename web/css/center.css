@@ -1,22 +1,39 @@
-body{
-    padding: 0 15%;
+.head{
+    width: 100%;
+    height: 200px;
+    background: #090723;
+}
+.body{
+    width: 1000px;
+    margin: 0 auto;
 }
 /* catalog */
-ul{
+.catalog{
     display: flex;
     justify-content: space-around;
+    margin: 30px 0;
 }
-ul li{
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: #333;
+.catalog li{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #fff;
-    font-weight: bold;
     cursor: pointer;
+    font-weight: bold;
+}
+.icon{
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+    transition: all 0.3s linear;
+}
+.icon:hover{
+    /*transform: translateY(-10px);*/
+    transform: scale(1.1);
+}
+.iconClick{
+    transform: translateY(-20px);
 }
 
 /* content*/
@@ -32,9 +49,9 @@ ul li{
     width: 100%;
     height: 100%;
 }
-/* strategyContainer */
+/* 1.strategyContainer */
 #strategyContainer{
-    
+    display: none;
 }
 /* echarts */
 #container{
@@ -71,54 +88,249 @@ ul li{
     height: 20px;
 }
 .strategy{
-    padding: 15px 20px;
+    cursor: pointer;
 }
-.province,.noProvince{
-    padding: 5px;
+.province{
+    padding: 10px 5px;
     border-bottom: 2px dashed #333;
-    margin-bottom: 10px;
     font-weight: bold;
+    line-height: 100%;
 }
 .all{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    text-align: center;
 }
 .each{
-    width: 200px;
-    height: 200px;
+    width: 170px;
+    height: 170px;
     border: 2px solid #333;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    margin: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #999;
+    transition: all 0.3s linear;
+}
+.each:hover{
+    box-shadow: 0 0 30px #999;
+    transition: all 0.3s linear;
 }
 .each img{
     height: 100%;
-    opacity: 0.5;
+    opacity: 0.3;
 }
 .title{
     position: absolute;
 }
-/*.each span{
-    position: absolute;
-}
-.bracket,.number{
+.number{
+    color: #999;
     font-size: 13px;
-    color: #666;
-}*/
-
-/**/
-#collectContainer{
-    background: blue;
 }
+
+/* 2.collectContainer */
+#collectContainer{
+    padding: 30px 50px;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: none;
+}
+.collectCatalog{
+    width: 180px;
+    float: left;
+}
+.collectCatalog li{
+    padding: 10px 10px 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+.collectProvince{
+    width: 90px;
+}
+.nothing{
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    color: #999;
+}
+.collects{
+    padding-left: 50px;
+    flex: 1;
+    border-left: 2px dashed #333;
+}
+.collect{
+    display: flex;
+    position: relative;
+    padding: 20px 0;
+    border-bottom: 1px solid #d1d5da;
+}
+.collect:first-child{
+    padding-top: 0;
+}
+.collect:last-child{
+    border: none;
+    padding-bottom: 0;
+}
+#mainImg{
+    width: 300px;
+    height: 200px;
+    vertical-align: top;
+    margin-right: 30px;
+}
+.collectInfo{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    justify-content: space-between;
+}
+.collectInfo>span:nth-child(1) span{
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+}
+.title{
+    font-size: 25px;
+    font-weight: bold;
+}
+.bot{
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+.bot span{
+    font-size: 15px;
+}
+.bot .icon-zan1{
+    font-size: 19px;
+    color: #3367D6;
+    margin-right: 5px;
+}
+.forNum{
+    margin-right: 15px;
+}
+.bot .icon-collection-b{
+    color: #eb4f38;
+    margin-right: 5px;
+}
+
+/* 3.uploadContainer */
 #uploadContainer{
     background: green;
+    height: 500px;
+    display: none;
 }
+
+/* 4.editContainer */
 #editContainer{
-    background: pink;
+    padding: 15px;
+    box-sizing: border-box;
+    display: none;
 }
+.editCatalog{
+    height: 500px;
+    width: 10%;
+    font-size: 14px;
+    margin-right: 20px;
+}
+.editCatalog li{
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 5px;
+    text-align: center;
+}
+.editCilck{
+    background: #333;
+    color: #fff;
+    border-radius: 5px;
+}
+/*.editCatalog li:hover{
+    text-shadow: 0 0 5px #888;
+}*/
+.editInfo{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    border-left: 2px dashed #333;
+}
+.reset{
+    display: none;
+}
+.left,.right{
+    float: left;
+}
+.left{
+    margin-right: 200px;
+}
+.left>div,.reset>div{
+    margin-bottom: 20px;
+}
+.left>div>div,.reset>div>div{
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.left>div>input,.left>div>textarea,.reset input{
+    border-radius: 5px;
+    border: 1px solid #d1d5da;
+    background: #fafbfc;
+    height: 25px;
+}
+.left>div>textarea{
+    width: 225px;
+    height: 75px;
+    resize: none;
+    padding: 5px;
+    outline: none;
+}
+.codeContainer{
+    display: none;
+}
+#updateBtn{
+    font-size: 12px;
+    width: 70px;
+    margin-left: 10px;
+}
+#editBtn,#resetBtn{
+    height: 25px;
+    width: 100px;
+    border-radius: 5px;
+    border: 1px solid #1E82CF;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #0495C7, #0487B4);
+    color: #fff;
+    font-size: 12px;
+}
+#editBtn:hover{
+    text-shadow: 0 0 10px #fff;
+}
+#usericon{
+    width: 180px;
+    border-radius: 5px;
+    vertical-align: top;
+}
+#uploadIcon{
+    height: 30px;
+    width: 180px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #CDCFD1;
+    background: linear-gradient(to bottom, #F9FBFC, #EFF3F6);
+    font-weight: bold;
+    cursor: pointer;
+}
+#iconPath{
+    display: none;
+}
+
+/* 5.msgContainer */
 #msgContainer{
     background: purple;
+    height: 500px;
 }
