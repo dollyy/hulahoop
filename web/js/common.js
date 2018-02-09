@@ -91,13 +91,13 @@ $(function(){
     $(window).scroll(function(){
         var heightTop=$(window).scrollTop();
         if(heightTop > 300){
-            $("#backTop").slideDown();
+            $(".sideTool").slideDown();
         }else{
-            $("#backTop").slideUp();
+            $(".sideTool").slideUp();
         }
     });
     /* back to top */
-    $("#toTop").click(function(){
+    $(".icon-fanhuidingbu").click(function(){
         $("body,html").animate({scrollTop:0},500);
     });
 });

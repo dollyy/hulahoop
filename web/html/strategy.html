@@ -8,55 +8,76 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/strategy.css">
 </head>
-<body class="plf20">
-   <!--up to top-->
-    <div id="backTop">
-        <img id="toTop" src="../images/toTop.png" title="返回顶部">
-        <span>返回顶部</span>
+<body>
+    <!--side tools-->
+    <div class="sideTool">
+       <span class="iconfont icon-fankui"></span>
+       <span class="iconfont icon-fanhuidingbu"></span>
     </div>
     
-    <!-- catalog -->
-    <div class="catalog">
-        <div class="provTab mb10">
-            省份: 
-            <select class="js-example-basic-single province" name="state">
-                <option value="0">全部</option>
-            </select>
+    <div class="body">
+        <!-- catalog -->
+        <div class="catalog">
+            <div class="provTab mb10">
+                省份: 
+                <select class="js-example-basic-single province" name="state">
+                    <option value="0">全部</option>
+                </select>
+            </div>
+            <div class="durTab">
+                时长: 
+                <select class="js-example-basic-single duration" name="state">
+                    <option>全部</option>
+                </select>
+            </div>
         </div>
-        <div class="durTab">
-            时长: 
-            <select class="js-example-basic-single duration" name="state">
-                <option>全部</option>
-            </select>
-        </div>
-    </div>
-    
-    <!-- content -->
-    <div class="content">
-<!--        <div class="container">
-            <div class="strategy">
-                <img src="../images/icon1.jpg">
-                <div class="s_msg">
-                    <div>
-                        <span class="iconfont icon-dizhi"></span>
-                        <span class="title">香港新疆云南浙江</span>
-                    </div>
-                    <div>
-                        <span class="iconfont icon-ren"></span>
-                        <span class="user">Lily</span>
-                    </div>
-                    <div>
-                        <span class="iconfont icon-icontag"></span>
-                        <span class="tags">香港 3天</span>
+        <!-- content -->
+        <div class="content">
+           <div class="container">
+                <div class="strategy">
+                    <img id="strategyBg" src="../images/notfound.jpg">
+                    <img id="avatar" src="../images/icons/icon6.jpg">
+                    <div class="s_msg">
+                        <div>
+                            <span class="iconfont icon-dizhi"></span>
+                            <span class="title">香港新疆云南浙江</span>
+                        </div>
+<!--                        <div>
+                            <span class="iconfont icon-ren"></span>
+                            <span class="user">Lily</span>
+                        </div>-->
+                        <div>
+                            <span class="iconfont icon-icontag"></span>
+                            <span class="tags">香港 3天</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>-->
+            <!--<div class="container">
+                <div class="strategy">
+                    <img src="../images/notfound.jpg">
+                    <div class="s_msg">
+                        <div>
+                            <span class="iconfont icon-dizhi"></span>
+                            <span class="title">香港新疆云南浙江</span>
+                        </div>
+                        <div>
+                            <span class="iconfont icon-ren"></span>
+                            <span class="user">Lily</span>
+                        </div>
+                        <div>
+                            <span class="iconfont icon-icontag"></span>
+                            <span class="tags">香港 3天</span>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
     </div>
     
     <script src="../js/jquery-3.2.1.min.js"></script>
     <script src="../vendors/select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
-    <script src="../js/strategy.js"></script>
+    <!--<script src="../js/strategy.js"></script>-->
     <script src="../js/common.js"></script>
 </body>
 </html>

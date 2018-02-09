@@ -1,14 +1,18 @@
+.body{
+    width: 1100px;
+    margin: 0 auto;
+}
 /* catalog */
 .catalog{
     float: left;
-    width: 16%;
+    width: 180px;
     background: #fff;
     padding: 10px;
     box-sizing: border-box;
-    border-radius: 10px;
     box-shadow: 0 0 15px #999;
     font-size: 14px;
     position: fixed;
+    border-left: 3px solid #3367D6;
 }
 .js-example-basic-single{
     width: 100px;
@@ -16,7 +20,7 @@
 /* content */
 .content{
     float: right;
-    width: 80%;
+    width: 900px;
     background: #fff;
     padding: 15px 25px;
     box-sizing: border-box;
@@ -24,8 +28,7 @@
     box-shadow: 0 0 15px #999;
 }
 .container{
-    width: 25%;
-    float: left;
+    width: 250px;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -34,18 +37,28 @@
     width: 100%;
     height: 100%;
     background: #f2f2f2;
-    border-radius: 10px;
     cursor: pointer;
     box-shadow: 0 0 10px #999;
     transition: all 0.3s linear;
+    position: relative;
 }
 .strategy:hover{
     box-shadow: 0 0 30px #999;
     transition: all 0.3s linear;
 }
-.strategy img{
+#strategyBg{
     width: 100%;
-    border-radius: 10px;
+    height: 200px;
+    border-bottom: 2px solid #999;
+}
+#avatar{
+    width: 50px;
+    border-radius: 50%;
+    position: relative;
+    margin-top: -30px;
+    left: 50%;
+    transform: translate(-50%);
+    border: 2px solid #999;
 }
 .s_msg{
     font-size: 13px;
@@ -57,9 +70,41 @@
 .s_msg>div>span:nth-child(2){
     font-weight: bold;
 }
+/*.container{
+    width: 200px;
+    float: left;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.strategy{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background: #f2f2f2;
+    cursor: pointer;
+    box-shadow: 0 0 10px #999;
+    transition: all 0.3s linear;
+}
+.strategy:hover{
+    box-shadow: 0 0 30px #999;
+    transition: all 0.3s linear;
+}
+.strategy img{
+    width: 100%;
+}
+.s_msg{
+    font-size: 13px;
+    margin: 0 5px;
+}
+.s_msg>div{
+    margin: 5px 0;
+}
+.s_msg>div>span:nth-child(2){
+    font-weight: bold;
+}*/
 
 /* media*/
-@media (max-width:750px){
+/*@media (max-width:750px){
     .container{
         width: 50%;
     }
@@ -80,4 +125,4 @@
     .container{
         width: 20%;
     }
-}
+}*/

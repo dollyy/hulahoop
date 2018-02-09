@@ -3,6 +3,7 @@
 //2.the gradient color of map
 //3.the format of phone
 //4.whether city is needed?
+var mapData,myChart;
 $(function(){
     
     //select2
@@ -16,9 +17,9 @@ $(function(){
         dataType:"json",*/
         success:function(data){
 /*            var data={"userMap":[[1,7],[2,11],[3,15],[4,12],[5,7],[6,10],[7,2],[8,11],[9,2],[10,1],[11,5],[12,1],[13,3],[14,11],[15,2],[16,1],[17,5],[18,1],[19,2],[20,11],[21,11],[22,4],[23,5],[24,1],[25,2],[26,11],[27,1],[28,1],[29,5],[30,1],[31,2],[32,11],[34,1],[35,9]]};*/
-            var datas={"userMap":[[1,15,'安徽'],[2,2,'澳门'],[3,1,'北京'],[4,2,'重庆'],[5,1,'福建'],[6,1,'吉林'],[8,8,'江西'],[12,2,'黑龙江'],[15,2,'甘肃'],[18,2,'贵州'],[20,1,'南海诸岛'],[23,8,'青海'],[27,4,'上海'],[35,4,'浙江']],"stStrategy":[
+            var data={"userMap":[[1,15,'安徽'],[2,2,'澳门'],[3,1,'北京'],[4,2,'重庆'],[5,1,'福建'],[6,1,'吉林'],[8,8,'江西'],[12,2,'黑龙江'],[15,2,'甘肃'],[18,2,'贵州'],[20,1,'南海诸岛'],[23,8,'青海'],[27,4,'上海'],[35,4,'浙江']],"stStrategy":[
                 [
-                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"]
+                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"],["4","../images/icons/icon4.jpg","4"]
                 ],[
                     ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"]
                 ],[
@@ -30,7 +31,7 @@ $(function(){
                 ],[
                     ["1","../images/icons/icon1.jpg","1"]
                 ],[
-                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"]
+                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"],["4","../images/icons/icon4.jpg","4"]
                 ],[
                     ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"]
                 ],[
@@ -40,15 +41,15 @@ $(function(){
                 ],[
                     ["1","../images/icons/icon1.jpg","1"]
                 ],[
-                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"]
+                    ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"],["4","../images/icons/icon4.jpg","4"]
                 ],[
                     ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"]
                 ],[
                     ["1","../images/icons/icon1.jpg","1"],["2","../images/icons/icon2.jpg","2"],["3","../images/icons/icon3.jpg","3"],["4","../images/icons/icon4.jpg","4"]
                 ],
             ]};
-            data=datas;
-            showMap(datas);
+            mapData=data;
+            showMap(data);
             for(i=0;i<data.userMap.length;i++){
                 $("#strategies").append("<div class='strategy'><div class='province'><span>"+data.userMap[i][2]+"</span><span class='number'> ( "+data.userMap[i][1]+" ) </span><span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span></div><div class='all' id='all"+i+"'></div></div>");
                 for(j=0;j<data.stStrategy[i].length;j++){
@@ -56,7 +57,6 @@ $(function(){
                 }
             }
             $("#strategies .strategy").find(".icon-zhankai").hide();
-            //$("#strategies .strategy").filter(':not(:eq(0))').find(".icon-shouqi").hide();
             $("#strategies .strategy .icon-zhankai").off("click").on("click",function(){
                 $(this).hide().siblings().show();
                 $(this).parent().next().show();
@@ -71,14 +71,25 @@ $(function(){
         }
     });
     
-    /**/
+    /* 1 */
     $("#navStrategy").click(function(){
         $(this).find(".icon").addClass("iconClick");
         $(this).siblings().find(".icon").removeClass("iconClick");
         $("#strategyContainer").show().siblings().hide();
     });
+    //echarts
+    $(window).resize(function(){
+        myChart.resize();
+    });
+    $("#mapDot").click(function(){
+        $("#strategyMap").show().siblings().hide();
+    });
+    $("#pieDot").click(function(){
+        $("#strategyPie").show().siblings().hide();
+        showPie(mapData);
+    });
     
-    /**/
+    /* 2 */
     $("#navCollect").click(function(){
         $.ajax({
 /*            type:"post",
@@ -104,14 +115,14 @@ $(function(){
         $("#collectContainer").css("display","flex").siblings().hide();
     });
     
-    /**/
+    /* 3 */
     $("#navUpload").click(function(){
         $(this).find(".icon").addClass("iconClick");
         $(this).siblings().find(".icon").removeClass("iconClick");
         $("#uploadContainer").show().siblings().hide();
     });
     
-    /**/
+    /* 4 */
     $("#navEdit").click(function(){
         $(this).find(".icon").addClass("iconClick");
         $(this).siblings().find(".icon").removeClass("iconClick");
@@ -141,33 +152,30 @@ $(function(){
         console.log(123);
     });
     
-    /**/
+    /* 5 */
     $("#navMsg").click(function(){
         $(this).find(".icon").addClass("iconClick");
         $(this).siblings().find(".icon").removeClass("iconClick");
+        $.ajax({
+            type:"post",
+            url:"",
+            dataType:"json",
+            success:function(data){
+                var data={"msg":[[]]};
+            },
+            error:function(){
+                
+            }
+        });
         $("#msgContainer").show().siblings().hide();
-    });
-    
-    //echarts
-    var myChart,data;
-    $(window).resize(function(){
-        myChart.resize();
-    });
-    $("#mapDot").click(function(){
-        $("#strategyMap").show().siblings().hide();
-    });
-    
-    $("#pieDot").click(function(){
-        $("#strategyPie").show().siblings().hide();
-        showPie(data);
     });
     
 });
     
-function showPie(data){
+function showPie(mapData){
     var province=new Array();
-    for(i=0;i<data.userMap.length;i++){
-        province[i]=data.userMap[i][2];
+    for(i=0;i<mapData.userMap.length;i++){
+        province[i]=mapData.userMap[i][2];
     }
     myChart=echarts.init(document.getElementById("strategyPie"));
     option = {
