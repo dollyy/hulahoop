@@ -10,6 +10,15 @@ $(function(){
         $(".icon-feiji").css("transform","rotateZ(-45deg)");
     });
     
+    $(".icon-fangdajing").click(function(){
+        /*$("#searchInp").show();*/
+        var search=$("#searchInp").val();
+        if(search == "" || search == null){
+            return;
+        }
+        alert(search);
+    });
+    
     /* to signup*/
     $("#goUp").click(function(){
         $("#signupContainer").slideDown();
@@ -228,9 +237,8 @@ $(function(){
                 $("#signinContainer").slideUp();
                 $("#sign").css("display","none");
                 $("#userIcon").css("display","inline-block");
-                $("#signinForm")[0].reset();   //clean input
+                $("#signinContainer")[0].reset();   //clean input
                 $("#inBtn").attr("disabled","true");
-                
                 $("#username").html(data.username);
                 $("#userIcon img").attr("src","../images/icons/icon"+data.userIcon+".jpg");
             },

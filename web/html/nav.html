@@ -12,24 +12,30 @@
    <div id="bg"></div>
    <!--导航-->
     <nav>
-        <a href="index.html"><img src="../images/icons/icon1.jpg"></a>
-        <span id="sign">
-            <span class="mr20" id="signin">登录</span>
-            <span class="mr20" id="signup">注册</span>
-        </span>
-        <span id="userIcon">
-            <img class="mr10" src="">
-            <span class="mr20" id="username"></span>
-            <span class="mr20" id="msgTip">
-                <span class="iconfont icon-lingdang"></span>
-                <span id="msgDot"></span>
+        <div class="nav">
+            <a href="index.html"><img src="../images/icons/icon1.jpg"></a>
+            <div class="serach">
+                <input type="text" id="searchInp">
+                <span class="iconfont icon-fangdajing"></span>
+            </div>
+            <span id="sign">
+                <span id="signin">登录</span>
+                <span id="signup">注册</span>
             </span>
-            <span id="logout">退出</span>
-        </span>
+            <span id="userIcon">
+                <img src="">
+                <span id="username"></span>
+                <span id="msgTip">
+                    <span class="iconfont icon-lingdang"></span>
+                    <span id="msgDot"></span>
+                </span>
+                <span id="logout">退出</span>
+            </span>
+        </div>
     </nav>
     <div class="signContainer">
         <!--登录容器-->
-        <div id="signinContainer">
+        <form id="signinContainer">
             <div>
                 <span id="goUp">去注册</span>
                 <span class="iconfont icon-feiji"></span>
@@ -41,7 +47,7 @@
                 <a href="#" id="resetPwd">忘记密码 </a>
             </span><br>
             <input type="button" id="inBtn" value="登 录" disabled>
-        </div>
+        </form>
         <!--注册容器-->
         <form id="signupContainer">
             <div>

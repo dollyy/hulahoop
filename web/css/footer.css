@@ -2,9 +2,12 @@ nav{
     width: 100%;
     padding: 10px;
     font-size: 13px;
-    background: #f2f2f2;
-    box-shadow: 0px -2px 10px #666;
+    background: #090723;
     box-sizing: border-box;
+    color: #fff;
+}
+nav a{
+    color: #fff;
 }
 nav>span{
     display: inline-block;

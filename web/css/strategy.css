@@ -27,20 +27,16 @@
     border-radius: 10px;
     box-shadow: 0 0 15px #999;
 }
-.container{
-    width: 250px;
-    padding: 10px;
-    box-sizing: border-box;
-}
 .strategy{
     display: inline-block;
-    width: 100%;
+    width: 250px;
     height: 100%;
     background: #f2f2f2;
     cursor: pointer;
     box-shadow: 0 0 10px #999;
     transition: all 0.3s linear;
     position: relative;
+    margin: 15px;
 }
 .strategy:hover{
     box-shadow: 0 0 30px #999;
@@ -48,17 +44,26 @@
 }
 #strategyBg{
     width: 100%;
-    height: 200px;
+    height: 180px;
     border-bottom: 2px solid #999;
 }
-#avatar{
-    width: 50px;
-    border-radius: 50%;
+.author{
     position: relative;
-    margin-top: -30px;
-    left: 50%;
-    transform: translate(-50%);
+    margin-top: -40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#avatar{
+    width: 60px;
+    border-radius: 50%;
     border: 2px solid #999;
+}
+.user{
+    position: absolute;
+    font-weight: bold;
+    font-size: 14px;
+    display: none;
 }
 .s_msg{
     font-size: 13px;
