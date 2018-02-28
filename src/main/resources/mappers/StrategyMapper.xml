@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.hulahoop.dao.StrategyMapper">
+    <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.Strategy">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="city_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="duration" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="main_img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="sub_img" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="for_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="collect_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num,
+        create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from strategies
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from strategies
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Strategy">
+        insert into strategies (id, user_id, name,
+          city_id, duration, content,
+          main_img, sub_img, for_num,
+          collect_num, create_time, update_time
+          )
+        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+          #{cityId,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+          #{mainImg,jdbcType=VARCHAR}, #{subImg,jdbcType=VARCHAR}, #{forNum,jdbcType=INTEGER},
+          #{collectNum,jdbcType=INTEGER}, now(), now()
+          )
+    </insert>
+    <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Strategy">
+        insert into strategies
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="duration != null">
+                duration,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="mainImg != null">
+                main_img,
+            </if>
+            <if test="subImg != null">
+                sub_img,
+            </if>
+            <if test="forNum != null">
+                for_num,
+            </if>
+            <if test="collectNum != null">
+                collect_num,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="duration != null">
+                #{duration,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="mainImg != null">
+                #{mainImg,jdbcType=VARCHAR},
+            </if>
+            <if test="subImg != null">
+                #{subImg,jdbcType=VARCHAR},
+            </if>
+            <if test="forNum != null">
+                #{forNum,jdbcType=INTEGER},
+            </if>
+            <if test="collectNum != null">
+                #{collectNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="updateTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yc.hulahoop.pojo.Strategy">
+        update strategies
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="duration != null">
+                duration = #{duration,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="mainImg != null">
+                main_img = #{mainImg,jdbcType=VARCHAR},
+            </if>
+            <if test="subImg != null">
+                sub_img = #{subImg,jdbcType=VARCHAR},
+            </if>
+            <if test="forNum != null">
+                for_num = #{forNum,jdbcType=INTEGER},
+            </if>
+            <if test="collectNum != null">
+                collect_num = #{collectNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.Strategy">
+        update strategies
+        set user_id = #{userId,jdbcType=INTEGER},
+          name = #{name,jdbcType=VARCHAR},
+          city_id = #{cityId,jdbcType=INTEGER},
+          duration = #{duration,jdbcType=VARCHAR},
+          content = #{content,jdbcType=VARCHAR},
+          main_img = #{mainImg,jdbcType=VARCHAR},
+          sub_img = #{subImg,jdbcType=VARCHAR},
+          for_num = #{forNum,jdbcType=INTEGER},
+          collect_num = #{collectNum,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

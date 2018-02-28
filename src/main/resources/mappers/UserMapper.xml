@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.hulahoop.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.User">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="bio" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="gender" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, username, password, avatar, phone, role, bio, gender, city, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from users
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from users
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User">
+        insert into users (id, username, password,
+          avatar, phone, role,
+          bio, gender, city,
+          create_time, update_time)
+        values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+          #{avatar,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER},
+          #{bio,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+          now(), now())
+    </insert>
+    <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.User">
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="bio != null">
+                bio,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=INTEGER},
+            </if>
+            <if test="bio != null">
+                #{bio,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="updateTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yc.hulahoop.pojo.User">
+        update users
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=INTEGER},
+            </if>
+            <if test="bio != null">
+                bio = #{bio,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.User">
+        update users
+        set username = #{username,jdbcType=VARCHAR},
+          password = #{password,jdbcType=VARCHAR},
+          avatar = #{avatar,jdbcType=VARCHAR},
+          phone = #{phone,jdbcType=VARCHAR},
+          role = #{role,jdbcType=INTEGER},
+          bio = #{bio,jdbcType=VARCHAR},
+          gender = #{gender,jdbcType=VARCHAR},
+          city = #{city,jdbcType=VARCHAR},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="verifyUsername" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM users WHERE username=#{username}
+    </select>
+
+    <select id="verifyPhone" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM users WHERE phone=#{phone}
+    </select>
+
+    <select id="loginByUsername" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM users WHERE username=#{username} AND password=#{password}
+    </select>
+
+    <select id="loginByPhone" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM users WHERE phone=#{phone} AND password=#{password}
+    </select>
+
+    <select id="verifyPassword" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM users WHERE id=#{userId} AND password=#{passwordOld}
+    </select>
+</mapper>
