@@ -1,6 +1,9 @@
 package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.Strategy;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface StrategyMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,6 @@ public interface StrategyMapper {
     int updateByPrimaryKeySelective(Strategy record);
 
     int updateByPrimaryKey(Strategy record);
+
+    List<Strategy> list(@Param("cityId") int cityId, @Param("duration") String duration);
 }

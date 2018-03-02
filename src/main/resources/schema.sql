@@ -49,6 +49,12 @@ CREATE TABLE `strategies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num, create_time, update_time)
+VALUES (2,'三日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
+  (3,'五日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate());
+
+SELECT * FROM strategies;
+
 -- ------------------------------------
 -- Table structure for `user_strategy`
 -- ------------------------------------

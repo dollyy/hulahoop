@@ -1,7 +1,7 @@
 package com.yc.hulahoop.common;
 
 /**
- * Created by ts on 18-2-28.
+ * Created by Yang Chen on 18-2-28.
  */
 public class Const {
 

@@ -176,4 +176,16 @@
           update_time = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="list" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" /> FROM strategies
+        <where>
+            <if test="cityId != null">
+                city_id=#{cityId}
+            </if>
+            <if test="duration != null">
+                AND duration=#{duration}
+            </if>
+        </where>
+    </select>
 </mapper>
