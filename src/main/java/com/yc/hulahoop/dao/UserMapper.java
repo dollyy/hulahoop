@@ -1,6 +1,8 @@
 package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.User;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -19,9 +21,9 @@ public interface UserMapper {
 
     int verifyPhone(String phone);
 
-    User loginByUsername(String username, String password);
+    User loginByUsername(@Param("username") String username, @Param("password") String password);
 
-    User loginByPhone(String username, String phone);
+    User loginByPhone(@Param("phone") String phone, @Param("password") String password);
 
-    int verifyPassword(String passwordOld, int userId);
+    int verifyPassword(@Param("passwordOld") String passwordOld, @Param("userId") int userId);
 }

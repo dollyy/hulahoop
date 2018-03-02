@@ -21,7 +21,7 @@ CREATE TABLE `users` (
   `password` varchar(50) NOT NULL COMMENT '密码加密',
   `avatar` varchar(100) DEFAULT NULL COMMENT '用户头像',
   `phone` varchar(20) NOT NULL,
-  `role` int(1) DEFAULT '0' COMMENT '角色,0:用户,1:管理员',
+  `role` int(1) NOT NULL COMMENT '角色,0:用户,1:管理员',
   `bio` varchar(50) DEFAULT NULL COMMENT '个人简介',
   `gender` varchar(10) DEFAULT NULL COMMENT '性别',
   `city` varchar(10) DEFAULT NULL COMMENT '城市',
@@ -129,6 +129,8 @@ CREATE TABLE `feedback_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 
+
+INSERT INTO users(username, password, phone, create_time, update_time) VALUES ('123','456','12345678',sysdate(),sysdate());
 
 -- ------------------------------------
 -- Records of `cities`

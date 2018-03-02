@@ -11,10 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-
 /**
- * Created by ts on 18-2-28.
+ * Created by Yang Chen on 18-2-28.
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -27,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> verify(String val, String type) {
+        System.out.println(val+","+type);
         int count;
         switch (type) {
             case Const.USERNAME:    //校验 用户名
@@ -39,10 +38,10 @@ public class UserServiceImpl implements UserService {
                 return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
         if (count > 0) {    //参数已存在
-            return ServerResponse.createByErrorMessage(type + Const.DUPLICATE_PARAMETER);
+            return ServerResponse.createByErrorMessage("参数已存在");
         }
         //校验成功
-        return ServerResponse.createBySuccess();
+        return ServerResponse.createBySuccessMessage("参数校验成功");
     }
 
     @Override
@@ -59,64 +58,66 @@ public class UserServiceImpl implements UserService {
         }
         //密码加密
         //todo: password MD5
+        //设置role
+        user.setRole(Const.Role.USER);
 
         //添加用户
-        int count = userMapper.insertSelective(user);
+        int count = userMapper.insert(user);
         //注册成功
         if (count > 0) {
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createBySuccessMessage("注册成功");
         }
         //注册失败
-        return ServerResponse.createByError();
+        return ServerResponse.createByErrorMessage("注册失败");
     }
 
     @Override
-    public ServerResponse login(String val, String password, String type) {
+    public ServerResponse login(String val, String password) {
         //密码加密
         //todo: password MD5
-        User user;
-        switch (type) {
-            case Const.USERNAME:    //用用户名登录
-                user = userMapper.loginByUsername(val, password);
-                break;
-            case Const.PHONE:       //用手机号登录
-                user = userMapper.loginByPhone(val, password);
-                break;
-            default:
-                return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        //1.用用户名登录
+        if(userMapper.verifyUsername(val) == 0){    //校验用户名是否存在
+            return ServerResponse.createByErrorMessage(Const.NO_USER);
         }
+        User nameUser = userMapper.loginByUsername(val, password);
         //登录成功
-        if (user != null) {
-            user.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
-            return ServerResponse.createBySuccess(Const.ResponseCode.SUCCESS.getDescription(), user);
+        if (nameUser != null) {
+            nameUser.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
+            return ServerResponse.createBySuccess("登陆成功", nameUser);
+        }
+        //2.用手机号登录
+        //校验手机号时候存在
+        if(userMapper.verifyPhone(val) == 0){
+            return ServerResponse.createByErrorMessage(Const.NO_PHONE);
+        }
+        User phoneUser = userMapper.loginByPhone(val, password);
+        //登录成功
+        if (phoneUser != null) {
+            phoneUser.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
+            return ServerResponse.createBySuccess("登陆成功", phoneUser);
         }
         //登录失败
-        return ServerResponse.createByErrorMessage(Const.ResponseCode.ERROR.getDescription());
+        return ServerResponse.createByErrorMessage("用户名或密码错误");
     }
 
     @Override
-    public ServerResponse verifyPassword(String passwordOld, int userId) {
-        //todo: password MD5
-        int count = userMapper.verifyPassword(passwordOld, userId);
-        //校验密码正确
-        if (count > 0) {
-            return ServerResponse.createBySuccess();
-        }
+    public ServerResponse resetPassword(String passwordOld, String passwordNew, User user) {
+        //校验旧密码
+        //todo: passwordOld MD5
+        int count = userMapper.verifyPassword(passwordOld, user.getId());
         //校验密码失败
-        return ServerResponse.createByError();
-    }
-
-    @Override
-    public ServerResponse resetPassword(String passwordNew, User user) {
-        //todo: password MD5
+        if (count == 0) {
+            return ServerResponse.createByErrorMessage("原始密码错误");
+        }
+        //todo: passwordNew MD5
         user.setPassword(passwordNew);
-        int count = userMapper.updateByPrimaryKeySelective(user);
+        count = userMapper.updateByPrimaryKeySelective(user);
         //重置密码成功
         if (count > 0) {
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createBySuccessMessage("重置密码成功");
         }
         //重置密码失败
-        return ServerResponse.createByError();
+        return ServerResponse.createByErrorMessage("重置密码失败");
     }
 
     @Override
@@ -133,20 +134,29 @@ public class UserServiceImpl implements UserService {
     public ServerResponse updateUserInformation(User user) {
         int count=userMapper.updateByPrimaryKeySelective(user);
         if(count > 0){
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createBySuccessMessage("更新用户信息成功");
         }
-        return ServerResponse.createByError();
+        return ServerResponse.createByErrorMessage("更新用户信息失败");
     }
 
     @Override
     public ServerResponse feedback(FeedbackInfo feedbackInfo) {
         feedbackInfo.setLevel(String.valueOf(feedbackInfoMapper.queryFeedbackCount() + 1));
-        int count=feedbackInfoMapper.insertSelective(feedbackInfo);
+        int count=feedbackInfoMapper.insert(feedbackInfo);
         //添加反馈成功
         if(count > 0){
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createBySuccessMessage("反馈信息成功");
         }
         //添加反馈失败
-        return ServerResponse.createByError();
+        return ServerResponse.createByErrorMessage("反馈信息失败");
+    }
+
+    @Override
+    public ServerResponse reFeedback(FeedbackInfo feedbackInfo) {
+        int count=feedbackInfoMapper.insert(feedbackInfo);
+        if(count > 0){
+            return ServerResponse.createBySuccessMessage("发送信息成功");
+        }
+        return ServerResponse.createByErrorMessage("发送信息失败");
     }
 }

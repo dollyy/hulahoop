@@ -10,16 +10,16 @@ public interface UserService {
 
     ServerResponse<String> register(User user);
 
-    ServerResponse login(String val, String password, String type);
+    ServerResponse login(String val, String password);
 
-    ServerResponse verifyPassword(String passwordOld, int userId);
-
-    ServerResponse resetPassword(String passwordNew, User user);
+    ServerResponse resetPassword(String passwordOld, String passwordNew, User user);
 
     ServerResponse queryUserInformation(int userId);
 
     ServerResponse updateUserInformation(User user);
 
     ServerResponse feedback(FeedbackInfo feedbackInfo);
+
+    ServerResponse reFeedback(FeedbackInfo feedbackInfo);
 
 }

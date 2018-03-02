@@ -1,8 +1,13 @@
 package com.yc.hulahoop.common;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 /**
- * Created by ts on 18-2-28.
+ * Created by Yang Chen on 18-2-28.
  */
+//value为null时不返回key
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> {
 
     private int status;
@@ -21,30 +26,32 @@ public class ServerResponse<T> {
         return data;
     }
 
-    public ServerResponse(int status) {
+    private ServerResponse(int status) {
         this.status = status;
     }
 
-    public ServerResponse(String msg) {
+    private ServerResponse(String msg) {
         this.msg = msg;
     }
 
-    public ServerResponse(int status, String msg) {
+    private ServerResponse(int status, String msg) {
         this.status = status;
         this.msg = msg;
     }
 
-    public ServerResponse(int status, T data) {
+    private ServerResponse(int status, T data) {
         this.status = status;
         this.data = data;
     }
 
-    public ServerResponse(int status, String msg, T data) {
+    private ServerResponse(int status, String msg, T data) {
         this.status = status;
         this.msg = msg;
         this.data = data;
     }
 
+    //不会出现在序列化中
+    @JsonIgnore
     public boolean isSuccess() {
         return this.status == Const.ResponseCode.SUCCESS.getCode();
     }
@@ -55,6 +62,10 @@ public class ServerResponse<T> {
 
     public static <T> ServerResponse<T> createBySuccessData(T data) {
         return new ServerResponse<T>(Const.ResponseCode.SUCCESS.getCode(), data);
+    }
+
+    public static <T> ServerResponse<T> createBySuccessMessage(String msg) {
+        return new ServerResponse<T>(Const.ResponseCode.SUCCESS.getCode(), msg);
     }
 
     public static <T> ServerResponse<T> createBySuccess(String msg, T data) {

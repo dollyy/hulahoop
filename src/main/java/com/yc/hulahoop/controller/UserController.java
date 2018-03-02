@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 
 /**
- * Created by ts on 18-2-28.
+ * Created by Yang Chen on 18-2-28.
  */
 
 @Controller
@@ -47,23 +47,23 @@ public class UserController {
      */
     @RequestMapping(value = "register.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse<String> register(@RequestBody User user) {
+    private ServerResponse<String> register(User user) {
         return userService.register(user);
     }
 
     /**
      * 登录
+     * 登陆时不在根据手机号或者用户名来分开校验是因为:用户名没有样式的限制,如果用户名也是手机号就会出现拿手机号来校验登录而失败的情况
      *
      * @param val      用户名 / 手机号
      * @param password 密码
-     * @param type     username / phone
      * @param session  存放当前用户
      * @return 登录成功/失败
      */
     @RequestMapping(value = "login.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse login(String val, String password, String type, HttpSession session) {
-        ServerResponse serverResponse = userService.login(val, password, type);
+    private ServerResponse login(String val, String password, HttpSession session) {
+        ServerResponse serverResponse = userService.login(val, password);
         if (serverResponse.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
         }
@@ -80,25 +80,7 @@ public class UserController {
     @ResponseBody
     private ServerResponse logout(HttpSession session) {
         session.removeAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccess();
-    }
-
-    /**
-     * 登录状态验证密码
-     *
-     * @param session     当前用户
-     * @param passwordOld 旧密码
-     * @return 密码正确/错误
-     */
-    @RequestMapping(value = "verifyPassword.action", method = RequestMethod.POST)
-    @ResponseBody
-    private ServerResponse verifyPassword(HttpSession session, String passwordOld) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
-        }
-        return userService.verifyPassword(passwordOld, currentUser.getId());
+        return ServerResponse.createBySuccessMessage("退出登录成功");
     }
 
     /**
@@ -110,13 +92,13 @@ public class UserController {
      */
     @RequestMapping(value = "resetPassword.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse resetPassword(HttpSession session, String passwordNew) {
+    private ServerResponse resetPassword(HttpSession session, String passwordOld, String passwordNew) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
         }
-        return userService.resetPassword(passwordNew, currentUser);
+        return userService.resetPassword(passwordOld, passwordNew, currentUser);
     }
 
     /**
@@ -145,7 +127,7 @@ public class UserController {
      */
     @RequestMapping(value = "updateUserInformation.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updateUserInformation(HttpSession session, @RequestBody User user) {
+    private ServerResponse updateUserInformation(HttpSession session, User user) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
@@ -154,9 +136,10 @@ public class UserController {
         //防止横向越权
         user.setId(currentUser.getId());
         //禁止修改的字段
-        user.setPassword(StringUtils.EMPTY);
+        user.setPassword(null);
         user.setRole(null);
         user.setCreateTime(null);
+        //todo: 手机号可不可以更新???
 
         ServerResponse serverResponse = userService.updateUserInformation(user);
         if (serverResponse.isSuccess()) {
@@ -170,7 +153,7 @@ public class UserController {
      *
      * @param session 当前用户
      * @param title   反馈信息的标题
-     * @param content 反馈信息的内同容
+     * @param content 反馈信息的内容
      * @return 反馈成功/失败
      */
     @RequestMapping(value = "feedback.action", method = RequestMethod.POST)
@@ -188,6 +171,34 @@ public class UserController {
         feedbackInfo.setParent(0);
         feedbackInfo.setSequence(1);
         return userService.feedback(feedbackInfo);
+    }
+
+    /**
+     * 回复信息
+     *
+     * @param session  当前用户
+     * @param title    信息的标题
+     * @param content  信息的内容
+     * @param parent   该回复的父级level
+     * @param sequence 回复的次序
+     * @return 回复成功/失败
+     */
+    @RequestMapping(value = "reFeedback.action", method = RequestMethod.POST)
+    @ResponseBody
+    private ServerResponse reFeedback(HttpSession session, String title, String content, int parent, int sequence) {
+        //检查用户是否登录
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {     //用户未登录
+            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        }
+        FeedbackInfo feedbackInfo = new FeedbackInfo();
+        feedbackInfo.setUserId(currentUser.getId());
+        feedbackInfo.setTitle(title);
+        feedbackInfo.setContent(content);
+        feedbackInfo.setParent(parent);
+        feedbackInfo.setSequence(sequence + 1);
+        feedbackInfo.setLevel(parent + "." + (sequence + 1));
+        return userService.reFeedback(feedbackInfo);
     }
 
 }
