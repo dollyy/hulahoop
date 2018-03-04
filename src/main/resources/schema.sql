@@ -30,6 +30,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 -- ------------------------------------
 -- Table structure for `strategies`
 -- ------------------------------------
@@ -49,11 +50,25 @@ CREATE TABLE `strategies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+TRUNCATE TABLE strategies;
+
 INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num, create_time, update_time)
-VALUES (2,'三日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
-  (3,'五日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate());
+VALUES (1,'1日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
+  (2,'2日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate()),
+  (2,'3日游',1,'7天','77777游啊游啊游啊游啊游啊游啊','main path','{sub7,sub7}',15,1,sysdate(),sysdate()),
+  (3,'4五日游',2,'15天','15151515游啊游啊游啊游啊游啊游啊22','main path1','{sub15,sub15}',3,15,sysdate(),sysdate()),
+  (2,'5日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate());
+
+INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num, create_time, update_time)
+VALUES (2,'6日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate()),
+  (3,'7日游',5,'7天','77777游啊游啊游啊游啊游啊游啊','main path','{sub7,sub7}',15,1,sysdate(),sysdate()),
+  (3,'8日游',4,'15天','15151515游啊游啊游啊游啊游啊游啊22','main path1','{sub15,sub15}',3,15,sysdate(),sysdate()),
+  (1,'9日游',7,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
+  (2,'10日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate());
 
 SELECT * FROM strategies;
+
+SELECT * FROM strategies WHERE user_id=(SELECT users.id FROM users WHERE username LIKE '%哈');
 
 -- ------------------------------------
 -- Table structure for `user_strategy`
@@ -66,6 +81,22 @@ CREATE TABLE `user_strategy` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+TRUNCATE TABLE user_strategy;
+
+INSERT INTO user_strategy(strategy_id, city_id, user_id)
+VALUES(1,1,2),(2,23,1),(3,1,1),(4,1,2),(5,18,1),(6,2,2),(7,1,2),(8,8,1),(9,20,2),(10,35,1);
+
+INSERT INTO user_strategy(strategy_id, city_id, user_id)
+VALUES(1,1,1),(2,23,1),(3,1,1),(4,1,1),(5,18,1),(6,2,1),(7,1,2),(8,8,1),(9,20,1),(10,35,1),(11,12,1),(12,35,1),
+  (13,35,1),(14,1,2),(15,34,2),(16,27,1),(17,23,1),(18,8,1),(19,7,2),(20,8,1),(21,1,1),(22,5,1),(23,1,1),(24,1,1),
+  (25,1,2),(26,15,1),(27,27,1),(28,1,1),(29,27,1),(30,35,1),(31,9,2),(32,23,1),(33,1,1),(34,6,1),(35,23,1),(36,4,1),
+  (37,1,1),(38,11,2),(39,23,1),(40,23,1),(41,15,1),(42,27,1),(43,1,1),(44,23,1),(45,12,1),(46,8,1),(47,3,1),(48,1,1),
+  (49,2,1),(50,18,1),(51,23,1),(52,1,1),(53,8,1),(54,1,1),(55,4,1),(56,8,1),(57,8,1),(58,1,1),(59,8,1),(60,1,1);
+
+SELECT s.id, s.user_id, name, s.city_id, duration, content, main_img, sub_img, for_num, collect_num,
+create_time, update_time FROM user_strategy us JOIN strategies s ON us.strategy_id=s.id WHERE s.user_id=2
+AND s.city_id=4;
+
 -- ------------------------------------
 -- Table structure for `cities`
 -- ------------------------------------
@@ -75,6 +106,12 @@ CREATE TABLE `cities` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO cities(name)
+VALUES ('安徽'),('澳门'),('北京'),('重庆'),('福建'),('吉林'),('江苏'),('江西'),('海南'),('河北'),('河南'),('黑龙江'),
+  ('湖北'),('湖南'),('甘肃'),('广东'),('广西'),('贵州'),('辽宁'),('南海诸岛'),('内蒙古'),('宁夏'),('青海'),('山东'),
+  ('山西'),('陕西'),('上海'),('四川'),('台湾'),('天津'),('西藏'),('香港'),('新疆'),('云南'),('浙江');
+
 
 -- ------------------------------------
 -- Table structure for `comments`
@@ -93,62 +130,6 @@ CREATE TABLE `comments` (
   UNIQUE KEY `level` (`level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ------------------------------------
--- Table structure for `help_info`
--- ------------------------------------
-CREATE TABLE `help_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(10) NOT NULL COMMENT '帮助信息的标题',
-  `content` text NOT NULL,
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ------------------------------------
--- Table structure for `resource_info`
--- ------------------------------------
-CREATE TABLE `resource_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) NOT NULL COMMENT '资源的名称',
-  `path` varchar(50) NOT NULL COMMENT '资源在服务器上的路径',
-  `status` int(1) DEFAULT '1' COMMENT '资源的状态,0:弃用,1:使用',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ------------------------------------
--- Table structure for `feedback_info`
--- ------------------------------------
-CREATE TABLE `feedback_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL COMMENT 'users.id',
-  `title` varchar(20) NOT NULL COMMENT '反馈信息的题目',
-  `content` varchar(500) NOT NULL COMMENT '反馈信息的内容',
-  `level` varchar(50) NOT NULL COMMENT '标识唯一反馈信息,值为parent.sequence',
-  `parent` int(11) NOT NULL COMMENT '这条反馈信息是哪条反馈信息的回复,值为第一条反馈信息的level',
-  `sequence` int(11) NOT NULL COMMENT '同等级反馈信息中的顺序',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
-
-
-INSERT INTO users(username, password, phone, create_time, update_time) VALUES ('123','456','12345678',sysdate(),sysdate());
-
--- ------------------------------------
--- Records of `cities`
--- ------------------------------------
-INSERT INTO cities(name)
-VALUES ('安徽'),('澳门'),('北京'),('重庆'),('福建'),('吉林'),('江苏'),('江西'),('海南'),('河北'),('河南'),('黑龙江'),
-  ('湖北'),('湖南'),('甘肃'),('广东'),('广西'),('贵州'),('辽宁'),('南海诸岛'),('内蒙古'),('宁夏'),('青海'),('山东'),
-  ('山西'),('陕西'),('上海'),('四川'),('台湾'),('天津'),('西藏'),('香港'),('新疆'),('云南'),('浙江');
-
--- ------------------------------------
--- Records of `comments`
--- ------------------------------------
 INSERT INTO comments(user_id, content, level, parent, sequence, create_time)
 VALUES
   (1, '今天是几号呀', '1', '0', 1, '2017-12-15 11:11:11'),
@@ -165,19 +146,50 @@ VALUES
   (4, 'emmmm', '2.3', '2', 3, '2017-12-15 11:11:14'),
   (5, 'hhhh不告诉你', '1.4', '1', 4, '2017-12-15 14:50:02');
 
--- ------------------------------------
--- Records of `user_strategy`
--- ------------------------------------
-INSERT INTO user_strategy(strategy_id, city_id, user_id)
-VALUES(1,1,1),(2,23,1),(3,1,1),(4,1,1),(5,18,1),(6,2,1),(7,1,2),(8,8,1),(9,20,1),(10,35,1),(11,12,1),(12,35,1),
-  (13,35,1),(14,1,2),(15,34,2),(16,27,1),(17,23,1),(18,8,1),(19,7,2),(20,8,1),(21,1,1),(22,5,1),(23,1,1),(24,1,1),
-  (25,1,2),(26,15,1),(27,27,1),(28,1,1),(29,27,1),(30,35,1),(31,9,2),(32,23,1),(33,1,1),(34,6,1),(35,23,1),(36,4,1),
-  (37,1,1),(38,11,2),(39,23,1),(40,23,1),(41,15,1),(42,27,1),(43,1,1),(44,23,1),(45,12,1),(46,8,1),(47,3,1),(48,1,1),
-  (49,2,1),(50,18,1),(51,23,1),(52,1,1),(53,8,1),(54,1,1),(55,4,1),(56,8,1),(57,8,1),(58,1,1),(59,8,1),(60,1,1);
 
 -- ------------------------------------
--- Records of `feedback_info`
+-- Table structure for `help_info`
 -- ------------------------------------
+CREATE TABLE `help_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(10) NOT NULL COMMENT '帮助信息的标题',
+  `content` text NOT NULL,
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ------------------------------------
+-- Table structure for `resource_info`
+-- ------------------------------------
+CREATE TABLE `resource_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(10) NOT NULL COMMENT '资源的名称',
+  `path` varchar(50) NOT NULL COMMENT '资源在服务器上的路径',
+  `status` int(1) DEFAULT '1' COMMENT '资源的状态,0:弃用,1:使用',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `path` (`path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- ------------------------------------
+-- Table structure for `feedback_info`
+-- ------------------------------------
+CREATE TABLE `feedback_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT 'users.id',
+  `title` varchar(20) NOT NULL COMMENT '反馈信息的题目',
+  `content` varchar(500) NOT NULL COMMENT '反馈信息的内容',
+  `level` varchar(50) NOT NULL COMMENT '标识唯一反馈信息,值为parent.sequence',
+  `parent` int(11) NOT NULL COMMENT '这条反馈信息是哪条反馈信息的回复,值为第一条反馈信息的level',
+  `sequence` int(11) NOT NULL COMMENT '同等级反馈信息中的顺序',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
 INSERT INTO feedback_info(user_id, title, content, level, parent, sequence, create_time)
 VALUES (2,'你好','你好呀',1,0,1,'2018-02-27 12:23:45'),(3,'登录','首次登录',2,0,1,'2018-02-27 12:23:46'),
   (1,'Re: 你好','hi!',1.2,1,2,'2018-02-27 12:23:47'),(1,'Re: 登录','欢迎你',2.2,2,2,'2018-02-27 12:23:48'),

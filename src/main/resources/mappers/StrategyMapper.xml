@@ -28,20 +28,22 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from strategies
-        where id = #{id,jdbcType=INTEGER}
+        DELETE FROM strategies
+        WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.Strategy">
-        insert into strategies (id, user_id, name,
-          city_id, duration, content,
-          main_img, sub_img, for_num,
-          collect_num, create_time, update_time
-          )
-        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-          #{cityId,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
-          #{mainImg,jdbcType=VARCHAR}, #{subImg,jdbcType=VARCHAR}, #{forNum,jdbcType=INTEGER},
-          #{collectNum,jdbcType=INTEGER}, now(), now()
-          )
+        INSERT INTO strategies (id, user_id, name,
+                                city_id, duration, content,
+                                main_img, sub_img, for_num,
+                                collect_num, create_time, update_time
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+                                        #{cityId,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR},
+                                        #{content,jdbcType=VARCHAR},
+                                        #{mainImg,jdbcType=VARCHAR}, #{subImg,jdbcType=VARCHAR},
+                                        #{forNum,jdbcType=INTEGER},
+                                        #{collectNum,jdbcType=INTEGER}, now(), now()
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Strategy">
         insert into strategies
@@ -162,23 +164,25 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.Strategy">
-        update strategies
-        set user_id = #{userId,jdbcType=INTEGER},
-          name = #{name,jdbcType=VARCHAR},
-          city_id = #{cityId,jdbcType=INTEGER},
-          duration = #{duration,jdbcType=VARCHAR},
-          content = #{content,jdbcType=VARCHAR},
-          main_img = #{mainImg,jdbcType=VARCHAR},
-          sub_img = #{subImg,jdbcType=VARCHAR},
-          for_num = #{forNum,jdbcType=INTEGER},
-          collect_num = #{collectNum,jdbcType=INTEGER},
-          create_time = #{createTime,jdbcType=TIMESTAMP},
-          update_time = now()
-        where id = #{id,jdbcType=INTEGER}
+        UPDATE strategies
+        SET user_id     = #{userId,jdbcType=INTEGER},
+            name        = #{name,jdbcType=VARCHAR},
+            city_id     = #{cityId,jdbcType=INTEGER},
+            duration    = #{duration,jdbcType=VARCHAR},
+            content     = #{content,jdbcType=VARCHAR},
+            main_img    = #{mainImg,jdbcType=VARCHAR},
+            sub_img     = #{subImg,jdbcType=VARCHAR},
+            for_num     = #{forNum,jdbcType=INTEGER},
+            collect_num = #{collectNum,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = now()
+        WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
     <select id="list" parameterType="map" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List" /> FROM strategies
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM strategies
         <where>
             <if test="cityId != null">
                 city_id=#{cityId}
@@ -187,5 +191,43 @@
                 AND duration=#{duration}
             </if>
         </where>
+    </select>
+
+    <select id="detail" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM strategies WHERE id=#{strategyId}
+    </select>
+
+    <delete id="deleteByUserIdAndStrategyId" parameterType="map">
+        DELETE FROM strategies
+        WHERE id = #{strategyId} AND user_id = #{userId}
+    </delete>
+
+    <select id="searchByUsername" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM strategies WHERE user_id=(SELECT users.id FROM users WHERE username LIKE #{username})
+    </select>
+
+    <select id="searchByStrategyName" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM strategies WHERE name LIKE #{strategyName}
+    </select>
+
+    <select id="queryUserStrategy" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM strategies WHERE user_id=#{userId}
+    </select>
+
+    <select id="queryCollectionList" parameterType="int" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_strategy us JOIN strategies s ON us.strategy_id=s.id WHERE s.user_id=#{userId}
+        <if test="cityId != null">
+            AND s.city_id=#{cityId}
+        </if>
     </select>
 </mapper>
