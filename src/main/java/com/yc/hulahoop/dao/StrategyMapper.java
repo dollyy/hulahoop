@@ -1,6 +1,8 @@
 package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.Strategy;
+import com.yc.hulahoop.vo.StrategyVo;
+import com.yc.hulahoop.vo.UserStrategyVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,15 +22,17 @@ public interface StrategyMapper {
 
     List<Strategy> list(@Param("cityId") Integer cityId, @Param("duration") String duration);
 
-    Strategy detail(Integer strategyId);
+    StrategyVo detail(Integer strategyId);
 
     int deleteByUserIdAndStrategyId(@Param("strategyId") Integer strategyId, @Param("userId") Integer userId);
+
+    int updateByUserIdAndStrategyId(Strategy strategy);
 
     List<Strategy> searchByUsername(String username);
 
     List<Strategy> searchByStrategyName(String strategyName);
 
-    List<Strategy> queryUserStrategy(int userId);
+    List<UserStrategyVo> queryUserStrategy(int userId);
 
-    List<Strategy> queryCollectionList(@Param("userId") int userId, @Param("cityId") Integer cityId);
+    int countUserStrategy(@Param("userId") Integer userId, @Param("cityId") Integer cityId);
 }

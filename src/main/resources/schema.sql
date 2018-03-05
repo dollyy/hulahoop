@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS `hulahoop` DEFAULT CHARACTER SET utf8 COLLATE utf8
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS strategies;
-DROP TABLE IF EXISTS user_strategy;
+DROP TABLE IF EXISTS collections;
 DROP TABLE IF EXISTS cities;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS help_info;
@@ -40,9 +40,8 @@ CREATE TABLE `strategies` (
   `name` varchar(20) NOT NULL,
   `city_id` int(11) NOT NULL COMMENT '省份',
   `duration` varchar(10) NOT NULL COMMENT '时长',
-  `content` text NOT NULL,
-  `main_img` varchar(500) DEFAULT NULL COMMENT '攻略主图在服务器上的路径',
-  `sub_img` text COMMENT '子图片在服务器上的路径,json',
+  `content` text NOT NULL COMMENT '攻略内容,json格式',
+  `main_img` varchar(100)  COMMENT '攻略主图在服务器上的路径',
   `for_num` int(4) DEFAULT '0' COMMENT '攻略的支持数',
   `collect_num` int(4) DEFAULT '0' COMMENT '攻略的收藏数',
   `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -52,50 +51,59 @@ CREATE TABLE `strategies` (
 
 TRUNCATE TABLE strategies;
 
-INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num, create_time, update_time)
-VALUES (1,'1日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
-  (2,'2日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate()),
-  (2,'3日游',1,'7天','77777游啊游啊游啊游啊游啊游啊','main path','{sub7,sub7}',15,1,sysdate(),sysdate()),
-  (3,'4五日游',2,'15天','15151515游啊游啊游啊游啊游啊游啊22','main path1','{sub15,sub15}',3,15,sysdate(),sysdate()),
-  (2,'5日游',1,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate());
+INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
+VALUES
+  (4,'1日游',1,'3天','{第一天:11111ftp://images/a0.jpg,第二天:22222,第三天:33333ftp://images/a1.jpg,第四天:44444}','ftp://images/a0.jpg',5,7,sysdate(),sysdate()),
+  (2,'2日游',4,'5天','{百度:baidu,准备:zhunbeiftp://images/a1.jpg,开始:kaishi,途中:tuzhong,回家:huijia}','ftp://images/a1.jpg',8,5,sysdate(),sysdate()),
+  (2,'3日游',1,'7天','{1天:11111,2天:22222,3天:33333}','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
+  (3,'4五日游',2,'15天','{2百度:2baidu,2准备:2zhunbeiftp://images/a2.jpg,2开始:2kaishi,2途中:2tuzhong,2回家:2huijia}','ftp://images/a2.jpg',3,15,sysdate(),sysdate()),
+  (2,'5日游',1,'3天','{3百度:3baidu,3准备:3zhunbei,3途中:3tuzhong,3回家:3huijia}','ftp://images/default.jpg',5,7,sysdate(),sysdate());
 
-INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num, create_time, update_time)
-VALUES (2,'6日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate()),
-  (3,'7日游',5,'7天','77777游啊游啊游啊游啊游啊游啊','main path','{sub7,sub7}',15,1,sysdate(),sysdate()),
-  (3,'8日游',4,'15天','15151515游啊游啊游啊游啊游啊游啊22','main path1','{sub15,sub15}',3,15,sysdate(),sysdate()),
-  (1,'9日游',7,'3天','游啊游啊游啊游啊游啊游啊','main path','{sub1,sub2}',5,7,sysdate(),sysdate()),
-  (2,'10日游',4,'5天','11游啊游啊游啊游啊游啊游啊22','main path1','{sub2,sub3}',8,5,sysdate(),sysdate());
+INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
+VALUES
+  (2,'6日游',4,'5天','{5百度:5baidu,5准备:5zhunbeiftp://images/a3.jpg,5开始:5kaishi,5途中:5tuzhong,5回家:5huijia}','ftp://images/a3.jpg',8,5,sysdate(),sysdate()),
+  (3,'7日游',5,'7天','{6百度:6baidu,6准备:6zhunbei,6开始:6kaishi}','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
+  (3,'8日游',4,'15天','{7百度:7baidu,7准备:7zhunbeiftp://images/a4.jpg,7开始:7kaishiftp://images/a5.jpg,7途中:7tuzhong,7回家:7huijia}','ftp://images/a4.jpg',3,15,sysdate(),sysdate()),
+  (4,'9日游',7,'3天','{8百度:8baidu,8准备:8zhunbei}','ftp://images/default.jpg',5,7,sysdate(),sysdate()),
+  (2,'10日游',4,'5天','{9百度:9baidu,9准备:9zhunbeiftp://images/a6.jpg,9开始:9kaishi,9途中:9tuzhong,9回家:2huijia}','ftp://images/a6.jpg',8,5,sysdate(),sysdate());
 
 SELECT * FROM strategies;
 
 SELECT * FROM strategies WHERE user_id=(SELECT users.id FROM users WHERE username LIKE '%哈');
 
+SELECT * FROM strategies WHERE user_id=2;
+
+SELECT s.id, s.name, city_id, c.name FROM strategies s JOIN cities c ON s.city_id=c.id
+WHERE user_id = 2;
+
+SELECT count(*) FROM strategies WHERE user_id=2 AND city_id=1;
+
+SELECT s.id, s.content, c.name, s.duration, s.name, s.for_num, s.collect_num, u.username FROM strategies s JOIN cities c ON s.city_id=c.id JOIN users u ON
+s.user_id=u.id WHERE s.id=2;
+
 -- ------------------------------------
--- Table structure for `user_strategy`
+-- Table structure for `collections`
 -- ------------------------------------
-CREATE TABLE `user_strategy` (
+CREATE TABLE `collections` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
-  `city_id` int(11) NOT NULL COMMENT 'cities.id',
   `user_id` int(11) NOT NULL COMMENT 'users.id',
+  `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE TABLE user_strategy;
+TRUNCATE TABLE collections;
 
-INSERT INTO user_strategy(strategy_id, city_id, user_id)
-VALUES(1,1,2),(2,23,1),(3,1,1),(4,1,2),(5,18,1),(6,2,2),(7,1,2),(8,8,1),(9,20,2),(10,35,1);
+INSERT INTO collections(strategy_id, user_id)
+VALUES(1,2),(2,3),(3,4),(4,2),(5,3),(6,2),(7,2),(8,4),(9,2),(10,4),(15,3);
 
-INSERT INTO user_strategy(strategy_id, city_id, user_id)
-VALUES(1,1,1),(2,23,1),(3,1,1),(4,1,1),(5,18,1),(6,2,1),(7,1,2),(8,8,1),(9,20,1),(10,35,1),(11,12,1),(12,35,1),
-  (13,35,1),(14,1,2),(15,34,2),(16,27,1),(17,23,1),(18,8,1),(19,7,2),(20,8,1),(21,1,1),(22,5,1),(23,1,1),(24,1,1),
-  (25,1,2),(26,15,1),(27,27,1),(28,1,1),(29,27,1),(30,35,1),(31,9,2),(32,23,1),(33,1,1),(34,6,1),(35,23,1),(36,4,1),
-  (37,1,1),(38,11,2),(39,23,1),(40,23,1),(41,15,1),(42,27,1),(43,1,1),(44,23,1),(45,12,1),(46,8,1),(47,3,1),(48,1,1),
-  (49,2,1),(50,18,1),(51,23,1),(52,1,1),(53,8,1),(54,1,1),(55,4,1),(56,8,1),(57,8,1),(58,1,1),(59,8,1),(60,1,1);
+SELECT s.id, u.username, s.name, ci.name as cityName, duration, for_num, collect_num, s.create_time
+FROM strategies s JOIN collections co ON s.id=co.strategy_id JOIN users u ON s.user_id=u.id
+JOIN cities ci ON s.city_id=ci.id WHERE co.user_id=2;
 
-SELECT s.id, s.user_id, name, s.city_id, duration, content, main_img, sub_img, for_num, collect_num,
-create_time, update_time FROM user_strategy us JOIN strategies s ON us.strategy_id=s.id WHERE s.user_id=2
-AND s.city_id=4;
+SELECT s.id, u.username, s.name, ci.name as cityName, duration, for_num, collect_num, s.create_time
+FROM strategies s JOIN collections co ON s.id=co.strategy_id JOIN users u ON s.user_id=u.id
+  JOIN cities ci ON s.city_id=ci.id WHERE co.user_id=2;
+
 
 -- ------------------------------------
 -- Table structure for `cities`

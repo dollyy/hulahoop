@@ -2,7 +2,6 @@ package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.User;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);

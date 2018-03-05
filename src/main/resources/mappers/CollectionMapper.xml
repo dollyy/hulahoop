@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.hulahoop.dao.CollectionMapper">
+    <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.Collection">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="strategy_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, strategy_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from collections
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM collections
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Collection">
+        INSERT INTO collections (id, user_id, strategy_id
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{strategyId,jdbcType=INTEGER}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Collection">
+        insert into collections
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="strategyId != null">
+                strategy_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="strategyId != null">
+                #{strategyId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yc.hulahoop.pojo.Collection">
+        update collections
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="strategyId != null">
+                strategy_id = #{strategyId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.Collection">
+        UPDATE collections
+        SET user_id     = #{userId,jdbcType=INTEGER},
+            strategy_id = #{strategyId,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <resultMap id="userResultMap" type="com.yc.hulahoop.pojo.User">
+        <result column="username" property="username"/>
+    </resultMap>
+    <resultMap id="cityResultMap" type="com.yc.hulahoop.pojo.City">
+        <result column="cityName" property="cityName"/>
+    </resultMap>
+    <resultMap id="strategyResultMap" type="com.yc.hulahoop.pojo.Strategy">
+        <result column="id" property="id"/>
+        <result column="name" property="strategyName"/>
+        <result column="duration" property="duration"/>
+        <result column="main_img" property="mainImg"/>
+        <result column="for_num" property="forNum"/>
+        <result column="collect_num" property="collectNum"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="username" resultMap="userResultMap"/>
+        <collection property="cityName" resultMap="cityResultMap"/>
+        <!--        <collection property="username" ofType="com.yc.hulahoop.pojo.User">
+                    <result property="username" column="username"/>
+                </collection>
+                <collection property="cityName" ofType="com.yc.hulahoop.pojo.City">
+                    <result property="cityName" column="cityName"/>
+                </collection>-->
+    </resultMap>
+    <resultMap extends="strategyResultMap" id="collectionList" type="com.yc.hulahoop.vo.CollectionVo">
+        <result column="id" property="id"/>
+        <result column="name" property="strategyName"/>
+        <result column="duration" property="duration"/>
+        <result column="main_img" property="mainImg"/>
+        <result column="for_num" property="forNum"/>
+        <result column="collect_num" property="collectNum"/>
+        <result column="create_time" property="createTime"/>
+        <result column="cityName" property="cityName"/>
+        <result column="username" property="username"/>
+    </resultMap>
+
+    <select id="queryCollectionList" parameterType="map" resultMap="collectionList">
+        SELECT
+        s.id,
+        u.username,
+        s.name,
+        ci.name AS cityName,
+        s.duration,
+        s.main_img,
+        s.for_num,
+        s.collect_num,
+        s.create_time
+        FROM strategies s
+        JOIN collections co ON s.id = co.strategy_id
+        JOIN users u ON s.user_id = u.id
+        JOIN cities ci ON s.city_id = ci.id
+        WHERE co.user_id = #{userId}
+        <if test="cityId != null">
+            AND ci.id = #{cityId}
+        </if>
+    </select>
+</mapper>

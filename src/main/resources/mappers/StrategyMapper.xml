@@ -10,7 +10,6 @@
             <arg column="duration" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="main_img" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="sub_img" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="for_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="collect_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
@@ -18,8 +17,8 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, name, city_id, duration, content, main_img, sub_img, for_num, collect_num,
-        create_time, update_time
+        id, user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time,
+        update_time
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -34,16 +33,14 @@
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.Strategy">
         INSERT INTO strategies (id, user_id, name,
                                 city_id, duration, content,
-                                main_img, sub_img, for_num,
-                                collect_num, create_time, update_time
-        )
+                                main_img, for_num, collect_num,
+                                create_time, update_time)
         VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
                                         #{cityId,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR},
                                         #{content,jdbcType=VARCHAR},
-                                        #{mainImg,jdbcType=VARCHAR}, #{subImg,jdbcType=VARCHAR},
-                                        #{forNum,jdbcType=INTEGER},
-                                        #{collectNum,jdbcType=INTEGER}, now(), now()
-        )
+                                        #{mainImg,jdbcType=VARCHAR}, #{forNum,jdbcType=INTEGER},
+                                        #{collectNum,jdbcType=INTEGER},
+                                        now(), now())
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Strategy">
         insert into strategies
@@ -68,9 +65,6 @@
             </if>
             <if test="mainImg != null">
                 main_img,
-            </if>
-            <if test="subImg != null">
-                sub_img,
             </if>
             <if test="forNum != null">
                 for_num,
@@ -107,9 +101,6 @@
             <if test="mainImg != null">
                 #{mainImg,jdbcType=VARCHAR},
             </if>
-            <if test="subImg != null">
-                #{subImg,jdbcType=VARCHAR},
-            </if>
             <if test="forNum != null">
                 #{forNum,jdbcType=INTEGER},
             </if>
@@ -145,9 +136,6 @@
             <if test="mainImg != null">
                 main_img = #{mainImg,jdbcType=VARCHAR},
             </if>
-            <if test="subImg != null">
-                sub_img = #{subImg,jdbcType=VARCHAR},
-            </if>
             <if test="forNum != null">
                 for_num = #{forNum,jdbcType=INTEGER},
             </if>
@@ -171,7 +159,6 @@
             duration    = #{duration,jdbcType=VARCHAR},
             content     = #{content,jdbcType=VARCHAR},
             main_img    = #{mainImg,jdbcType=VARCHAR},
-            sub_img     = #{subImg,jdbcType=VARCHAR},
             for_num     = #{forNum,jdbcType=INTEGER},
             collect_num = #{collectNum,jdbcType=INTEGER},
             create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -193,16 +180,62 @@
         </where>
     </select>
 
-    <select id="detail" parameterType="int" resultMap="BaseResultMap">
+    <resultMap id="strategyResultMap" type="com.yc.hulahoop.vo.StrategyVo">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="strategyName" property="strategyName"/>
+        <result column="cityName" property="cityName"/>
+        <result column="duration" property="duration"/>
+        <result column="content" property="content"/>
+        <result column="for_num" property="forNum"/>
+        <result column="collect_num" property="collectNum"/>
+    </resultMap>
+
+    <select id="detail" parameterType="int" resultMap="strategyResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM strategies WHERE id=#{strategyId}
+            s.id,
+            s.content,
+            c.name AS cityName,
+            s.duration,
+            s.name AS strategyName,
+            u.username,
+            s.for_num,
+            s.collect_num
+        FROM strategies s
+            JOIN cities c ON s.city_id = c.id
+            JOIN users u ON s.user_id = u.id
+        WHERE s.id = #{strategyId}
     </select>
 
     <delete id="deleteByUserIdAndStrategyId" parameterType="map">
         DELETE FROM strategies
         WHERE id = #{strategyId} AND user_id = #{userId}
     </delete>
+
+    <update id="updateByUserIdAndStrategyId" parameterType="map">
+        UPDATE strategies
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="duration != null">
+                duration = #{duration},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="mainImg != null">
+                main_img = #{mainImg},
+            </if>
+            <if test="subImg != null">
+                sub_img = #{subImg},
+            </if>
+        </set>
+        WHERE user_id=#{userId} AND id=#{id}
+    </update>
 
     <select id="searchByUsername" parameterType="string" resultMap="BaseResultMap">
         SELECT
@@ -216,18 +249,29 @@
         FROM strategies WHERE name LIKE #{strategyName}
     </select>
 
-    <select id="queryUserStrategy" parameterType="int" resultMap="BaseResultMap">
+    <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
+        <id column="city_id" property="cityId"/>
+        <result column="cityName" property="cityName"/>
+        <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
+            <result column="id" property="id"/>
+        </collection>
+    </resultMap>
+
+    <select id="queryUserStrategy" parameterType="int" resultMap="userStrategy">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM strategies WHERE user_id=#{userId}
+            s.id,
+            s.name,
+            city_id,
+            c.name AS cityName
+        FROM strategies s
+            JOIN cities c ON s.city_id = c.id
+        WHERE user_id = #{userId}
     </select>
 
-    <select id="queryCollectionList" parameterType="int" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM user_strategy us JOIN strategies s ON us.strategy_id=s.id WHERE s.user_id=#{userId}
-        <if test="cityId != null">
-            AND s.city_id=#{cityId}
-        </if>
+    <select id="countUserStrategy" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM strategies
+        WHERE user_id = #{userId} AND city_id = #{cityId}
     </select>
+
 </mapper>

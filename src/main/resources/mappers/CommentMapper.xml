@@ -1,41 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yc.hulahoop.dao.CommentMapper">
     <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.Comment">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="level" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="parent" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="sequence" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="for_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="against_num" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="level" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="parent" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="sequence" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="for_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="against_num" javaType="java.lang.Integer" jdbcType="INTEGER"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
         id, user_id, content, level, parent, sequence, create_time, for_num, against_num
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from comments
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from comments
-        where id = #{id,jdbcType=INTEGER}
+        DELETE FROM comments
+        WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.Comment">
-        insert into comments (id, user_id, content,
-          level, parent, sequence,
-          create_time, for_num, against_num
-          )
-        values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
-          #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
-          now(), #{forNum,jdbcType=INTEGER}, #{againstNum,jdbcType=INTEGER}
-          )
+        INSERT INTO comments (id, user_id, content,
+                              level, parent, sequence,
+                              create_time, for_num, against_num
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+                #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{forNum,jdbcType=INTEGER}, #{againstNum,jdbcType=INTEGER}
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Comment">
         insert into comments
@@ -88,7 +88,7 @@
                 #{sequence,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
-                now(),
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="forNum != null">
                 #{forNum,jdbcType=INTEGER},
@@ -129,15 +129,15 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.Comment">
-        update comments
-        set user_id = #{userId,jdbcType=INTEGER},
-          content = #{content,jdbcType=VARCHAR},
-          level = #{level,jdbcType=VARCHAR},
-          parent = #{parent,jdbcType=VARCHAR},
-          sequence = #{sequence,jdbcType=INTEGER},
-          create_time = #{createTime,jdbcType=TIMESTAMP},
-          for_num = #{forNum,jdbcType=INTEGER},
-          against_num = #{againstNum,jdbcType=INTEGER}
-        where id = #{id,jdbcType=INTEGER}
+        UPDATE comments
+        SET user_id     = #{userId,jdbcType=INTEGER},
+            content     = #{content,jdbcType=VARCHAR},
+            level       = #{level,jdbcType=VARCHAR},
+            parent      = #{parent,jdbcType=VARCHAR},
+            sequence    = #{sequence,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            for_num     = #{forNum,jdbcType=INTEGER},
+            against_num = #{againstNum,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

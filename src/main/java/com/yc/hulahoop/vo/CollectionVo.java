@@ -1,16 +1,18 @@
 package com.yc.hulahoop.vo;
 
-public class StrategyVo {
+import java.util.Date;
+
+public class CollectionVo {
 
     private int id;
     private String username;
     private String strategyName;
     private String cityName;
     private String duration;
-    private String catalog;
-    private String content;
+    private String mainImg;
     private int forNum;
     private int collectNum;
+    private Date createTime;
 
     public int getId() {
         return id;
@@ -52,20 +54,12 @@ public class StrategyVo {
         this.duration = duration;
     }
 
-    public String getCatalog() {
-        return catalog;
+    public String getMainImg() {
+        return mainImg;
     }
 
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setMainImg(String mainImg) {
+        this.mainImg = mainImg;
     }
 
     public int getForNum() {
@@ -82,5 +76,13 @@ public class StrategyVo {
 
     public void setCollectNum(int collectNum) {
         this.collectNum = collectNum;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

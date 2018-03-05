@@ -4,11 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
+import com.yc.hulahoop.dao.CollectionMapper;
 import com.yc.hulahoop.dao.StrategyMapper;
 import com.yc.hulahoop.pojo.Strategy;
 import com.yc.hulahoop.service.StrategyService;
+import com.yc.hulahoop.vo.CollectionVo;
 import com.yc.hulahoop.vo.StrategyVo;
-import org.apache.commons.lang3.StringUtils;
+import com.yc.hulahoop.vo.UserStrategyVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,9 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Autowired
     StrategyMapper strategyMapper;
+
+    @Autowired
+    CollectionMapper collectionMapper;
 
     @Override
     public ServerResponse queryStrategyList(int pageNum, Integer cityId, String duration) {
@@ -38,24 +43,23 @@ public class StrategyServiceImpl implements StrategyService {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
         //获取该攻略的详细信息
-        Strategy strategy = strategyMapper.detail(strategyId);
-        if (strategy == null) {
+        StrategyVo strategyVo = strategyMapper.detail(strategyId);
+        if (strategyVo == null) {
             return ServerResponse.createByErrorMessage("攻略不存在");
         }
-        return ServerResponse.createBySuccessData(strategy);
+        System.out.println(strategyVo.getContent());
+        String[] contents=strategyVo.getContent().split(",");
+        for(String str : contents){
+            String[] items=str.split(":");
+            System.out.println("--------"+items[0]+","+items[1]);
+        }
+        return ServerResponse.createBySuccessData(strategyVo);
     }
 
     @Override
     public ServerResponse add(Strategy strategy) {
         if (strategy == null) {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
-        }
-        //为main_img赋值
-        if (StringUtils.isNotBlank(strategy.getSubImg())) {
-            String[] images = strategy.getSubImg().split(",");
-            if (images.length > 0) {
-                strategy.setMainImg(images[0]);
-            }
         }
         //向数据库新增攻略信息
         int count = strategyMapper.insert(strategy);
@@ -81,11 +85,11 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     public ServerResponse update(Strategy strategy) {
         //禁止修改的字段
-        strategy.setId(null);
         strategy.setForNum(null);
         strategy.setCollectNum(null);
         strategy.setCreateTime(null);
-        int count = strategyMapper.updateByPrimaryKeySelective(strategy);
+        //防止横向越权
+        int count = strategyMapper.updateByUserIdAndStrategyId(strategy);
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("更新成功");
         }
@@ -96,14 +100,15 @@ public class StrategyServiceImpl implements StrategyService {
     public ServerResponse search(String type, String val, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Strategy> strategyList;
+        //根据type选择搜索的类型
         switch (type) {
-            case Const.USERNAME:
+            case Const.USERNAME:    //按username来搜索
                 strategyList = strategyMapper.searchByUsername("%" + val + "%");
                 break;
-            case Const.STRATEGY_NAME:
+            case Const.STRATEGY_NAME:   //按攻略名来搜索
                 strategyList = strategyMapper.searchByStrategyName("%" + val + "%");
                 break;
-            default:
+            default:    //错误的参数类型
                 return ServerResponse.createByErrorMessage("参数类型错误");
         }
         if (strategyList.size() == 0) {
@@ -115,16 +120,22 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse queryUserStrategy(int userId) {
-        List<Strategy> strategyList = strategyMapper.queryUserStrategy(userId);
-        if (strategyList.size() == 0) {
+        List<UserStrategyVo> userStrategyVoList = strategyMapper.queryUserStrategy(userId);
+        if (userStrategyVoList.size() == 0) {
             return ServerResponse.createBySuccessMessage("没有匹配信息");
         }
-        return ServerResponse.createBySuccessData(strategyList);
+        //为count赋值
+        int count;
+        for (UserStrategyVo userStrategyVo : userStrategyVoList) {
+            count = strategyMapper.countUserStrategy(userId, userStrategyVo.getCityId());
+            userStrategyVo.setCount(count);
+        }
+        return ServerResponse.createBySuccessData(userStrategyVoList);
     }
 
     @Override
-    public ServerResponse queryUseCollection(int userId, Integer cityId, int pageNum, int pageSize, String orderBy) {
-        if (cityId == null || StringUtils.isBlank(orderBy)) {
+    public ServerResponse queryUserCollection(int userId, Integer cityId, int pageNum, int pageSize, String orderBy) {
+        if (cityId == null) {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
         PageHelper.startPage(pageNum, pageSize);
@@ -133,8 +144,8 @@ public class StrategyServiceImpl implements StrategyService {
             String[] orders = orderBy.split(".");
             PageHelper.orderBy(orders[0] + " " + orders[1]);
         }
-        List<Strategy> strategyList = strategyMapper.queryCollectionList(userId, cityId == 0 ? null : cityId);
-        PageInfo pageInfo=new PageInfo(strategyList);
+        List<CollectionVo> collectionVoList = collectionMapper.queryCollectionList(userId, cityId == 0 ? null : cityId);
+        PageInfo pageInfo = new PageInfo(collectionVoList);
         return ServerResponse.createBySuccessData(pageInfo);
     }
 }

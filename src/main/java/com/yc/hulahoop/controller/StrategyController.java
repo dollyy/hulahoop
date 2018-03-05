@@ -5,8 +5,6 @@ import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.Strategy;
 import com.yc.hulahoop.pojo.User;
 import com.yc.hulahoop.service.StrategyService;
-import org.apache.ibatis.annotations.Param;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +20,8 @@ public class StrategyController {
 
     @Autowired
     private StrategyService strategyService;
+
+    //todo content为json,如果内容含有','怎么办
 
     /**
      * 列出所有攻略
@@ -40,7 +40,7 @@ public class StrategyController {
     }
 
     /**
-     * 攻略详情 Vo
+     * 攻略详情 todo Vo
      *
      * @param session    当前用户
      * @param strategyId 攻略id
@@ -58,7 +58,7 @@ public class StrategyController {
     }
 
     /**
-     * 新增攻略  for_num,collect_num no default 0
+     * 新增攻略 todo 为main_img赋值
      *
      * @param session  当前用户
      * @param strategy 新增攻略的信息
@@ -95,7 +95,7 @@ public class StrategyController {
     }
 
     /**
-     * 修改攻略 id can't be null
+     * 修改攻略 todo 为main_img赋值
      *
      * @param session  当前用户
      * @param strategy 修改攻略的信息
@@ -130,7 +130,7 @@ public class StrategyController {
     }
 
     /**
-     * 查看我的攻略 group by city_id
+     * 查看我的攻略
      *
      * @param session 当前用户
      * @return strategy的list
@@ -160,14 +160,14 @@ public class StrategyController {
     @ResponseBody
     private ServerResponse queryUseCollection(HttpSession session, Integer cityId,
                                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                              @RequestParam(value = "pageSize", defaultValue = "2") int pageSize,
+                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                               @RequestParam(value = "orderBy", defaultValue = "") String orderBy) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
         }
-        return strategyService.queryUseCollection(currentUser.getId(), cityId, pageNum, pageSize, orderBy);
+        return strategyService.queryUserCollection(currentUser.getId(), cityId, pageNum, pageSize, orderBy);
     }
 
 }

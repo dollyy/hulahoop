@@ -19,5 +19,5 @@ public interface StrategyService {
 
     ServerResponse queryUserStrategy(int userId);
 
-    ServerResponse queryUseCollection(int userId, Integer cityId,int pageNum, int pageSize, String orderBy);
+    ServerResponse queryUserCollection(int userId, Integer cityId,int pageNum, int pageSize, String orderBy);
 }

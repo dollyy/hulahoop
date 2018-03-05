@@ -17,8 +17,6 @@ public class Strategy {
 
     private String mainImg;
 
-    private String subImg;
-
     private Integer forNum;
 
     private Integer collectNum;
@@ -27,7 +25,7 @@ public class Strategy {
 
     private Date updateTime;
 
-    public Strategy(Integer id, Integer userId, String name, Integer cityId, String duration, String content, String mainImg, String subImg, Integer forNum, Integer collectNum, Date createTime, Date updateTime) {
+    public Strategy(Integer id, Integer userId, String name, Integer cityId, String duration, String content, String mainImg, Integer forNum, Integer collectNum, Date createTime, Date updateTime) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -35,7 +33,6 @@ public class Strategy {
         this.duration = duration;
         this.content = content;
         this.mainImg = mainImg;
-        this.subImg = subImg;
         this.forNum = forNum;
         this.collectNum = collectNum;
         this.createTime = createTime;
@@ -100,14 +97,6 @@ public class Strategy {
 
     public void setMainImg(String mainImg) {
         this.mainImg = mainImg == null ? null : mainImg.trim();
-    }
-
-    public String getSubImg() {
-        return subImg;
-    }
-
-    public void setSubImg(String subImg) {
-        this.subImg = subImg == null ? null : subImg.trim();
     }
 
     public Integer getForNum() {
