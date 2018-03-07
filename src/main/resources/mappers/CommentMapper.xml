@@ -34,7 +34,7 @@
         )
         VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
                 #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
-                now(), #{forNum,jdbcType=INTEGER}, #{againstNum,jdbcType=INTEGER}
+                now(), 0, 0
         )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Comment">
@@ -140,4 +140,42 @@
             against_num = #{againstNum,jdbcType=INTEGER}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="list" resultType="com.yc.hulahoop.vo.CommentVo">
+        SELECT
+            c.id,
+            c.level,
+            c.parent,
+            u.avatar,
+            u.id       AS responseId,
+            u.username AS responseName,
+            c.content,
+            c.create_time AS createTime,
+            c.for_num AS forNum,
+            c.against_num AS againstNum
+        FROM comments c
+            JOIN users u ON c.user_id = u.id
+        ORDER BY level
+    </select>
+
+    <select id="queryRequestUser" resultType="com.yc.hulahoop.pojo.User">
+        SELECT
+            u.id,
+            u.username
+        FROM comments c
+            JOIN users u ON c.user_id = u.id
+        WHERE level = #{parent}
+    </select>
+
+    <select id="querySequenceByAdd" resultType="int">
+        SELECT count(*)
+        FROM comments
+        WHERE level LIKE '_'
+    </select>
+
+    <select id="querySequenceByReply" parameterType="string" resultType="int">
+        SELECT count(*)
+        FROM comments
+        WHERE level LIKE #{parent}
+    </select>
 </mapper>

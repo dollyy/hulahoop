@@ -25,6 +25,11 @@ public class Const {
         int USER = 0;
     }
 
+    public interface CommentType{
+        String FOR="for";
+        String AGAINST="against";
+    }
+
     public interface StrategyOrderBy{
         //List contains的时间复杂度是O(n),Set contains的时间复杂度是O(1)
         Set<String> STRATEGY_ORDER= Sets.newHashSet("create_time.desc","create_time.asc","for_num.desc","for_num.asc"

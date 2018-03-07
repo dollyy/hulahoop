@@ -155,6 +155,14 @@ VALUES
   (4, 'emmmm', '2.3', '2', 3, '2017-12-15 11:11:14'),
   (5, 'hhhh不告诉你', '1.4', '1', 4, '2017-12-15 14:50:02');
 
+SELECT count(*) FROM comments WHERE level LIKE '_';
+
+SELECT count(*) FROM comments WHERE level LIKE '1.1._';
+
+SELECT c.id,c.level,c.parent,u.avatar,u.id,u.username,c.content,c.create_time,c.for_num,c.against_num
+FROM comments c JOIN users u ON c.user_id=u.id ORDER BY level;
+
+SELECT u.id,u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE level='1.1';
 
 -- ------------------------------------
 -- Table structure for `help_info`

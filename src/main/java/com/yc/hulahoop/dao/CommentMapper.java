@@ -1,6 +1,10 @@
 package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.Comment;
+import com.yc.hulahoop.pojo.User;
+import com.yc.hulahoop.vo.CommentVo;
+
+import java.util.List;
 
 public interface CommentMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +18,12 @@ public interface CommentMapper {
     int updateByPrimaryKeySelective(Comment record);
 
     int updateByPrimaryKey(Comment record);
+
+    List<CommentVo> list();
+
+    User queryRequestUser(String parent);
+
+    int querySequenceByAdd();
+
+    int querySequenceByReply(String parent);
 }

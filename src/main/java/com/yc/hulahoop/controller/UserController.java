@@ -79,6 +79,11 @@ public class UserController {
     @RequestMapping(value = "logout.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse logout(HttpSession session) {
+        //检查用户是否登录
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {     //用户未登录
+            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        }
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("退出登录成功");
     }
