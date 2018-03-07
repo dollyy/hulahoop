@@ -34,7 +34,7 @@
         )
         VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
                 #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
-                #{createTime,jdbcType=TIMESTAMP}, #{forNum,jdbcType=INTEGER}, #{againstNum,jdbcType=INTEGER}
+                now(), #{forNum,jdbcType=INTEGER}, #{againstNum,jdbcType=INTEGER}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Comment">
@@ -88,7 +88,7 @@
                 #{sequence,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="forNum != null">
                 #{forNum,jdbcType=INTEGER},

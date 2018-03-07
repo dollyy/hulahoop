@@ -11,6 +11,7 @@ import com.yc.hulahoop.service.StrategyService;
 import com.yc.hulahoop.vo.CollectionVo;
 import com.yc.hulahoop.vo.StrategyVo;
 import com.yc.hulahoop.vo.UserStrategyVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,10 +57,14 @@ public class StrategyServiceImpl implements StrategyService {
         return ServerResponse.createBySuccessData(strategyVo);
     }
 
+    //第一天@#11111a0.jpg#-第二天@#22222#-第三天@#33333a1.jpg#-第四天@#44444
     @Override
     public ServerResponse add(Strategy strategy) {
         if (strategy == null) {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
+        //为main_img赋值
+        if(StringUtils.isNotBlank(strategy.getContent())){
         }
         //向数据库新增攻略信息
         int count = strategyMapper.insert(strategy);

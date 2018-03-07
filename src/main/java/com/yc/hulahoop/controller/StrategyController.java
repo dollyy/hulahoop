@@ -21,8 +21,6 @@ public class StrategyController {
     @Autowired
     private StrategyService strategyService;
 
-    //todo content为json,如果内容含有','怎么办
-
     /**
      * 列出所有攻略
      *
@@ -40,7 +38,7 @@ public class StrategyController {
     }
 
     /**
-     * 攻略详情 todo Vo
+     * 攻略详情
      *
      * @param session    当前用户
      * @param strategyId 攻略id
@@ -58,7 +56,7 @@ public class StrategyController {
     }
 
     /**
-     * 新增攻略 todo 为main_img赋值
+     * 新增攻略 todo 1.为main_img赋值 + 上传图片
      *
      * @param session  当前用户
      * @param strategy 新增攻略的信息
@@ -95,7 +93,7 @@ public class StrategyController {
     }
 
     /**
-     * 修改攻略 todo 为main_img赋值
+     * 修改攻略 todo 2.为main_img赋值 + 上传图片
      *
      * @param session  当前用户
      * @param strategy 修改攻略的信息

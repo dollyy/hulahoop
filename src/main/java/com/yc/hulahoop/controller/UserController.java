@@ -119,7 +119,7 @@ public class UserController {
     }
 
     /**
-     * 更新个人信息
+     * 更新个人信息  todo 1.上传头像图片
      *
      * @param session 当前用户
      * @param user    当前用户更新的用户信息
@@ -139,7 +139,7 @@ public class UserController {
         user.setPassword(null);
         user.setRole(null);
         user.setCreateTime(null);
-        //todo: 手机号可不可以更新???
+        //todo 2.手机号可不可以更新???
 
         ServerResponse serverResponse = userService.updateUserInformation(user);
         if (serverResponse.isSuccess()) {

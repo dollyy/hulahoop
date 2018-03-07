@@ -7,6 +7,7 @@ import com.yc.hulahoop.dao.UserMapper;
 import com.yc.hulahoop.pojo.FeedbackInfo;
 import com.yc.hulahoop.pojo.User;
 import com.yc.hulahoop.service.UserService;
+import com.yc.hulahoop.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse<String> verify(String val, String type) {
-        System.out.println(val+","+type);
+        if(StringUtils.isBlank(val) || StringUtils.isBlank(type)){
+            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
         int count;
         switch (type) {
             case Const.USERNAME:    //校验 用户名
@@ -56,9 +59,9 @@ public class UserServiceImpl implements UserService {
         if (!serverResponse.isSuccess()) {
             return serverResponse;
         }
-        //密码加密
-        //todo: password MD5
-        //设置role
+        //密码MD5加密
+        user.setPassword(MD5Util.MD5Encode(user.getPassword(),"utf-8"));
+        //设置当前用户的角色
         user.setRole(Const.Role.USER);
 
         //添加用户
@@ -73,8 +76,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse login(String val, String password) {
-        //密码加密
-        //todo: password MD5
+        if(StringUtils.isBlank(val) || StringUtils.isBlank(password)){
+            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
+        //密码MD5加密
+        password=MD5Util.MD5Encode(password,"utf-8");
         //1.用用户名登录
         if(userMapper.verifyUsername(val) == 0){    //校验用户名是否存在
             return ServerResponse.createByErrorMessage(Const.NO_USER);
@@ -102,14 +108,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse resetPassword(String passwordOld, String passwordNew, User user) {
+        if(StringUtils.isBlank(passwordOld) || StringUtils.isBlank(passwordNew)){
+            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
         //校验旧密码
-        //todo: passwordOld MD5
+        passwordOld=MD5Util.MD5Encode(passwordOld,"utf-8");
         int count = userMapper.verifyPassword(passwordOld, user.getId());
         //校验密码失败
         if (count == 0) {
             return ServerResponse.createByErrorMessage("原始密码错误");
         }
-        //todo: passwordNew MD5
+        //新密码MD5加密
+        passwordNew=MD5Util.MD5Encode(passwordNew,"utf-8");
         user.setPassword(passwordNew);
         count = userMapper.updateByPrimaryKeySelective(user);
         //重置密码成功
@@ -121,7 +131,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse queryUserInformation(int userId) {
+    public ServerResponse queryUserInformation(Integer userId) {
+        if(userId == null){
+            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
         User user=userMapper.selectByPrimaryKey(userId);
         if(user == null){
             return ServerResponse.createByErrorMessage(Const.NO_USER);

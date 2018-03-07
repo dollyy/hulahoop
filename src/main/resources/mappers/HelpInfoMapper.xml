@@ -27,7 +27,7 @@
         INSERT INTO help_info (id, title, content,
                                create_time, update_time)
         VALUES (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
-                #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+                now(), now())
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.HelpInfo">
         insert into help_info
@@ -59,10 +59,10 @@
                 #{content,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
         </trim>
     </insert>
@@ -79,7 +79,7 @@
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
+                update_time = now(),
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -89,7 +89,7 @@
         SET title       = #{title,jdbcType=VARCHAR},
             content     = #{content,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
-            update_time = #{updateTime,jdbcType=TIMESTAMP}
+            update_time = now()
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

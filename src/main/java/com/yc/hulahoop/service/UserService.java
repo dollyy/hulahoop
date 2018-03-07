@@ -14,7 +14,7 @@ public interface UserService {
 
     ServerResponse resetPassword(String passwordOld, String passwordNew, User user);
 
-    ServerResponse queryUserInformation(int userId);
+    ServerResponse queryUserInformation(Integer userId);
 
     ServerResponse updateUserInformation(User user);
 
