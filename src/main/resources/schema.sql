@@ -32,6 +32,8 @@ CREATE TABLE `users` (
 
 TRUNCATE TABLE users;
 
+SELECT count(*) FROM users WHERE role=1;
+
 -- ------------------------------------
 -- Table structure for `strategies`
 -- ------------------------------------
@@ -184,13 +186,19 @@ SELECT u.id,u.username FROM comments c JOIN users u ON c.user_id=u.id WHERE leve
 -- ------------------------------------
 CREATE TABLE `help_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(10) NOT NULL COMMENT '帮助信息的标题',
+  `title` varchar(100) NOT NULL COMMENT '帮助信息的标题',
   `content` text NOT NULL,
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO help_info(title, content, create_time, update_time)
+VALUES ('攻略标签是什么?','<div style=''text-align: center;''>从下拉框中为这篇攻略打上关于地点、时长的tag吧！</div>',
+'2018-01-22 12:12:12','2018-01-26 16:16:16'),
+('交换Days','<div><div style=''text-align: center;''>•step1:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy1.png''></div></div><div><div style=''text-align: center;''>•step2:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy2.png''></div></div><div><div style=''text-align: center;''>•step3:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy3.png''></div></div>',
+'2018-01-28 19:34:26','2018-01-28 22:02:45');
 
 
 -- ------------------------------------
@@ -234,3 +242,9 @@ SELECT count(*) FROM feedback_info WHERE parent=0;
 
 -- 查看某条反馈的全部信息
 SELECT * FROM feedback_info WHERE level LIKE '1%';
+
+SELECT f.id,f.title,f.content,f.level,f.create_time,u.username FROM feedback_info f JOIN users u ON f.user_id=u.id
+WHERE parent=0;
+
+SELECT f.id,f.title,f.content,f.level,f.create_time,u.username FROM feedback_info f JOIN users u ON f.user_id=u.id
+WHERE level LIKE '1%' ORDER BY create_time;

@@ -128,9 +128,37 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
+    <select id="queryFeedbackList" resultType="com.yc.hulahoop.vo.FeedbackInfoVo">
+        SELECT
+            f.id,
+            f.level,
+            u.username,
+            f.title,
+            f.content,
+            f.create_time AS createTime
+        FROM feedback_info f
+            JOIN users u ON f.user_id = u.id
+        WHERE parent = 0
+        ORDER BY createTime
+    </select>
+
     <select id="queryFeedbackCount" resultType="int">
         SELECT count(*)
         FROM feedback_info
         WHERE parent = 0
+    </select>
+
+    <select id="detail" parameterType="string" resultType="com.yc.hulahoop.vo.FeedbackInfoVo">
+        SELECT
+            f.id,
+            f.level,
+            u.username,
+            f.title,
+            f.content,
+            f.create_time AS createTime
+        FROM feedback_info f
+            JOIN users u ON f.user_id = u.id
+        WHERE level LIKE #{level}
+        ORDER BY level
     </select>
 </mapper>

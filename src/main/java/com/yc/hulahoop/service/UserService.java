@@ -18,8 +18,6 @@ public interface UserService {
 
     ServerResponse updateUserInformation(User user);
 
-    ServerResponse feedback(FeedbackInfo feedbackInfo);
-
-    ServerResponse reFeedback(FeedbackInfo feedbackInfo);
+    ServerResponse adminLogin(String username, String password);
 
 }

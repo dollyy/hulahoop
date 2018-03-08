@@ -29,7 +29,8 @@
         DELETE FROM users
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User">
+    <!-- useGeneratedKeys="true" 获取插入这条记录中的字段keyProperty -->
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (id, username, password,
                            avatar, phone, role,
                            bio, gender, city,
@@ -191,5 +192,17 @@
         SELECT COUNT(*)
         FROM users
         WHERE id = #{userId} AND password = #{passwordOld}
+    </select>
+
+    <select id="adminLogin" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users WHERE username=#{username} AND password=#{password} AND role=1
+    </select>
+
+    <select id="existAdmin" resultType="int">
+        SELECT count(*)
+        FROM users
+        WHERE role = 1
     </select>
 </mapper>

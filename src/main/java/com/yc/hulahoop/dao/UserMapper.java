@@ -25,4 +25,8 @@ public interface UserMapper {
     User loginByPhone(@Param("phone") String phone, @Param("password") String password);
 
     int verifyPassword(@Param("passwordOld") String passwordOld, @Param("userId") int userId);
+
+    User adminLogin(@Param("username") String username, @Param("password") String password);
+
+    int existAdmin();
 }

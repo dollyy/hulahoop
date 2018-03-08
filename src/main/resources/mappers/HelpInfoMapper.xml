@@ -92,4 +92,8 @@
             update_time = now()
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM help_info
+    </select>
 </mapper>
