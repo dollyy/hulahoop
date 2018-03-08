@@ -141,20 +141,21 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="list" resultType="com.yc.hulahoop.vo.CommentVo">
+    <select id="listByStrategyId" resultType="com.yc.hulahoop.vo.CommentVo">
         SELECT
             c.id,
             c.level,
             c.parent,
             u.avatar,
-            u.id       AS responseId,
-            u.username AS responseName,
+            u.id          AS responseId,
+            u.username    AS responseName,
             c.content,
             c.create_time AS createTime,
-            c.for_num AS forNum,
+            c.for_num     AS forNum,
             c.against_num AS againstNum
         FROM comments c
             JOIN users u ON c.user_id = u.id
+        WHERE c.strategy_id = #{strategyId}
         ORDER BY level
     </select>
 

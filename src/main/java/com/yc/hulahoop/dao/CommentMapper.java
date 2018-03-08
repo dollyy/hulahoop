@@ -19,7 +19,7 @@ public interface CommentMapper {
 
     int updateByPrimaryKey(Comment record);
 
-    List<CommentVo> list();
+    List<CommentVo> listByStrategyId(Integer strategyId);
 
     User queryRequestUser(String parent);
 

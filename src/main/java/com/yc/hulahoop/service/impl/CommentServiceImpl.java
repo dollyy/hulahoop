@@ -21,8 +21,16 @@ public class CommentServiceImpl implements CommentService {
     CommentMapper commentMapper;
 
     @Override
-    public ServerResponse list() {
-        List<CommentVo> commentList = commentMapper.list();
+    public ServerResponse listByStrategyId(Integer strategyId) {
+        if (strategyId == null) {
+            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+        }
+        List<CommentVo> commentList = commentMapper.listByStrategyId(strategyId);
+        //攻略没有评论
+        if (commentList.size() == 0) {
+            return ServerResponse.createBySuccessMessage("暂无信息");
+        }
+        //封装评论信息
         List<List<CommentVo>> comments = Lists.newArrayList();
         List<CommentVo> comment = null;
         for (CommentVo vo : commentList) {
@@ -45,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public ServerResponse add(Comment comment) {
-        int sequence = commentMapper.querySequenceByAdd()+1;
+        int sequence = commentMapper.querySequenceByAdd() + 1;
         comment.setParent("0");
         comment.setSequence(sequence);
         comment.setLevel(String.valueOf(sequence));
@@ -58,7 +66,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public ServerResponse reply(Comment comment) {
-        int sequence = commentMapper.querySequenceByReply(comment.getParent() + "._")+1;
+        int sequence = commentMapper.querySequenceByReply(comment.getParent() + "._") + 1;
         comment.setSequence(sequence);
         comment.setLevel(comment.getParent() + "." + sequence);
         int count = commentMapper.insert(comment);

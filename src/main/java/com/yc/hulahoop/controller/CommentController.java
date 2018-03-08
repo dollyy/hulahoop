@@ -21,20 +21,21 @@ public class CommentController {
     CommentService commentService;
 
     /**
-     * 查看所有评论
+     * 查看攻略的评论
      *
-     * @param session 当前用户
+     * @param session    当前用户
+     * @param strategyId 攻略id
      * @return comment的list
      */
     @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse list(HttpSession session) {
+    private ServerResponse list(HttpSession session, Integer strategyId) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
         }
-        return commentService.list();
+        return commentService.listByStrategyId(strategyId);
     }
 
     /**
