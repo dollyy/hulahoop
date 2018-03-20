@@ -41,7 +41,6 @@ public class FeedbackManageController {
      * 反馈信息
      *
      * @param session  当前用户
-     * @param title    信息的标题
      * @param content  信息的内容
      * @param parent   该回复的父级level
      * @param sequence 回复的次序
@@ -49,14 +48,13 @@ public class FeedbackManageController {
      */
     @RequestMapping(value = "reply.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse reply(HttpSession session, String title, String content, int parent, int sequence) {
+    private ServerResponse reply(HttpSession session, String content, int parent, int sequence) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
             FeedbackInfo feedbackInfo = new FeedbackInfo();
             feedbackInfo.setUserId(currentUser.getId());
-            feedbackInfo.setTitle(title);
             feedbackInfo.setContent(content);
             feedbackInfo.setParent(parent);
             feedbackInfo.setSequence(sequence + 1);

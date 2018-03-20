@@ -7,8 +7,6 @@ public class FeedbackInfo {
 
     private Integer userId;
 
-    private String title;
-
     private String content;
 
     private String level;
@@ -19,10 +17,9 @@ public class FeedbackInfo {
 
     private Date createTime;
 
-    public FeedbackInfo(Integer id, Integer userId, String title, String content, String level, Integer parent, Integer sequence, Date createTime) {
+    public FeedbackInfo(Integer id, Integer userId, String content, String level, Integer parent, Integer sequence, Date createTime) {
         this.id = id;
         this.userId = userId;
-        this.title = title;
         this.content = content;
         this.level = level;
         this.parent = parent;
@@ -48,14 +45,6 @@ public class FeedbackInfo {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
     }
 
     public String getContent() {

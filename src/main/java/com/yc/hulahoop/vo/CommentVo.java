@@ -12,7 +12,7 @@ public class CommentVo {
     private int requestId;
     private String requestName;
     private String content;
-    private Date createTime;
+    private String createTime;
     private int forNum;
     private int AgainstNum;
 
@@ -88,11 +88,11 @@ public class CommentVo {
         this.content = content;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

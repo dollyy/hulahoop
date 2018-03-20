@@ -50,8 +50,8 @@ public class UserController {
 
     /**
      * 登录
-     * 登陆时不在根据手机号或者用户名来分开校验是因为:用户名没有样式的限制,如果用户名也是手机号就会出现拿手机号来校验登录而失败的情况
      *
+     * @param type     username/phone
      * @param val      用户名 / 手机号
      * @param password 密码
      * @param session  存放当前用户
@@ -59,8 +59,8 @@ public class UserController {
      */
     @RequestMapping(value = "login.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse login(String val, String password, HttpSession session) {
-        ServerResponse serverResponse = userService.login(val, password);
+    private ServerResponse login(String type, String val, String password, HttpSession session) {
+        ServerResponse serverResponse = userService.login(type, val, password);
         if (serverResponse.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
         }
@@ -144,6 +144,7 @@ public class UserController {
         //todo 2.手机号可不可以更新???
 
         ServerResponse serverResponse = userService.updateUserInformation(user);
+        //将修改后的信息存进session
         if (serverResponse.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, user);
         }

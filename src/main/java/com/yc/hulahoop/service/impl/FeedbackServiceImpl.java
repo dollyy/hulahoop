@@ -41,9 +41,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public ServerResponse reply(FeedbackInfo feedbackInfo) {
         int count = feedbackInfoMapper.insert(feedbackInfo);
         if (count > 0) {
-            return ServerResponse.createBySuccessMessage("发送信息成功");
+            return ServerResponse.createBySuccessMessage("回复信息成功");
         }
-        return ServerResponse.createByErrorMessage("发送信息失败");
+        return ServerResponse.createByErrorMessage("回复信息失败");
     }
 
     @Override

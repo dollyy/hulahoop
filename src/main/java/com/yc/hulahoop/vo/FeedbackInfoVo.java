@@ -8,7 +8,7 @@ public class FeedbackInfoVo {
     private String username;
     private String title;
     private String content;
-    private Date createTime;
+    private String createTime;
 
     public int getId() {
         return id;
@@ -50,11 +50,11 @@ public class FeedbackInfoVo {
         this.content = content;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 }

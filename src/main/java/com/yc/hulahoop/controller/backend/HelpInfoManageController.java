@@ -21,7 +21,7 @@ public class HelpInfoManageController {
     private HelpInfoService helpInfoService;
 
     /**
-     * 列出所有的帮助信息
+     * 列出所有的帮助信息 todo create_time
      *
      * @param session 当前用户
      * @return helpInfo的list

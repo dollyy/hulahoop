@@ -230,9 +230,6 @@
             <if test="mainImg != null">
                 main_img = #{mainImg},
             </if>
-            <if test="subImg != null">
-                sub_img = #{subImg},
-            </if>
         </set>
         WHERE user_id=#{userId} AND id=#{id}
     </update>
@@ -249,20 +246,23 @@
         FROM strategies WHERE name LIKE #{strategyName}
     </select>
 
-    <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
-        <id column="city_id" property="cityId"/>
-        <result column="cityName" property="cityName"/>
-        <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
-            <result column="id" property="id"/>
-        </collection>
-    </resultMap>
+        <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
+            <id column="city_id" property="cityId"/>
+            <result column="cityName" property="cityName"/>
+            <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
+                <result column="id" property="id"/>
+                <result column="strategyName" property="strategyName"/>
+                <result column="duration" property="duration"/>
+            </collection>
+        </resultMap>
 
     <select id="queryUserStrategy" parameterType="int" resultMap="userStrategy">
         SELECT
             s.id,
-            s.name,
+            s.name        AS strategyName,
+            s.duration,
             city_id,
-            c.name AS cityName
+            c.name        AS cityName
         FROM strategies s
             JOIN cities c ON s.city_id = c.id
         WHERE user_id = #{userId}

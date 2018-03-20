@@ -17,7 +17,6 @@ public class Const {
     public static final String ILLEGAL_PARAMETER = "非法参数";
     public static final String NOT_LOGIN = "用户未登录";
     public static final String NO_USER = "用户不存在";
-    public static final String NO_PHONE = "手机号不存在";
     public static final String NON_ADMIN="非管理员无权操作";
     public static final int PAGE_SIZE=10;
 

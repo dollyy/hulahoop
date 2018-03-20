@@ -71,52 +71,17 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <resultMap id="userResultMap" type="com.yc.hulahoop.pojo.User">
-        <result column="username" property="username"/>
-    </resultMap>
-    <resultMap id="cityResultMap" type="com.yc.hulahoop.pojo.City">
-        <result column="cityName" property="cityName"/>
-    </resultMap>
-    <resultMap id="strategyResultMap" type="com.yc.hulahoop.pojo.Strategy">
-        <result column="id" property="id"/>
-        <result column="name" property="strategyName"/>
-        <result column="duration" property="duration"/>
-        <result column="main_img" property="mainImg"/>
-        <result column="for_num" property="forNum"/>
-        <result column="collect_num" property="collectNum"/>
-        <result column="create_time" property="createTime"/>
-        <collection property="username" resultMap="userResultMap"/>
-        <collection property="cityName" resultMap="cityResultMap"/>
-        <!--        <collection property="username" ofType="com.yc.hulahoop.pojo.User">
-                    <result property="username" column="username"/>
-                </collection>
-                <collection property="cityName" ofType="com.yc.hulahoop.pojo.City">
-                    <result property="cityName" column="cityName"/>
-                </collection>-->
-    </resultMap>
-    <resultMap extends="strategyResultMap" id="collectionList" type="com.yc.hulahoop.vo.CollectionVo">
-        <result column="id" property="id"/>
-        <result column="name" property="strategyName"/>
-        <result column="duration" property="duration"/>
-        <result column="main_img" property="mainImg"/>
-        <result column="for_num" property="forNum"/>
-        <result column="collect_num" property="collectNum"/>
-        <result column="create_time" property="createTime"/>
-        <result column="cityName" property="cityName"/>
-        <result column="username" property="username"/>
-    </resultMap>
-
-    <select id="queryCollectionList" parameterType="map" resultMap="collectionList">
+    <select id="queryCollectionList" parameterType="map" resultType="com.yc.hulahoop.vo.CollectionVo">
         SELECT
         s.id,
         u.username,
-        s.name,
+        s.name AS strategyName,
         ci.name AS cityName,
         s.duration,
-        s.main_img,
-        s.for_num,
-        s.collect_num,
-        s.create_time
+        s.main_img AS mainImg,
+        s.for_num AS forNum,
+        s.collect_num AS collectNum,
+        DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
         FROM strategies s
         JOIN collections co ON s.id = co.strategy_id
         JOIN users u ON s.user_id = u.id

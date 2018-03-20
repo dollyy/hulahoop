@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
         //校验 用户名
         ServerResponse<String> serverResponse = verify(user.getUsername(), Const.USERNAME);
         if (!serverResponse.isSuccess()) {
-            return serverResponse;
+            return ServerResponse.createByErrorMessage("用户名已存在");
         }
         //校验 手机号
         serverResponse = verify(user.getPhone(), Const.PHONE);
         if (!serverResponse.isSuccess()) {
-            return serverResponse;
+            return ServerResponse.createByErrorMessage("手机号已存在");
         }
         //密码MD5加密
         user.setPassword(MD5Util.MD5Encode(user.getPassword(), "utf-8"));
@@ -70,32 +70,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse login(String val, String password) {
+    public ServerResponse login(String type, String val, String password) {
         if (StringUtils.isBlank(val) || StringUtils.isBlank(password)) {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
         //密码MD5加密
         password = MD5Util.MD5Encode(password, "utf-8");
-        //1.用用户名登录
-        if (userMapper.verifyUsername(val) == 0) {    //校验用户名是否存在
-            return ServerResponse.createByErrorMessage(Const.NO_USER);
+        User user;
+        switch (type) {
+            case Const.USERNAME:    //用户名登录
+                user = userMapper.loginByUsername(val, password);
+                break;
+            case Const.PHONE:   //手机号登录
+                user = userMapper.loginByPhone(val, password);
+                break;
+            default:
+                return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
-        User nameUser = userMapper.loginByUsername(val, password);
         //登录成功
-        if (nameUser != null) {
-            nameUser.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
-            return ServerResponse.createBySuccess("登陆成功", nameUser);
-        }
-        //2.用手机号登录
-        //校验手机号时候存在
-        if (userMapper.verifyPhone(val) == 0) {
-            return ServerResponse.createByErrorMessage(Const.NO_PHONE);
-        }
-        User phoneUser = userMapper.loginByPhone(val, password);
-        //登录成功
-        if (phoneUser != null) {
-            phoneUser.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
-            return ServerResponse.createBySuccess("登陆成功", phoneUser);
+        if (user != null) {
+            user.setPassword(StringUtils.EMPTY);    //将密码置空再返回user对象
+            return ServerResponse.createBySuccess("登陆成功", user);
         }
         //登录失败
         return ServerResponse.createByErrorMessage("用户名或密码错误");
@@ -163,15 +158,15 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorMessage("管理员用户名或密码错误");
         }
         //第一次登录即为管理员
-        User admin=new User();
+        User admin = new User();
         admin.setUsername(username);
         admin.setPassword(password);
         admin.setRole(Const.Role.ADMIN);
         //todo admin phone ???
         admin.setPhone("");
-        count=userMapper.insert(admin);
+        count = userMapper.insert(admin);
         //获取user的信息
-        user=userMapper.selectByPrimaryKey(admin.getId());
+        user = userMapper.selectByPrimaryKey(admin.getId());
         if (count > 0) {
             user.setPassword(StringUtils.EMPTY);        //密码置空
             return ServerResponse.createBySuccess("管理员登陆成功", user);

@@ -37,16 +37,12 @@ public class StrategyManageController {
     private ServerResponse list(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                 @RequestParam(value = "cityId", required = false) Integer cityId,
                                 @RequestParam(value = "duration", required = false) String duration) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            return strategyService.queryStrategyList(pageNum, cityId, duration);
         }
-        //检查当前用户是否为管理员
-        if (currentUser.getRole() != Const.Role.ADMIN) {
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
-        }
-        return strategyService.queryStrategyList(pageNum, cityId, duration);
+        return serverResponse;
     }
 
     /**
@@ -59,16 +55,12 @@ public class StrategyManageController {
     @RequestMapping(value = "detail.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse detail(HttpSession session, Integer strategyId) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            return strategyService.detail(strategyId);
         }
-        //检查当前用户是否为管理员
-        if (currentUser.getRole() != Const.Role.ADMIN) {
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
-        }
-        return strategyService.detail(strategyId);
+        return serverResponse;
     }
 
     /**
@@ -83,20 +75,16 @@ public class StrategyManageController {
     private ServerResponse search(HttpSession session, String type, String val,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                   @RequestParam(value = "pageSize", defaultValue = "2") int pageSize) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            return strategyService.search(type, val, pageNum, pageSize);
         }
-        //检查当前用户是否为管理员
-        if (currentUser.getRole() != Const.Role.ADMIN) {
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
-        }
-        return strategyService.search(type, val, pageNum, pageSize);
+        return serverResponse;
     }
 
     /**
-     * 删除攻略
+     * 删除攻略 todo 删除多个
      *
      * @param session    当前用户
      * @param strategyId 攻略id
@@ -105,16 +93,13 @@ public class StrategyManageController {
     @RequestMapping(value = "delete.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse delete(HttpSession session, Integer strategyId) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.delete(strategyId, currentUser.getId());
         }
-        //检查当前用户是否为管理员
-        if (currentUser.getRole() != Const.Role.ADMIN) {
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
-        }
-        return strategyService.delete(strategyId, currentUser.getId());
+        return serverResponse;
     }
 
     /**
@@ -130,16 +115,25 @@ public class StrategyManageController {
     @ResponseBody
     private ServerResponse richtxtImgUpload(HttpSession session, MultipartFile file,
                                             HttpServletRequest request, HttpServletResponse response) {
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            //todo upload
+            return null;
+        }
+        return serverResponse;
+    }
+
+    private ServerResponse<Object> isAdmin(HttpSession session) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
         }
         //检查当前用户是否为管理员
-        if (currentUser.getRole() != Const.Role.ADMIN) {
+        if (currentUser.getRole() != Const.Role.ADMIN) {    //非管理员
             return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
         }
-        //todo upload
-        return null;
+        return ServerResponse.createBySuccess();
     }
 }

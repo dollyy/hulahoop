@@ -7,6 +7,8 @@ public class Comment {
 
     private Integer userId;
 
+    private Integer strategyId;
+
     private String content;
 
     private String level;
@@ -21,9 +23,10 @@ public class Comment {
 
     private Integer againstNum;
 
-    public Comment(Integer id, Integer userId, String content, String level, String parent, Integer sequence, Date createTime, Integer forNum, Integer againstNum) {
+    public Comment(Integer id, Integer userId, Integer strategyId, String content, String level, String parent, Integer sequence, Date createTime, Integer forNum, Integer againstNum) {
         this.id = id;
         this.userId = userId;
+        this.strategyId = strategyId;
         this.content = content;
         this.level = level;
         this.parent = parent;
@@ -51,6 +54,14 @@ public class Comment {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getStrategyId() {
+        return strategyId;
+    }
+
+    public void setStrategyId(Integer strategyId) {
+        this.strategyId = strategyId;
     }
 
     public String getContent() {

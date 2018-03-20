@@ -5,6 +5,7 @@
         <constructor>
             <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="strategy_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="level" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="parent" javaType="java.lang.String" jdbcType="VARCHAR"/>
@@ -15,7 +16,8 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, content, level, parent, sequence, create_time, for_num, against_num
+        id, user_id, strategy_id, content, level, parent, sequence, create_time, for_num,
+        against_num
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -28,14 +30,13 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.Comment">
-        INSERT INTO comments (id, user_id, content,
-                              level, parent, sequence,
-                              create_time, for_num, against_num
-        )
-        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
-                #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
-                now(), 0, 0
-        )
+        INSERT INTO comments (id, user_id, strategy_id,
+                              content, level, parent,
+                              sequence, create_time, for_num,
+                              against_num)
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{strategyId,jdbcType=INTEGER},
+                #{content,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{parent,jdbcType=VARCHAR},
+                #{sequence,jdbcType=INTEGER}, now(), 0, 0)
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Comment">
         insert into comments
@@ -45,6 +46,9 @@
             </if>
             <if test="userId != null">
                 user_id,
+            </if>
+            <if test="strategyId != null">
+                strategy_id,
             </if>
             <if test="content != null">
                 content,
@@ -75,6 +79,9 @@
             <if test="userId != null">
                 #{userId,jdbcType=INTEGER},
             </if>
+            <if test="strategyId != null">
+                #{strategyId,jdbcType=INTEGER},
+            </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
@@ -104,6 +111,9 @@
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
+            <if test="strategyId != null">
+                strategy_id = #{strategyId,jdbcType=INTEGER},
+            </if>
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
@@ -131,6 +141,7 @@
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.Comment">
         UPDATE comments
         SET user_id     = #{userId,jdbcType=INTEGER},
+            strategy_id = #{strategyId,jdbcType=INTEGER},
             content     = #{content,jdbcType=VARCHAR},
             level       = #{level,jdbcType=VARCHAR},
             parent      = #{parent,jdbcType=VARCHAR},
@@ -147,12 +158,12 @@
             c.level,
             c.parent,
             u.avatar,
-            u.id          AS responseId,
-            u.username    AS responseName,
+            u.id                                      AS responseId,
+            u.username                                AS responseName,
             c.content,
-            c.create_time AS createTime,
-            c.for_num     AS forNum,
-            c.against_num AS againstNum
+            DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime,
+            c.for_num                                 AS forNum,
+            c.against_num                             AS againstNum
         FROM comments c
             JOIN users u ON c.user_id = u.id
         WHERE c.strategy_id = #{strategyId}

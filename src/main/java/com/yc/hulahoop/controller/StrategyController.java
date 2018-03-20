@@ -22,7 +22,7 @@ public class StrategyController {
     private StrategyService strategyService;
 
     /**
-     * 列出所有攻略
+     * 列出所有攻略 todo create_time
      *
      * @param pageNum  页码
      * @param cityId   城市编号(如果参数没有值就会默认赋值null,所以要用int的包装类)
@@ -75,7 +75,7 @@ public class StrategyController {
     }
 
     /**
-     * 删除攻略
+     * 删除攻略 todo 删除多个
      *
      * @param session    当前用户
      * @param strategyId 攻略id
@@ -133,7 +133,7 @@ public class StrategyController {
      * @param session 当前用户
      * @return strategy的list
      */
-    @RequestMapping(value = "queryUserStrategy.action", method = RequestMethod.POST)
+    @RequestMapping(value = "queryUserStrategy.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse queryUserStrategy(HttpSession session) {
         //检查用户是否登录
@@ -154,12 +154,13 @@ public class StrategyController {
      * @param orderBy  排序
      * @return strategy的list
      */
-    @RequestMapping(value = "queryUseCollection.action", method = RequestMethod.POST)
+    @RequestMapping(value = "queryUserCollection.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse queryUseCollection(HttpSession session, Integer cityId,
-                                              @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                              @RequestParam(value = "orderBy", defaultValue = "") String orderBy) {
+    private ServerResponse queryUserCollection(HttpSession session,
+                                               @RequestParam(value = "cityId", required = false) Integer cityId,
+                                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                               @RequestParam(value = "orderBy", defaultValue = "") String orderBy) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录

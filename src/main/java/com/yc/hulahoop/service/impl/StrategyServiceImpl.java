@@ -140,16 +140,14 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse queryUserCollection(int userId, Integer cityId, int pageNum, int pageSize, String orderBy) {
-        if (cityId == null) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
-        }
+        System.out.println("++++++"+cityId);
         PageHelper.startPage(pageNum, pageSize);
         //处理排序
         if (Const.StrategyOrderBy.STRATEGY_ORDER.contains(orderBy)) {
             String[] orders = orderBy.split(".");
             PageHelper.orderBy(orders[0] + " " + orders[1]);
         }
-        List<CollectionVo> collectionVoList = collectionMapper.queryCollectionList(userId, cityId == 0 ? null : cityId);
+        List<CollectionVo> collectionVoList = collectionMapper.queryCollectionList(userId, cityId);
         PageInfo pageInfo = new PageInfo(collectionVoList);
         return ServerResponse.createBySuccessData(pageInfo);
     }

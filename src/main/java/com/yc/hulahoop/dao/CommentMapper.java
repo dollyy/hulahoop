@@ -26,4 +26,5 @@ public interface CommentMapper {
     int querySequenceByAdd();
 
     int querySequenceByReply(String parent);
+
 }

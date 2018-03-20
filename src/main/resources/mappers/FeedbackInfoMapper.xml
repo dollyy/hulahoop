@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yc.hulahoop.dao.FeedbackInfoMapper">
     <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.FeedbackInfo">
         <constructor>
-            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="title" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="content" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="level" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="parent" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="sequence" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="level" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="parent" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="sequence" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, title, content, level, parent, sequence, create_time
+        id, user_id, content, level, parent, sequence, create_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from feedback_info
@@ -27,12 +26,12 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
-        INSERT INTO feedback_info (id, user_id, title,
-                                   content, level, parent,
-                                   sequence, create_time)
-        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
-                #{content,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER},
-                #{sequence,jdbcType=INTEGER}, now())
+        INSERT INTO feedback_info (id, user_id, content,
+                                   level, parent, sequence,
+                                   create_time)
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+                #{level,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER},
+                now())
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
         insert into feedback_info
@@ -42,9 +41,6 @@
             </if>
             <if test="userId != null">
                 user_id,
-            </if>
-            <if test="title != null">
-                title,
             </if>
             <if test="content != null">
                 content,
@@ -69,9 +65,6 @@
             <if test="userId != null">
                 #{userId,jdbcType=INTEGER},
             </if>
-            <if test="title != null">
-                #{title,jdbcType=VARCHAR},
-            </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
@@ -95,9 +88,6 @@
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
-            <if test="title != null">
-                title = #{title,jdbcType=VARCHAR},
-            </if>
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
             </if>
@@ -119,7 +109,6 @@
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
         UPDATE feedback_info
         SET user_id     = #{userId,jdbcType=INTEGER},
-            title       = #{title,jdbcType=VARCHAR},
             content     = #{content,jdbcType=VARCHAR},
             level       = #{level,jdbcType=VARCHAR},
             parent      = #{parent,jdbcType=INTEGER},
@@ -133,9 +122,8 @@
             f.id,
             f.level,
             u.username,
-            f.title,
             f.content,
-            f.create_time AS createTime
+            DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
         FROM feedback_info f
             JOIN users u ON f.user_id = u.id
         WHERE parent = 0
@@ -153,9 +141,8 @@
             f.id,
             f.level,
             u.username,
-            f.title,
             f.content,
-            f.create_time AS createTime
+            DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
         FROM feedback_info f
             JOIN users u ON f.user_id = u.id
         WHERE level LIKE #{level}
