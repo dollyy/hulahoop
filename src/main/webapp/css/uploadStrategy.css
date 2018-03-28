@@ -1,0 +1,154 @@
+input{
+    border: none;
+}
+/*strategy*/
+.strategyContainer{
+    width: 1000px;
+    height: auto;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #999;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+}
+.st{
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+/* help start */
+.icon-iconhelp{
+    float: right;
+    margin: 10px 10px 0 0;
+}
+.helpPage{
+    width: 300px;
+    max-height: 500px;
+    overflow: scroll;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+    background: #fff;
+    box-shadow: 0 0 15px #999;
+    padding: 10px;
+    display: none;
+}
+#helpClose{
+    text-align: right;
+    cursor: pointer;
+}
+.tip{
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    float: left;
+    margin: 10px 0 10px 0;
+}
+.tip>div{
+    margin-bottom: 5px;
+}
+.tip>div:first-child{
+    font-weight: bold;
+    text-align: center;
+}
+/* help end */
+
+/* tags start */
+.tags{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.cities{
+    width: 100px;
+    margin-right: 20px;
+}
+#duration{
+    height: 28px;
+    width: 50px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+/* tags end */
+
+#title{
+    height: 27px;
+    width: 100%;
+    border: 2px dashed #666;
+    font-size: 15px;
+    margin: 15px 0 20px 0;
+    border-radius: 0;
+}
+
+/* addBtn + subBtn start */
+#subBtn,#addBtn{
+    width: 50px;
+    height: 23px;
+    margin-top: 10px;
+    float: right;
+    background: #999;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+#subBtn:hover,#addBtn:hover{
+    box-shadow: 0 0 15px #999;
+}
+/* addBtn + subBtn end */
+
+/* day start */
+.day{
+    border: 2px dashed #666;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.dayTitle,#daySub{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+#daySub{
+    border-bottom: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    width: 80%;
+}
+.icon-bianji,.icon-delete,.icon-baocun{
+    float: right;
+    margin: 5px 0 0 15px;
+    cursor: pointer;
+}
+.icon-baocun{
+    display: none;
+}
+/* day end */
+
+/**/
+.editorContainer{
+
+}
+#subTitle{
+    width: 1000px;
+    height: 23px;
+    border: 1px dashed #999;
+    border-radius: 0;
+    position: relative;
+    left: 50%;
+    margin: 10px 0 10px -500px;
+}
+/*wangEditor*/
+#editor{
+    width: 1000px;
+    background: #fff;
+    position: relative;
+    z-index: 1;
+    left: 50%;
+    margin-left: -500px;
+}

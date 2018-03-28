@@ -5,7 +5,7 @@ import com.yc.hulahoop.pojo.Comment;
 
 public interface CommentService {
 
-    ServerResponse listByStrategyId(Integer strategyId);
+    ServerResponse listByLevel(Integer level);
 
     ServerResponse add(Comment comment);
 

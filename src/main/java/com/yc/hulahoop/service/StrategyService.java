@@ -2,22 +2,27 @@ package com.yc.hulahoop.service;
 
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.Strategy;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface StrategyService {
 
-    ServerResponse queryStrategyList(int pageNum, Integer cityId, String duration);
+    ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
+
+    ServerResponse updateStrategyList(int pageNum, Integer cityId, String duration);
 
     ServerResponse detail(Integer strategyId);
 
     ServerResponse add(Strategy strategy);
 
-    ServerResponse delete(Integer strategyId, Integer userId);
+    ServerResponse delete(Integer userId, String strategyId);
 
     ServerResponse update(Strategy strategy);
 
-    ServerResponse search(String type, String val, int pageNum, int pageSize);
+    ServerResponse updateForOrCollect(Strategy strategy);
 
-    ServerResponse queryUserStrategy(int userId);
+    ServerResponse search(String type, String val, int pageNum);
 
-    ServerResponse queryUserCollection(int userId, Integer cityId,int pageNum, int pageSize, String orderBy);
+    ServerResponse queryUserStrategy(Integer userId);
+
+    ServerResponse queryUserCollection(int userId, int pageNum, int pageSize, String orderBy);
 }

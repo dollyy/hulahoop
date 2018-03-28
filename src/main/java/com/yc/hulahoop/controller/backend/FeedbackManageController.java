@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -28,11 +29,11 @@ public class FeedbackManageController {
      */
     @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse list(HttpSession session) {
+    private ServerResponse list(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return feedbackService.list();
+            return feedbackService.list(pageNum);
         }
         return serverResponse;
     }

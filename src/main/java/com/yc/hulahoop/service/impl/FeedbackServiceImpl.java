@@ -1,5 +1,8 @@
 package com.yc.hulahoop.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.dao.FeedbackInfoMapper;
 import com.yc.hulahoop.pojo.FeedbackInfo;
@@ -17,12 +20,16 @@ public class FeedbackServiceImpl implements FeedbackService {
     FeedbackInfoMapper feedbackInfoMapper;
 
     @Override
-    public ServerResponse list() {
+    public ServerResponse list(Integer pageNum) {
         List<FeedbackInfoVo> feedbackInfoList = feedbackInfoMapper.queryFeedbackList();
         if (feedbackInfoList.size() == 0) {
             return ServerResponse.createBySuccessMessage("暂无数据");
         }
-        return ServerResponse.createBySuccessData(feedbackInfoList);
+        //1.startPage--start
+        PageHelper.startPage(pageNum, Const.PAGE_SIZE);
+        //2.pageHelper--end
+        PageInfo pageInfo = new PageInfo(feedbackInfoList);
+        return ServerResponse.createBySuccessData(pageInfo);
     }
 
     @Override

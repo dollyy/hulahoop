@@ -20,19 +20,25 @@ public interface StrategyMapper {
 
     int updateByPrimaryKey(Strategy record);
 
-    List<Strategy> list(@Param("cityId") Integer cityId, @Param("duration") String duration);
+    List<StrategyVo> list(@Param("cityId") Integer cityId, @Param("duration") String duration);
 
     StrategyVo detail(Integer strategyId);
 
-    int deleteByUserIdAndStrategyId(@Param("strategyId") Integer strategyId, @Param("userId") Integer userId);
+    int deleteByUserIdAndStrategyId(@Param("strategyIdList") List<Integer> strategyIdList, @Param("userId") Integer userId);
+
+    int deleteByAdmin(@Param("strategyIdList") List<Integer> strategyIdList);
 
     int updateByUserIdAndStrategyId(Strategy strategy);
 
-    List<Strategy> searchByUsername(String username);
+    int updateForOrCollect(Strategy strategy);
 
-    List<Strategy> searchByStrategyName(String strategyName);
+    List<StrategyVo> searchByUsername(String username);
+
+    List<StrategyVo> searchByStrategyName(String strategyName);
 
     List<UserStrategyVo> queryUserStrategy(int userId);
 
     int countUserStrategy(@Param("userId") Integer userId, @Param("cityId") Integer cityId);
+
+    List<String> selectAllDurations();
 }

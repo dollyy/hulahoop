@@ -1,0 +1,181 @@
+.body{
+    width: 1100px;
+    margin: 0 auto;
+}
+/* ---catalog start--- */
+.catalog{
+    float: left;
+    background: #fff;
+    font-size: 14px;
+    box-shadow: 0 0 15px #999;
+    position: fixed;
+    border-left: 3px solid #3367D6;
+}
+.catalog li{
+    padding: 2px 10px;
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.catalog li:first-child{
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    font-size: 19px;
+}
+.current{
+    color: #2196F3;
+}
+/* ---catalog end--- */
+
+.ItemRight{
+    width: 900px;
+    float: right;
+    border-radius: 10px;
+    padding: 0 10px 10px 10px;
+    box-sizing: border-box;
+}
+nav{
+    margin-bottom: 5px;
+    padding: 0 5px;
+    font-size: 14px;
+}
+.navOpe{
+    float: right;
+    color: #999;
+}
+.navOpe .icon-zan1{
+    font-size: 20px;
+}
+.navFor{
+    margin-right: 10px;
+}
+.navColor{
+    color: #3367D6;
+}
+.collectColor{
+    color: #eb4f38;
+}
+
+/* ---content start--- */
+.content{
+    margin-bottom: 20px;
+}
+.strategyInfo{
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 30px 20px;
+}
+.title,.author{
+    display: block;
+}
+.title{
+    font-size: 25px;
+    text-align: center;
+}
+.author{
+    float: right;
+}
+.cata{
+    background: #fff;
+    padding: 10px 0 20px 0;
+    border-bottom: 1px dashed #ccc;
+}
+.content div:nth-child(5){
+    border-radius: 0 0 10px 10px;
+}
+/*#cata1,#cata2,#cata3,#cata4,#cata5{
+    padding: 10px;
+    box-sizing: border-box;
+}*/
+.dayTitle{
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid #333;
+    padding: 5px 10px;
+}
+.dayContent{
+    padding: 5px 10px;
+}
+.commentTitle{
+    font-size: 20px;
+    border-bottom: 2px solid #3367D6;
+    margin: 10px 0 0 0;
+    color: #666;
+    background: none;
+}
+/* ---content end--- */
+
+/* ---comment start--- */
+.addCommentContainer{
+    background: #fff;
+    padding: 15px 55px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-bottom: 2px dashed #ccc;
+}
+#addComment{
+    width: 100%;
+    height: 80px;
+    resize: none;
+    padding: 5px;
+    box-sizing: border-box;
+}
+#addCommentBtn{
+    width: 80px;
+    margin-top: 10px;
+    float: right;
+}
+.comments{
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    height: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.comment{
+    height: auto;
+    box-sizing: border-box;
+    display: flex;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-bottom: 1px dashed #ccc;
+}
+.comments>div:last-child{
+    border: none;
+    margin-bottom: 0;
+}
+.comment img{
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #999;
+    box-sizing: border-box;
+    margin-right: 15px;
+}
+.response{
+    flex: 1;
+    overflow: hidden;
+}
+.commInfo{
+    font-size: 12px;
+    color: #666;
+}
+.commContent{
+    font-size: 15px;
+    margin: 5px 0 10px 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+.commOperation{
+    font-size: 12px;
+    float: right;
+    color: #666;
+}
+/* ---comment end--- */

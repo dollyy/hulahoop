@@ -1,16 +1,22 @@
 package com.yc.hulahoop.controller;
 
+import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.User;
+import com.yc.hulahoop.service.FileService;
 import com.yc.hulahoop.service.UserService;
+import com.yc.hulahoop.util.PropertiesUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * Created by Yang Chen on 18-2-28.
@@ -22,6 +28,10 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FileService fileService;
+
 
     /**
      * 验证注册时的参数
@@ -103,13 +113,20 @@ public class UserController {
         return userService.resetPassword(passwordOld, passwordNew, currentUser);
     }
 
+
+    @RequestMapping(value = "updatePassword.action", method = RequestMethod.POST)
+    @ResponseBody
+    private ServerResponse updatePassword(String passwordNew, String phone){
+        return userService.updatePassword(passwordNew);
+    }
+
     /**
      * 获取用户信息
      *
      * @param session 当前用户
      * @return 当前用户的用户信息
      */
-    @RequestMapping(value = "queryUserInformation.action", method = RequestMethod.POST)
+    @RequestMapping(value = "queryUserInformation.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse queryUserInformation(HttpSession session) {
         //检查用户是否登录
@@ -121,7 +138,7 @@ public class UserController {
     }
 
     /**
-     * 更新个人信息  todo 1.上传头像图片
+     * 更新个人信息
      *
      * @param session 当前用户
      * @param user    当前用户更新的用户信息
@@ -151,4 +168,31 @@ public class UserController {
         return serverResponse;
     }
 
+    /**
+     * todo 1.上传头像图片
+     *
+     * @param session 当前用户
+     * @param file    头像文件
+     * @return 更新成功/失败
+     */
+    @RequestMapping(value = "updateAvatar.action", method = RequestMethod.POST)
+    @ResponseBody
+    private Map updateAvatar(HttpSession session, MultipartFile file) {
+        Map<String, Object> resultMap = Maps.newHashMap();  //返回的结果集
+        //上传头像
+        String uploadFileName=fileService.upload(file,Const.AVATAR);
+        //上传失败
+        if(StringUtils.isBlank(uploadFileName)){
+            resultMap.put("status",0);
+            resultMap.put("msg", "上传文件失败");
+            return resultMap;
+        }
+        //上传成功
+        resultMap.put("status", 1);
+        resultMap.put("msg", "上传文件成功");
+        String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.avatar")
+                + uploadFileName;
+        resultMap.put("file_path", path);
+        return resultMap;
+    }
 }

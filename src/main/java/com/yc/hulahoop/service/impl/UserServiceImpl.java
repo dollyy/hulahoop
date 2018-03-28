@@ -6,6 +6,7 @@ import com.yc.hulahoop.dao.UserMapper;
 import com.yc.hulahoop.pojo.User;
 import com.yc.hulahoop.service.UserService;
 import com.yc.hulahoop.util.MD5Util;
+import com.yc.hulahoop.util.PropertiesUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(MD5Util.MD5Encode(user.getPassword(), "utf-8"));
         //设置当前用户的角色
         user.setRole(Const.Role.USER);
+        //设置头像
+        user.setAvatar(PropertiesUtil.getProperty("ftp.avatar.default"));
 
         //添加用户
         int count = userMapper.insert(user);
@@ -118,6 +121,13 @@ public class UserServiceImpl implements UserService {
         }
         //重置密码失败
         return ServerResponse.createByErrorMessage("重置密码失败");
+    }
+
+    @Override
+    public ServerResponse updatePassword(String passwordNew) {
+        //新密码MD5加密
+        passwordNew = MD5Util.MD5Encode(passwordNew, "utf-8");
+        return null;
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface UserService {
 
     ServerResponse resetPassword(String passwordOld, String passwordNew, User user);
 
+    ServerResponse updatePassword(String passwordNew);
+
     ServerResponse queryUserInformation(Integer userId);
 
     ServerResponse updateUserInformation(User user);

@@ -2,9 +2,11 @@ package com.yc.hulahoop.vo;
 
 public class StrategyVo {
 
-    private int id;
+    private int strategyId;
     private String username;
+    private String avatar;
     private String strategyName;
+    private String mainImg;
     private String cityName;
     private String duration;
     private String catalog;
@@ -12,12 +14,12 @@ public class StrategyVo {
     private int forNum;
     private int collectNum;
 
-    public int getId() {
-        return id;
+    public int getStrategyId() {
+        return strategyId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStrategyId(int strategyId) {
+        this.strategyId = strategyId;
     }
 
     public String getUsername() {
@@ -28,12 +30,28 @@ public class StrategyVo {
         this.username = username;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public String getStrategyName() {
         return strategyName;
     }
 
     public void setStrategyName(String strategyName) {
         this.strategyName = strategyName;
+    }
+
+    public String getMainImg() {
+        return mainImg;
+    }
+
+    public void setMainImg(String mainImg) {
+        this.mainImg = mainImg;
     }
 
     public String getCityName() {

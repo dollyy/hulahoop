@@ -18,4 +18,6 @@ public interface HelpInfoMapper {
     int updateByPrimaryKey(HelpInfo record);
 
     List<HelpInfo> list();
+
+    List<HelpInfo> listByUpload();
 }

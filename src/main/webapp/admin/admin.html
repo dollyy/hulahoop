@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+    <link href="../vendors/select2-4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../font/iconfont.css">
+    <link rel="stylesheet" href="../css/admin/admin.css">
+</head>
+<body>
+    <div id="bg"></div>
+    <div class="tips"></div>
+    <div class="left">
+       <div class="head">
+           <span>
+               <span class="username">Hi, admin</span>
+               <span class="iconfont icon-icon" title="退出"></span>
+           </span>
+           <div class="hulahoop">hulahoop</div>
+       </div>
+       <ul class="catalog">
+            <li class="index clicked"><span class="iconfont icon-iconindexnor1"></span><span>首页</span></li>
+            <li class="help"><span class="iconfont icon-iconhelp"></span><span>帮助信息</span></li>
+            <li class="res"><span class="iconfont icon-update"></span><span>更新资源</span></li>
+            <li class="feedback"><span class="iconfont icon-xinfeng2"></span><span>用户反馈</span></li>
+            <li class="strategy"><span class="iconfont icon-gonglve"></span><span>旅游攻略</span></li>
+        </ul>
+    </div>
+    <div class="right">
+        <div class="rightHead">
+            <span class="location">当前位置 > <span>首页</span></span>
+            <span class="searchContainer">
+                <input type="text" id="searchInp">
+                <span class="iconfont icon-fangdajing"></span>
+            </span>
+        </div>
+        <div class='nothing'>暂无信息...</div>
+        <ul>
+            <li class="indexContainer">Hi</li>
+            <li class="helpContainer">
+                <div class="opeContainer"></div>
+                <span class="iconfont icon-xinzeng" title="新增"></span>
+                <table class="helpTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Create Time</th>
+                            <th>Update Time</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="page page_div"></div>
+            </li>
+            <li class="resContainer">789</li>
+            <li class="feedbackContainer">
+                <table id="feedbackTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>发件人</th>
+                            <th>内容</th>
+                            <th>时间</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="page page_div"></div>
+                <div class="feedbackDetail"></div>
+            </li>
+            <li class="strategyContainer">
+                <div class="strategyTab">
+                    <div>
+                        <span class="deleteAdminStrategy">删除</span>
+                        <span class="strategyOpe">操作</span>
+                    </div>
+                    <span class="provTab">
+                        省份: 
+                        <select class="js-example-basic-single province" name="state"></select>
+                    </span>
+                    <span class="durTab">
+                        时长: 
+                        <select class="js-example-basic-single duration" name="state"></select>
+                    </span>
+                </div>
+                <div class="strategies"></div>
+                <div class="page page_div"></div>
+                <div class="strategyDetail"></div>
+            </li>
+        </ul>
+    </div>
+
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <!-- wangEditor -->
+    <script src="../vendors/wangEditor-3.0.15/release/wangEditor.min.js"></script>
+    <script src="../vendors/select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
+    <script src="../js/paging.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/admin/admin.js"></script>
+</body>
+</html>

@@ -140,7 +140,10 @@
         SELECT
             f.id,
             f.level,
+            f.parent,
+            f.sequence,
             u.username,
+            u.avatar,
             f.content,
             DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
         FROM feedback_info f

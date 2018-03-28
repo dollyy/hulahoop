@@ -19,5 +19,5 @@ public interface CollectionMapper {
 
     int updateByPrimaryKey(Collection record);
 
-    List<CollectionVo> queryCollectionList(@Param("userId") int userId, @Param("cityId") Integer cityId);
+    List<CollectionVo> queryCollectionList(int userId);
 }

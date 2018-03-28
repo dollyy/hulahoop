@@ -70,6 +70,19 @@ VALUES
   (4,'9日游',7,'3天','8百度@#8baidu#-8准备@#8zhunbei','ftp://images/default.jpg',5,7,sysdate(),sysdate()),
   (2,'10日游',4,'5天','9百度@#9baidu#-9准备@#9zhunbeiftp://images/a6.jpg#-9开始@#9kaishi#-9途中@#9tuzhong#-9回家@#2huijia','ftp://images/a6.jpg',8,5,sysdate(),sysdate());
 
+INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, create_time, update_time)
+    VALUES (4,'strategy7',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+
+      (4,'strategy2',8,'31天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+
+      (4,'strategy3',9,'32天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+
+      (4,'strategy10',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+
+      (4,'strategy11',5,'5天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+
+      (4,'strategy12',1,'7天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate());
+
 SELECT * FROM strategies;
 
 SELECT * FROM strategies WHERE user_id=(SELECT users.id FROM users WHERE username LIKE '%哈');
@@ -84,6 +97,44 @@ SELECT count(*) FROM strategies WHERE user_id=2 AND city_id=1;
 
 SELECT s.id, s.content, c.name, s.duration, s.name, s.for_num, s.collect_num, u.username FROM strategies s JOIN cities c ON s.city_id=c.id JOIN users u ON
 s.user_id=u.id WHERE s.id=2;
+
+SELECT
+  s.id,
+  s.name        AS strategyName,
+  s.duration,
+  city_id,
+  c.name        AS cityName,
+  s.main_img    AS mainImg
+FROM strategies s
+  JOIN cities c ON s.city_id = c.id
+WHERE user_id = 4;
+
+SELECT s.id AS strategyId,
+       s.main_img AS mainImg,
+  u.avatar,
+  u.username,
+       s.name AS strategyName,
+       c.name AS cityName,
+  s.duration
+FROM strategies s
+  JOIN users u ON s.user_id=u.id
+  JOIN cities c ON s.city_id=c.id
+where user_id IN (SELECT users.id FROM users WHERE username LIKE '%1%');
+
+
+SELECT s.id AS strategyId,
+       s.main_img AS mainImg,
+  u.avatar,
+  u.username,
+       s.name AS strategyName,
+       c.name AS cityName,
+  s.duration
+FROM strategies s
+  JOIN users u ON s.user_id=u.id
+  JOIN cities c ON s.city_id=c.id
+WHERE s.name LIKE '%日%';
+
+SELECT * FROM comments WHERE strategy_id=2 AND parent=0;
 
 -- ------------------------------------
 -- Table structure for `collections`
@@ -186,6 +237,13 @@ SELECT id, user_id, name, city_id, duration, content, main_img, for_num, collect
                                                                                                   '%Y-%m-%d %T') FROM strategies;
 
 SELECT * FROM comments ORDER BY level;
+
+SELECT duration FROM strategies GROUP BY duration ORDER BY duration;
+
+SELECT s.id,s.main_img,u.avatar,u.username,s.name,c.name,s.duration FROM strategies s JOIN users u ON s.user_id=u.id JOIN cities c
+ON s.city_id=c.id;
+
+SELECT count(*) FROM comments WHERE strategy_id=2 AND level LIKE '5.%';
 -- ------------------------------------
 -- Table structure for `help_info`
 -- ------------------------------------
@@ -252,6 +310,8 @@ WHERE parent=0;
 
 SELECT f.id,f.title,f.content,f.level,f.create_time,u.username FROM feedback_info f JOIN users u ON f.user_id=u.id
 WHERE level LIKE '1%' ORDER BY create_time;
+
+
 
 
 -- ------------------------------------

@@ -1,0 +1,23 @@
+footer{
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    background: #000000;
+    box-sizing: border-box;
+    color: #fff;
+}
+footer a{
+    color: #fff;
+}
+footer>span{
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+}
+footer img{
+    height: 45px;
+    vertical-align: middle;
+}
+a:hover{
+    text-shadow: 0 0 6px #fff;
+}

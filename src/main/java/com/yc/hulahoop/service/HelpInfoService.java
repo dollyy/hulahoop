@@ -5,12 +5,14 @@ import com.yc.hulahoop.pojo.HelpInfo;
 
 public interface HelpInfoService {
 
-    ServerResponse list();
+    ServerResponse list(Integer pageNum);
 
     ServerResponse add(HelpInfo helpInfo);
 
     ServerResponse update(HelpInfo helpInfo);
 
     ServerResponse delete(Integer helpInfoId);
+
+    ServerResponse listByUpload();
 
 }

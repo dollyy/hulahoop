@@ -1,0 +1,122 @@
+.body{
+    width: 1100px;
+    margin: 0 auto;
+}
+/* catalog */
+.catalog{
+    width: 100%;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
+    position: fixed;
+    border-bottom: 3px solid #3367D6;
+    display: flex;
+    z-index: 2;
+   justify-content: space-around;
+}
+.js-example-basic-single{
+    width: 150px;
+}
+.searchContainer{
+    display: inline-block;
+    height: 28px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0 5px 0 1px;
+}
+#searchInp{
+    height: 90%;
+    border: none;
+}
+.searchSelect{
+    height: 100%;
+    border: 0;
+    border-right: 1px solid #aaa;
+}
+/* content */
+.content{
+    position: relative;
+    top: 70px;
+    width: 1100px;
+    background: #fff;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 0 15px #999;
+}
+.strategy{
+    display: inline-block;
+    width: 230px;
+    /*height: 100%;*/
+    background: #f2f2f2;
+    cursor: pointer;
+    box-shadow: 0 0 10px #999;
+    transition: all 0.3s linear;
+    position: relative;
+    margin: 15px;
+}
+.strategy:hover{
+    box-shadow: 0 0 30px #999;
+    transition: all 0.3s linear;
+}
+#strategyBg{
+    width: 100%;
+    height: 180px;
+    border-bottom: 2px solid #999;
+}
+#avatar{
+    width: 60px;
+    border-radius: 50%;
+    border: 2px solid #999;
+    position: relative;
+    margin-top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.s_msg{
+    font-size: 13px;
+    margin: 0 5px;
+}
+.title,.tags,.user{
+    display: block;
+    font-weight: bold;
+    margin: 5px;
+}
+#pageNum{
+    position: relative;
+    top: 70px;
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    padding: 0 0 30px 0;
+    box-shadow: 0 7px 15px #999;
+}
+.page_div{
+    font-size: 15px;
+    color: #666666;
+    text-align: center;
+}
+.page_div a {
+    min-width: 30px;
+    height: 28px;
+    text-align: center;
+    margin: 0 5px;
+    cursor: pointer;
+    line-height: 28px;
+    color: #666666;
+    font-size: 13px;
+    display: inline-block;
+}
+#firstPage,#lastPage {
+    width: auto;
+    color: #3367D6;
+}
+#prePage,#nextPage {
+    width: auto;
+    color: #3367D6;
+}
+.page_div .current {
+    background-color: #3367D6;
+    color: #FFFFFF;
+    border-radius: 50%;
+}

@@ -1,6 +1,7 @@
 package com.yc.hulahoop.service.impl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.dao.CommentMapper;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {
@@ -21,11 +23,11 @@ public class CommentServiceImpl implements CommentService {
     CommentMapper commentMapper;
 
     @Override
-    public ServerResponse listByStrategyId(Integer strategyId) {
-        if (strategyId == null) {
+    public ServerResponse listByLevel(Integer level) {
+        if (level == null) {
             return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
         }
-        List<CommentVo> commentList = commentMapper.listByStrategyId(strategyId);
+        List<CommentVo> commentList = commentMapper.listByLevel(level+"%");
         //攻略没有评论
         if (commentList.size() == 0) {
             return ServerResponse.createBySuccessMessage("暂无信息");
@@ -71,7 +73,10 @@ public class CommentServiceImpl implements CommentService {
         comment.setLevel(comment.getParent() + "." + sequence);
         int count = commentMapper.insert(comment);
         if (count > 0) {
-            return ServerResponse.createBySuccessMessage("回复评论成功");
+            Map<String, Object> result= Maps.newHashMap();
+            result.put("level",comment.getLevel());
+            result.put("id",comment.getId());
+            return ServerResponse.createBySuccessData(result);
         }
         return ServerResponse.createByErrorMessage("回复评论失败");
     }

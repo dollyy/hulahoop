@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class CommentVo {
     private int id;
+    private int StrategyId;
     private String level;
     private String avatar;
     private String parent;
@@ -15,6 +16,7 @@ public class CommentVo {
     private String createTime;
     private int forNum;
     private int AgainstNum;
+    private int commentCount;
 
     public int getId() {
         return id;
@@ -22,6 +24,14 @@ public class CommentVo {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getStrategyId() {
+        return StrategyId;
+    }
+
+    public void setStrategyId(int strategyId) {
+        StrategyId = strategyId;
     }
 
     public String getLevel() {
@@ -112,4 +122,11 @@ public class CommentVo {
         AgainstNum = againstNum;
     }
 
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
 }

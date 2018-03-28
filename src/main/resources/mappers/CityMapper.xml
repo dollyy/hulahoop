@@ -57,4 +57,10 @@
         SET name = #{name,jdbcType=VARCHAR}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectCities" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cities ORDER BY id
+    </select>
 </mapper>

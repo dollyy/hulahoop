@@ -23,7 +23,7 @@
         DELETE FROM help_info
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.HelpInfo">
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.HelpInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO help_info (id, title, content,
                                create_time, update_time)
         VALUES (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
@@ -78,9 +78,7 @@
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="updateTime != null">
-                update_time = now(),
-            </if>
+            update_time = now(),
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -95,5 +93,9 @@
 
     <select id="list" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM help_info
+    </select>
+
+    <select id="listByUpload" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM help_info WHERE id IN (1,2)
     </select>
 </mapper>

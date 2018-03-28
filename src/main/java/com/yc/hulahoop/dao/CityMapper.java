@@ -2,6 +2,8 @@ package com.yc.hulahoop.dao;
 
 import com.yc.hulahoop.pojo.City;
 
+import java.util.List;
+
 public interface CityMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,6 @@ public interface CityMapper {
     int updateByPrimaryKeySelective(City record);
 
     int updateByPrimaryKey(City record);
+
+    List<City> selectCities();
 }

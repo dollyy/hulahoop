@@ -29,7 +29,7 @@
         DELETE FROM comments
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Comment">
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Comment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO comments (id, user_id, strategy_id,
                               content, level, parent,
                               sequence, create_time, for_num,
@@ -152,9 +152,10 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="listByStrategyId" resultType="com.yc.hulahoop.vo.CommentVo">
+    <select id="listByLevel" resultType="com.yc.hulahoop.vo.CommentVo">
         SELECT
             c.id,
+            c.strategy_id                             AS strategyId,
             c.level,
             c.parent,
             u.avatar,
@@ -166,7 +167,26 @@
             c.against_num                             AS againstNum
         FROM comments c
             JOIN users u ON c.user_id = u.id
-        WHERE c.strategy_id = #{strategyId}
+        WHERE c.level LIKE #{level}
+        ORDER BY level
+    </select>
+
+    <select id="listByStrategy" resultType="com.yc.hulahoop.vo.CommentVo">
+        SELECT
+            c.id,
+            c.strategy_id                             AS strategyId,
+            c.level,
+            c.parent,
+            u.avatar,
+            u.id                                      AS responseId,
+            u.username                                AS responseName,
+            c.content,
+            DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime,
+            c.for_num                                 AS forNum,
+            c.against_num                             AS againstNum
+        FROM comments c
+            JOIN users u ON c.user_id = u.id
+        WHERE c.strategy_id = #{strategyId} AND parent = 0
         ORDER BY level
     </select>
 
@@ -189,5 +209,11 @@
         SELECT count(*)
         FROM comments
         WHERE level LIKE #{parent}
+    </select>
+
+    <select id="queryCommentCount" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM comments
+        WHERE strategy_id = #{strategyId} AND level LIKE #{level}
     </select>
 </mapper>

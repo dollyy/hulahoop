@@ -1,0 +1,428 @@
+body{
+    display: flex;
+}
+#bg{
+    height: 100%;
+}
+.tips{
+    z-index: 4;
+}
+/* 1.left start */
+.left{
+    width: 270px;
+    height: 100%;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+/* 1-1.head start */
+.head{
+    height: 120px;
+    background: #2980B9;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    font-weight: bold;
+}
+.head>span:first-child{
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+}
+.hulahoop{
+    font-size: 35px;
+    vertical-align: sub;
+    margin-top: 20px;
+}
+/* 1-1.head end */
+/* 1-2.catalog start */
+.catalog{
+    flex: 1;
+    background: #343131;
+    color: #B3B3B3;
+    box-sizing: border-box;
+    padding: 15px 0;
+}
+.catalog li{
+    cursor: pointer;
+    padding: 13px 20px;
+    font-weight: bold;
+    font-size: 15px;
+}
+.catalog li:hover{
+    background: #4a4a4a;
+    color: #B3B3B3;
+}
+.icon-iconhelp{
+    margin-right: 10px;
+}
+.clicked{
+    background: #f2f2f2;
+    color: #404040;
+}
+/* 1-2.catalog end */
+/* 1.left end */
+
+
+/* 2.right start */
+.right{
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+/* 2-1.location start*/
+.rightHead{
+    border-bottom: 1px solid #E1E4E5;
+    padding: 10px 150px 10px 20px;
+}
+.location{
+    padding: 5px;
+    font-size: 13px;
+    box-sizing: border-box;
+    margin: 0 5px;
+    color: #666;
+}
+.location span:last-child{
+    font-weight: bold;
+}
+.searchContainer{
+    float: right;
+    background: #fff;
+    border-radius: 5px;
+    padding: 2px 5px 0 0;
+    box-sizing: border-box;
+}
+#searchInp{
+    border: none;
+    background: transparent;
+}
+/* 2-1.location end*/
+.right ul{
+    flex: 1;
+}
+.indexContainer,.helpContainer,.resContainer,.feedbackContainer,.strategyContainer{
+    height: 100%;
+    padding: 0 100px;
+}
+/* 2-2.indexContainer start */
+.indexContainer{
+    text-align: center;
+    /*display: none;*/
+}
+/* 2-2.indexContainer end */
+/* 2-3.helpContainer start */
+.helpContainer{
+    display: none;
+}
+.nothing{
+    padding: 10px;
+    text-align: center;
+    font-size: 30px;
+    color: #999;
+    position: absolute;
+    left: 52%;
+    top: 50%;
+    transform: translateY( -50%);
+    display: none;
+}
+.icon-xinzeng{
+    float: right;
+    margin: 10px 0 5px 0;
+}
+.icon-chakan,.icon-bianji,.icon-delete{
+    font-weight: bold;
+    margin-right: 10px;
+}
+.icon-close-eye{
+    font-size: 0;
+}
+.opeContainer{
+    width: 50%;
+    height: auto;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 25%;
+    z-index: 3;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    display: none;
+}
+#subTitle{
+    width: 100%;
+    border: 2px dashed #333;
+    margin-bottom: 15px;
+    padding: 10px 5px;
+}
+#addBtn{
+    width: 50px;
+    height: 23px;
+    margin-top: 10px;
+    float: right;
+    background: #999;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 12px;
+}
+.icon-baocun{
+    font-size: 20px;
+    float: right;
+    color: #333;
+    margin-bottom: 5px;
+}
+/* 2-3-1.table start */
+table{
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 12px #999;
+    margin: 40px 0 50px 0;
+}
+table thead tr{
+    border-bottom: 2px solid #ccc;
+}
+table tbody tr{
+    border-bottom: 1px solid #ccc;
+}
+table tbody tr:last-child{
+    border: none;
+}
+table td,table th{
+    padding: 10px;
+}
+.inner{
+    max-height: 150px;
+    overflow-y: scroll;
+    height: 0;
+    background: #fff;
+}
+/* 2-3-1.table end */
+/* 2-3.helpContainer end */
+/* 2-4.resContainer start */
+.resContainer{
+    display: none;
+}
+/* 2-4.resContainer end */
+
+/* feedbackContainer */
+.feedbackContainer{
+    display: none;
+}
+.feedbackContainer table tbody tr:hover{
+    background: #ccc;
+    cursor: pointer;
+}
+.feedSend,.feedContent{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+.feedSend{
+    max-width: 40px;
+}
+.feedDate{
+    max-width: 65px;
+}
+.feedbackDetail{
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    z-index: 5;
+    display: none;
+}
+.sender{
+    width: 100%;
+    background: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.chats{
+    height: auto;
+    overflow: hidden;
+    padding: 0 20px 20px 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border-bottom: 1px solid #ccc;
+    height: 400px;
+    overflow-y: scroll;
+}
+.chats>div{
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.chats img{
+    height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    vertical-align: top;
+    box-sizing: border-box;
+    margin: 0 3px;
+}
+.rightSide img,.rightSide span{
+    float: right;
+}
+.content{
+    display: inline-block;
+    background: red;
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    max-width: 300px;
+}
+.date{
+    color: #999;
+    text-align: center;
+    margin: 20px 0 5px 0;
+}
+.response{
+    width: 100%;
+    border: 0;
+    resize: none;
+    height: 90px;
+    outline: none;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.feedBtn{
+    margin: 10px;
+    float: right;
+    width: 50px;
+    border: none;
+    background: #ccc;
+    cursor: pointer;
+}
+
+/* strategyContainer */
+.strategyContainer{
+    display: none;
+}
+.strategyTab{
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+.adminStrategy{
+    width: auto;
+    vertical-align: top;
+    opacity: 0;
+    margin-right: 5px;
+}
+.js-example-basic-single{
+    width: 150px;
+}
+.strategyOpe,.deleteAdminStrategy{
+    cursor: pointer;
+}
+.deleteAdminStrategy{
+    display: none;
+}
+.strategyItem{
+    position: relative;
+    width: 185px;
+    height: 180px;
+    box-shadow: 0 0 15px #999;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px 20px 30px 0;
+}
+.strategyItem > img{
+    width: 100%;
+    position: absolute;
+    filter: blur(1px);
+}
+.strategyInfo{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-weight: bold;
+}
+.strategyInfo>span{
+    margin: 5px 0;
+}
+.strategyDetail{
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    z-index: 5;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    max-height: 500px;
+    overflow-y: scroll;
+    display: none;
+}
+.strategyDetail span{
+    display: block;
+    margin-bottom: 10px;
+}
+.strategyDetail>span:nth-child(1){
+    font-size: 30px;
+    text-align: center;
+}
+.strategyDetail>span:nth-child(2){
+    text-align: right;
+}
+.detailContent>div{
+    padding: 5px;
+    box-sizing: border-box;
+    border: 2px dashed #3367D6;
+    margin-bottom: 10px;
+}
+.detailContent span:nth-child(1){
+    padding: 5px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #3367D6;
+}
+
+/* page */
+.page_div{
+    width: 66%;
+    font-size: 15px;
+    color: #666666;
+    text-align: center;
+    position: absolute;
+    bottom: 30px;
+}
+.page_div a {
+    min-width: 30px;
+    height: 28px;
+    text-align: center;
+    margin: 0 5px;
+    cursor: pointer;
+    line-height: 28px;
+    color: #666666;
+    font-size: 13px;
+    display: inline-block;
+}
+#firstPage,#lastPage {
+    width: auto;
+    color: #3367D6;
+}
+#prePage,#nextPage {
+    width: auto;
+    color: #3367D6;
+}
+.page_div .current {
+    background-color: #3367D6;
+    color: #FFFFFF;
+    border-radius: 50%;
+}

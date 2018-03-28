@@ -5,7 +5,7 @@ import com.yc.hulahoop.pojo.FeedbackInfo;
 
 public interface FeedbackService {
 
-    ServerResponse list();
+    ServerResponse list(Integer pageNum);
 
     ServerResponse add(FeedbackInfo feedbackInfo);
 

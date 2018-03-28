@@ -1,0 +1,127 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+}
+header{
+    height: 55px;
+}
+footer{
+    background: #000000;
+}
+.HolyGrailBody{
+    height: auto;
+    overflow: hidden;
+}
+html,body{
+    height: 100%;
+    background: #f2f2f2;
+}
+/* No1.a */
+a{
+    text-decoration: none;
+    color: #000;
+}
+
+/*bg*/
+#bg{
+    position: absolute;
+    z-index: 2;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    cursor: pointer;
+}
+
+/* No2.input */
+input{
+    height: 21px;
+    padding-left: 5px;
+    width: 157px;
+    box-sizing: border-box;
+    outline: none;
+}
+input[type="button"]{
+    padding: 0;
+}
+select{
+    outline: none;
+    cursor: pointer;
+}
+
+/* No3.border*/
+.warnBorder{
+    border: 1px solid red;
+}
+
+/* No4.margin */
+.mr10{
+    margin-right: 10px;
+}
+.mr20{
+    margin-right: 20px;
+}
+.mb10{
+    margin-bottom: 10px;
+}
+.mtb10{
+    margin: 10px 0;
+}
+
+/* No5.color */
+.colorBlack{
+    color: #000;
+}
+
+/* No6.tips */
+.tips{
+    min-width: 100px;
+    height: 40px;
+    line-height: 40px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    background: #fff;
+    text-align: center;
+    border-radius: 5px;
+    border: 2px dotted #00728a;
+    display: none;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+/* No7.back to top */
+.sideTool{
+    position: fixed;
+    left: 40px;
+    bottom: 200px;
+    display: none;
+}
+.sideTool span{
+    display: block;
+    margin-bottom: 15px;
+    background: #888;
+    padding: 12px;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+.sideTool span:hover{
+    background: #666;
+}
+
+/* No8.ul*/
+ul{
+    list-style: none;
+}
+
+/* No9.padding */
+.plf20{
+    padding: 0 20px;
+}
+
+ul{
+    list-style: none;
+}

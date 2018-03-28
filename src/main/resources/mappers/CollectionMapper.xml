@@ -87,8 +87,5 @@
         JOIN users u ON s.user_id = u.id
         JOIN cities ci ON s.city_id = ci.id
         WHERE co.user_id = #{userId}
-        <if test="cityId != null">
-            AND ci.id = #{cityId}
-        </if>
     </select>
 </mapper>

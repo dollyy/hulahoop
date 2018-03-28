@@ -24,18 +24,18 @@ public class CommentController {
      * 查看攻略的评论
      *
      * @param session    当前用户
-     * @param strategyId 攻略id
+     * @param level 攻略level
      * @return comment的list
      */
     @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse list(HttpSession session, Integer strategyId) {
+    private ServerResponse list(HttpSession session, Integer level) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
         }
-        return commentService.listByStrategyId(strategyId);
+        return commentService.listByLevel(level);
     }
 
     /**

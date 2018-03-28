@@ -37,10 +37,8 @@
                                 create_time, update_time)
         VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
                                         #{cityId,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR},
-                                        #{content,jdbcType=VARCHAR},
-                                        #{mainImg,jdbcType=VARCHAR}, #{forNum,jdbcType=INTEGER},
-                                        #{collectNum,jdbcType=INTEGER},
-                                        now(), now())
+                                        #{content,jdbcType=VARCHAR}, #{mainImg,jdbcType=VARCHAR},
+                                        0, 0, now(), now())
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.Strategy">
         insert into strategies
@@ -166,10 +164,17 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="list" parameterType="map" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM strategies
+    <select id="list" parameterType="map" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT s.id AS strategyId,
+               s.main_img AS mainImg,
+               u.avatar,
+               u.username,
+               s.name AS strategyName,
+               c.name AS cityName,
+               s.duration
+        FROM strategies s
+               JOIN users u ON s.user_id=u.id
+               JOIN cities c ON s.city_id=c.id
         <where>
             <if test="cityId != null">
                 city_id=#{cityId}
@@ -181,7 +186,7 @@
     </select>
 
     <resultMap id="strategyResultMap" type="com.yc.hulahoop.vo.StrategyVo">
-        <id column="id" property="id"/>
+        <id column="strategyId" property="strategyId"/>
         <result column="username" property="username"/>
         <result column="strategyName" property="strategyName"/>
         <result column="cityName" property="cityName"/>
@@ -193,7 +198,7 @@
 
     <select id="detail" parameterType="int" resultMap="strategyResultMap">
         SELECT
-            s.id,
+            s.id AS strategyId,
             s.content,
             c.name AS cityName,
             s.duration,
@@ -209,7 +214,25 @@
 
     <delete id="deleteByUserIdAndStrategyId" parameterType="map">
         DELETE FROM strategies
-        WHERE id = #{strategyId} AND user_id = #{userId}
+        WHERE user_id = #{userId}
+        <if test="strategyIdList != null">
+            AND id IN
+            <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <delete id="deleteByAdmin" parameterType="map">
+        DELETE FROM strategies
+        <where>
+            <if test="strategyIdList != null">
+                id IN
+                <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
     </delete>
 
     <update id="updateByUserIdAndStrategyId" parameterType="map">
@@ -234,35 +257,66 @@
         WHERE user_id=#{userId} AND id=#{id}
     </update>
 
-    <select id="searchByUsername" parameterType="string" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM strategies WHERE user_id=(SELECT users.id FROM users WHERE username LIKE #{username})
+    <update id="updateForOrCollect" parameterType="map">
+        UPDATE strategies
+        <set>
+            <if test="forNum != null">
+                for_num=#{forNum}
+            </if>
+            <if test="collectNum != null">
+                collect_num=#{collectNum}
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <select id="searchByUsername" parameterType="string" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT s.id AS strategyId,
+               s.main_img AS mainImg,
+               u.avatar,
+               u.username,
+               s.name AS strategyName,
+               c.name AS cityName,
+               s.duration
+        FROM strategies s
+            JOIN users u ON s.user_id=u.id
+            JOIN cities c ON s.city_id=c.id
+        where user_id IN (SELECT users.id FROM users WHERE username LIKE #{username})
     </select>
 
-    <select id="searchByStrategyName" parameterType="string" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM strategies WHERE name LIKE #{strategyName}
+    <select id="searchByStrategyName" parameterType="string"  resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT s.id AS strategyId,
+               s.main_img AS mainImg,
+               u.avatar,
+               u.username,
+               s.name AS strategyName,
+               c.name AS cityName,
+               s.duration
+        FROM strategies s
+            JOIN users u ON s.user_id=u.id
+            JOIN cities c ON s.city_id=c.id
+        WHERE s.name LIKE #{strategyName}
     </select>
 
-        <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
-            <id column="city_id" property="cityId"/>
-            <result column="cityName" property="cityName"/>
-            <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
-                <result column="id" property="id"/>
-                <result column="strategyName" property="strategyName"/>
-                <result column="duration" property="duration"/>
-            </collection>
-        </resultMap>
+    <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
+        <id column="city_id" property="cityId"/>
+        <result column="cityName" property="cityName"/>
+        <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
+            <result column="strategyId" property="id"/>
+            <result column="strategyName" property="strategyName"/>
+            <result column="duration" property="duration"/>
+            <result column="mainImg" property="mainImg"/>
+        </collection>
+    </resultMap>
 
     <select id="queryUserStrategy" parameterType="int" resultMap="userStrategy">
         SELECT
             s.id,
-            s.name        AS strategyName,
+            s.name     AS strategyName,
             s.duration,
             city_id,
-            c.name        AS cityName
+            c.name     AS cityName,
+            s.main_img AS mainImg
         FROM strategies s
             JOIN cities c ON s.city_id = c.id
         WHERE user_id = #{userId}
@@ -272,6 +326,13 @@
         SELECT count(*)
         FROM strategies
         WHERE user_id = #{userId} AND city_id = #{cityId}
+    </select>
+
+    <select id="selectAllDurations" resultType="string">
+        SELECT duration
+        FROM strategies
+        GROUP BY duration
+        ORDER BY duration
     </select>
 
 </mapper>

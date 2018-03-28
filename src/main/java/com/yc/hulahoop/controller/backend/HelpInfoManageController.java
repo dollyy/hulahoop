@@ -5,10 +5,12 @@ import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.HelpInfo;
 import com.yc.hulahoop.pojo.User;
 import com.yc.hulahoop.service.HelpInfoService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -21,18 +23,18 @@ public class HelpInfoManageController {
     private HelpInfoService helpInfoService;
 
     /**
-     * 列出所有的帮助信息 todo create_time
+     * 列出所有的帮助信息
      *
      * @param session 当前用户
      * @return helpInfo的list
      */
     @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse list(HttpSession session) {
+    private ServerResponse list(HttpSession session, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return helpInfoService.list();
+            return helpInfoService.list(pageNum);
         }
         return serverResponse;
     }
@@ -87,6 +89,23 @@ public class HelpInfoManageController {
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
             return helpInfoService.delete(helpInfoId);
+        }
+        return serverResponse;
+    }
+
+    /**
+     * 搜索帮助信息
+     *
+     * @param session    当前用户
+     * @return 删除帮助信息成功/失败
+     */
+    @RequestMapping(value = "search.action", method = RequestMethod.GET)
+    @ResponseBody
+    private ServerResponse search(HttpSession session, String content) {
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            //return helpInfoService.
         }
         return serverResponse;
     }

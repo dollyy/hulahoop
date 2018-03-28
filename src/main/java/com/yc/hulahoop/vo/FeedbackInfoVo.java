@@ -5,7 +5,10 @@ import java.util.Date;
 public class FeedbackInfoVo {
     private int id;
     private String level;
+    private int parent;
+    private int sequence;
     private String username;
+    private String avatar;
     private String title;
     private String content;
     private String createTime;
@@ -26,12 +29,36 @@ public class FeedbackInfoVo {
         this.level = level;
     }
 
+    public int getParent() {
+        return parent;
+    }
+
+    public void setParent(int parent) {
+        this.parent = parent;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getTitle() {

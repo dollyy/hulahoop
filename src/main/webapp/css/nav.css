@@ -1,0 +1,150 @@
+input{
+    border-radius: 5px;
+    border: 1px solid #999;
+}
+/*nav*/
+nav{
+    padding: 5px 50px;
+    /*background: #090723;*/
+    background: #000000;
+    /*box-shadow: 0 2px 10px #666;*/
+    font-size: 14px;
+    color: #fff;
+}
+.nav{
+    width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+nav img{
+    height: 45px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+.serach{
+    margin-left: 100px;
+    display: inline-block;
+}
+#searchInp{
+    width: 170px;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #fff;
+}
+#sign,#userIcon{
+    position: absolute;
+    right: 0;
+}
+#userIcon{
+    display: none;
+}
+#signin,#signup,#userIcon img,#msgTip{
+    vertical-align: middle;
+    margin-left: 20px;
+}
+#signin,#signup,#logout{
+    cursor: pointer;
+    margin-left: 20px;
+}
+#username{
+    margin-left: 10px;
+}
+#signin:hover,#signup:hover,#logout:hover{
+    text-shadow: 0 0 6px #fff;
+}
+#userIcon img{
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+#msgTip{
+    display: inline-block;
+    position: relative;
+}
+#msgDot{
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 16px;
+    right: 3px;
+}
+/* signContainer */
+.signContainer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+}
+#signinContainer,#signupContainer{
+    height: 235px;
+    border-radius: 10px;
+    display: none;
+}
+#signinContainer{
+    width: 400px;
+    background: url("../images/sign/signin.jpg");
+}
+#signWarn{
+    width: 100%;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    color: red;
+    margin-bottom: 5px;
+}
+#goIn,#goUp{
+    position: absolute;
+    top: 32px;
+    right: 33px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 13px;
+}
+#goUp:hover,#goIn:hover{
+    text-shadow: 0 0 5px #fff;
+}
+#inName,#inPwd,#inBtn,#pwdOperation{
+    display: block;
+    position: relative;
+    top: 58px;
+    left: 60px;
+}
+#pwdOperation{
+    width: 157px;
+    font-size: 12px;
+}
+#savePwd{
+    width: 15px;
+    vertical-align: middle;
+    margin-right: 3px;
+}
+#resetPwd{
+    float: right;
+}
+#resetPwd:hover{
+    color: #777;
+}
+/* signupContainer */
+#signupContainer{
+    width: 254px;
+    background: url(../images/sign/signup.jpg);
+    text-align: center;
+}
+#upName,#upPwd,#upPwdRe,#upPhone,#upBtn{
+    position: relative;
+    top: 55px;
+    margin-bottom: 10px;
+}
+#inBtn,#upBtn{
+    height: 23px;
+    cursor: pointer;
+}
+/**/

@@ -40,7 +40,7 @@ public class StrategyManageController {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return strategyService.queryStrategyList(pageNum, cityId, duration);
+            return strategyService.queryStrategyList(pageNum, Const.PAGE_SIZE_ADMIN, cityId, duration);
         }
         return serverResponse;
     }
@@ -73,18 +73,17 @@ public class StrategyManageController {
     @RequestMapping(value = "search.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse search(HttpSession session, String type, String val,
-                                  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                  @RequestParam(value = "pageSize", defaultValue = "2") int pageSize) {
+                                  @RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return strategyService.search(type, val, pageNum, pageSize);
+            return strategyService.search(type, val, pageNum);
         }
         return serverResponse;
     }
 
     /**
-     * 删除攻略 todo 删除多个
+     * 删除攻略
      *
      * @param session    当前用户
      * @param strategyId 攻略id
@@ -92,12 +91,12 @@ public class StrategyManageController {
      */
     @RequestMapping(value = "delete.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse delete(HttpSession session, Integer strategyId) {
+    private ServerResponse delete(HttpSession session, String strategyId) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return strategyService.delete(strategyId, currentUser.getId());
+            return strategyService.delete(currentUser.getId(), strategyId);
         }
         return serverResponse;
     }
