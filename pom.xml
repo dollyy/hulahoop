@@ -164,6 +164,13 @@
             <version>0.9.4</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.directwebremoting/dwr -->
+        <dependency>
+            <groupId>org.directwebremoting</groupId>
+            <artifactId>dwr</artifactId>
+            <version>3.0.2-RELEASE</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>hulahoop</finalName>

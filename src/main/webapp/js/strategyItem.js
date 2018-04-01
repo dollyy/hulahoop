@@ -1,19 +1,27 @@
-var strategyId, i, args = [], name;  //args保存地址栏参数,name是参数的键
+//todo 收藏点赞不要重复
+var strategyId, i;
 $(function () {
-    getQueryStringArgs();
+    var parameter = getQueryStringArgs();
     $.ajax({
         type: "get",
         url: "/strategy/detail.action",
-        data: {"strategyId": args[name]},
+        data: {"strategyId": parameter},
         dataType: "json",
         success: function (data) {
-            if (data.status == 0) {
+            //用户未登录
+            if (data.status == -2) {
+                window.location.href="index.jsp";
+                return;
+            }
+            //攻略不存在
+            if (data.status == -1) {
+                window.location.href="notFound.jsp";
                 return;
             }
             //1.province + duration
-            $("nav .tags").html(data.data.strategy.cityName + " > " + data.data.strategy.duration);
-            $("nav .navFor").html(data.data.strategy.forNum);
-            $("nav .navCollect").html(data.data.strategy.collectNum);
+            $(".ItemNav .tags").html(data.data.strategy.cityName + " > " + data.data.strategy.duration);
+            $(".ItemNav .navFor").html(data.data.strategy.forNum);
+            $(".ItemNav .navCollect").html(data.data.strategy.collectNum);
 
             //2.catalog
             for (i = 0; i < data.data.catalog.length; i++) {
@@ -79,7 +87,7 @@ $(function () {
     });
 
     //点赞攻略
-    $("nav .icon-zan1").click(function () {
+    $(".ItemNav .icon-zan1").click(function () {
         var value = $(this).next().html();
         if ($(this).attr("class").indexOf("navColor") != -1) {
             $(this).removeClass("navColor");
@@ -101,7 +109,7 @@ $(function () {
         });
     });
     //收藏攻略
-    $("nav .icon-collection-b").click(function () {
+    $(".ItemNav .icon-collection-b").click(function () {
         var value = $(this).next().html();
         if ($(this).attr("class").indexOf("collectColor") != -1) {
             $(this).removeClass("collectColor");
@@ -145,22 +153,6 @@ $(function () {
     });
 });
 
-function getQueryStringArgs() {
-    //取得查询字符串并去掉开头的问号--->第一个是问号
-    var parameters = (location.search.length > 0 ? location.search.substring(1) : "");
-    //取得每一项
-    var items = parameters.length ? parameters.split("&") : [];
-    var item, value;
-    //逐个讲每一项添加到args对象中
-    for (i = 0; i < items.length; i++) {
-        item = items[i].split("=");
-        name = decodeURIComponent(item[0]);
-        value = decodeURIComponent(item[1]);
-        if (name.length > 0) {
-            args[name] = value;
-        }
-    }
-}
 
 function calNumber() {
     var that = $(this);

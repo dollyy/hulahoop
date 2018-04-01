@@ -1,4 +1,8 @@
-var adminAvatar, i, editor;
+var adminAvatar;    //管理员头像
+var i;              //循环参数
+var editor;         //富文本编辑器
+var searchInp;      //搜索框
+
 $(function () {
 
     //select2
@@ -6,18 +10,45 @@ $(function () {
         $('.js-example-basic-single').select2();
     });
 
+    //有没有消息未查看
+    $.ajax({
+        type: "get",
+        url: "/manage/feedback/queryNotice.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status != 1) {
+                $("#msgDot").css("display", "none");
+                return;
+            }
+            $("#msgDot").css("display", "inline-block");
+        },
+        error: function () {
+            console.log("get notice error");
+        }
+    });
+
+    //查看消息
+    $(".icon-lingdang").click(feedClick);
+
+    //获取用户信息
     $.ajax({
         type: "get",
         url: "/user/queryUserInformation.action",
         dataType: "json",
         success: function (data) {
-            if (data.status == 0) {
-                alert(data.msg);
+            if (data.status == -2 || data.status == -1) {    //用户未登录 || 用户不存在
+                window.location.href = "adminSignin.html";
                 return;
             }
+            if (data.data.id != 8) {
+                window.location.href = "adminSignin.html";
+            }
             adminAvatar = data.data.avatar;
+
+            //dwr页面加载
+            dwrMessage.onPageLoad(data.data.id);
         }
-    })
+    });
 
     //退出登录
     $(".icon-icon").click(function () {
@@ -26,7 +57,7 @@ $(function () {
             url: "/manage/user/logout.action",
             dataType: "json",
             success: function (data) {
-                if (data.status == 0) {
+                if (data.status == 0) {     //退出登录失败
                     alert(data.msg);
                     return;
                 }
@@ -54,71 +85,40 @@ $(function () {
 
     //搜索
     $(".icon-fangdajing").click(function () {
-        var searchIndex;
+        var searchIndex = 0;
         $('.catalog li').each(function (index) {
             if ($(this).hasClass("clicked")) {
                 searchIndex = index;
             }
         });
-        var searchInp = search();
+        searchInp = search();
         switch (searchIndex) {
             case 0:
                 break;
-            case 1:
+            case 1: //搜索帮助信息
                 helpSearch(searchInp);
                 break;
             case 2:
                 break;
-            case 3:
+            case 3: //搜索反馈信息
                 feedSearch(searchInp);
                 break;
-            case 4:
+            case 4: //搜索攻略信息
                 strategySearch(searchInp);
                 break;
         }
     });
 
     /* 1.index */
-    $(".index").click(function () {
-        $(".indexContainer").show().siblings().hide();
-        $(this).addClass("clicked").siblings().removeClass("clicked");
-        $(".right .location span").html($(this).children().last().html());
-        //禁止搜索
-        $("#searchInp").attr("disabled", true);
-    });
+    $(".index").click(indexClick);
 
     /* 2.help */
-    $(".help").click(function () {
-        $("#searchInp").removeAttr("disabled");
-        $.ajax({
-            type: "get",
-            url: "/manage/helpInfo/list.action",
-            dataType: "json",
-            success: function (data) {
-                if (data.status == 0) {
-                    alert(data.msg);
-                    return;
-                }
-                $(".helpTable tbody").empty();
-                if (data.data == undefined) {
-                    $(".helpTable").hide();
-                    $(".nothing").show();
-                    return;
-                }
-                packHelp(data.data);
-            },
-            error: function () {
-                console.log("help error");
-            }
-        });
-        $(".helpContainer").show().siblings().hide();
-        $(this).addClass("clicked").siblings().removeClass("clicked");
-        $(".right .location span").html($(this).children().last().html());
-    });
+    $(".help").click(helpClick);
     //add icon-xinzeng
     $(".icon-xinzeng").click(function () {
         $("#bg").slideDown();
-        $(".opeContainer").empty().append("<input type='text' id='subTitle' placeholder='Help Title. No more than 20 words'><div id='editor'></div><input type='button' value='添 加'  id='addBtn'>");
+        $(".opeContainer").empty().append("<input type='text' id='subTitle' placeholder='帮助信息标题，不要超过20字'>" +
+            "<div id='editor'></div><input type='button' value='添 加'  id='addBtn'>");
         $("#addBtn").off("click").on("click", addHelp);
         $("#subTitle").off("click").on("change", titleChange);
         showEditor();
@@ -126,66 +126,14 @@ $(function () {
     });
 
     /* 3.res */
-    $(".res").click(function () {
-        $(".resContainer").show().siblings().hide();
-        $(this).addClass("clicked").siblings().removeClass("clicked");
-        $(".right .location span").html($(this).children().last().html());
-        //禁止搜索
-        $("#searchInp").attr("disabled", true);
-    });
+    $(".res").click(resClick);
 
     /* 4.feeback */
-    $(".feedback").click(function () {
-        $("#searchInp").removeAttr("disabled");
-        $.ajax({
-            type: "get",
-            url: "/manage/feedback/list.action",
-            dataType: "json",
-            success: function (data) {
-                if (data.status == 0) {
-                    alert(data.msg);
-                    return;
-                }
-                $("#feedbackTable tbody").empty();
-                if (data.data == undefined) {
-                    $("#feedbackTable").hide();
-                    $(".nothing").show();
-                    return;
-                }
-                packFeedback(data.data);
-            },
-            error: function () {
-                console.log("feedback error");
-            }
-        });
-        $(".feedbackContainer").show().siblings().hide();
-        $(this).addClass("clicked").siblings().removeClass("clicked");
-        $(".right .location span").html($(this).children().last().html());
-    });
+    $(".feedback").click(feedClick);
 
     /* 5.strategy*/
-    $(".strategy").click(function () {
-        $("#searchInp").removeAttr("disabled");
-        $.ajax({
-            type: "get",
-            url: "/manage/strategy/list.action",
-            dataType: "json",
-            success: function (data) {
-                if (data.status == 0) {
-                    alert(data.msg);
-                    return;
-                }
-                packStrategy(data.data);
-            },
-            error: function () {
-                console.log("admin strategy error");
-            }
-        });
-        $(".strategyContainer").show().siblings().hide();
-        $(this).addClass("clicked").siblings().removeClass("clicked");
-        $(".right .location span").html($(this).children().last().html());
-    });
-    //操作
+    $(".strategy").click(strategyClick);
+    //'操作'
     $(".strategyOpe").click(function () {
         var val = $(this).html();
         if (val == "操作") {
@@ -217,48 +165,236 @@ $(function () {
             data: {"strategyId": selectId},
             dataType: "json",
             success: function (data) {
+                if (data.status == -2) {    //用户未登录
+                    window.location.href = "adminSignin.html";
+                    return;
+                }
+                if (data.status == -4) {    //非管理员
+                    window.location.href = "../pages/index.jsp";
+                    return;
+                }
                 if (data.status == 0) {
                     alert(data.msg);
                     return;
                 }
-                var deleteId = selectId.split(",");
-                for (i = 0; i < deleteId.length; i++) {
-                    $(".strategies").find("[value='" + deleteId[i] + "']").remove();
-                }
+                window.location.href = "admin.html?catalog=5";
             }
         });
     });
+
+    switch (parseInt(getQueryStringArgs())) {
+        case 1:
+            indexClick();
+            break;
+        case 2:
+            helpClick();
+            break;
+        case 3:
+            resClick();
+            break;
+        case 4:
+            feedClick();
+            break;
+        case 5:
+            strategyClick();
+            break;
+        default:
+            break;
+    }
+
 });
+
+/* 1 */
+function indexClick() {
+    $(".indexContainer").show().siblings().hide();
+    $(".catalog li").eq(0).addClass("clicked").siblings().removeClass("clicked");
+    $(".right .location span").html($(this).children().last().html());
+    //禁止搜索
+    $("#searchInp").attr("disabled", true);
+}
+
+/* 2 */
+function helpClick() {  //可以搜索
+    $("#searchInp").removeAttr("disabled").val("");
+    $.ajax({
+        type: "get",
+        url: "/manage/helpInfo/list.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            $(".helpTable tbody").empty();
+            if (data.status == -1) {    //没有匹配信息
+                $(".helpTable").hide();
+                $(".nothing").show();
+                return;
+            }
+            $(".helpContainer").show().siblings().hide();
+            $(".catalog li").eq(1).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html($(this).children().last().html());
+            //封装信息
+            packHelp(data.data);
+        },
+        error: function () {
+            console.log("help error");
+        }
+    });
+}
 
 //搜索帮助信息
 function helpSearch(searchInp) {
-
+    $.ajax({
+        type: "get",
+        url: "/manage/helpInfo/search.action",
+        data: {"content": searchInp},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            if (data.status == 0) {     //参数错误
+                alert(data.msg);
+                return;
+            }
+            $(".helpTable tbody").empty();
+            if (data.status == -1) {    //没有匹配信息
+                $(".helpTable").hide();
+                $(".nothing").show();
+                return;
+            }
+            packSearchHelp(data.data);
+        }
+    });
 }
 
 //搜索反馈信息
 function feedSearch(searchInp) {
-
+    $.ajax({
+        type: "get",
+        url: "/manage/feedback/search.action",
+        data: {"content": searchInp},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            $("#feedbackTable tbody").empty();
+            if (data.status == -1) {    //没有匹配信息
+                $("#feedbackTable").hide();
+                $(".nothing").show();
+                return;
+            }
+            packSearchFeedback(data.data);
+        },
+        error: function () {
+            console.log("feedback error");
+        }
+    });
 }
 
 //搜索攻略信息
 function strategySearch(searchInp) {
-
+    $.ajax({
+        type: "get",
+        url: "/manage/strategy/search.action",
+        data: {"content": searchInp},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            $(".strategies").empty();
+            if (data.status == -1) {    //没有匹配信息
+                $(".nothing").show();
+                return;
+            }
+            packSearchStrategy(data.data);
+        },
+        error: function () {
+            console.log("admin strategy error");
+        }
+    });
 }
-
-/*2*/
 
 //create editor
 function showEditor() {
     //wangEidtor
     var E = window.wangEditor;
     editor = new E('#editor');
-    //use base64 to save img
-    editor.customConfig.uploadImgShowBase64 = true;
+    //name名称为uploadImage
+    editor.customConfig.uploadFileName = 'file';
+    //上传图片
+    editor.customConfig.uploadImgServer = '/manage/helpInfo/richtext_img_upload.action';
+    editor.customConfig.uploadImgHooks = {
+        // 图片上传之前触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，files 是选择的图片文件
+        before: function (xhr, editor, files) {
+
+        },
+        // 图片上传并返回结果，图片插入成功之后触发
+        // xhr 是 XMLHttpRequst 对象，editor 是编辑器对象，result 是服务器端返回的结果
+        success: function (xhr, editor, result) {
+            console.log("wangEditor succeed-->" + result);
+
+        },
+        // 图片上传并返回结果，但图片插入错误时触发
+        fail: function (xhr, editor, result) {
+            console.log("wangEditor failed--->" + result)
+        },
+        // 图片上传出错时触发
+        error: function (xhr, editor) {
+        },
+        // 图片上传超时时触发
+        timeout: function (xhr, editor) {
+        },
+        // 如果服务器端返回的不是 {errno:0, data: [...]} 这种格式，可使用该配置
+        // （但是，服务器端返回的必须是一个 JSON 格式字符串！！！否则会报错）
+
+        // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+        // insertImg 是插入图片的函数
+        customInsert: function (insertImg, result, editor) {
+            // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+            // result 必须是一个 JSON 格式字符串！！！否则报错
+            var url = result.file_path
+            console.log(url);
+            insertImg(url);
+        }
+    };
     editor.create();
 }
 
-//package data for "help page"
+//封装帮助信息
 function packHelp(data) {
+    $(".helpTable").show();
     $(".nothing").hide();
     for (i = 0; i < data.list.length; i++) {
         $(".helpTable tbody").append("<tr value='" + data.list[i].id + "'><td>" + (i + 1) + "</td><td class='trTitle'>" +
@@ -273,22 +409,26 @@ function packHelp(data) {
         totalPage: data.pages,
         callback: function (num) {
             $.ajax({
-                type: "post",
+                type: "get",
                 url: "/manage/helpInfo/list.action",
                 data: {"pageNum": num},
                 dataType: "json",
                 success: function (data) {
-                    if (data.status == 0) {
-                        alert(data.msg);
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
                         return;
                     }
                     $(".helpTable tbody").empty();
-                    if (data.data == undefined) {
+                    if (data.status == -1) {    //没有匹配信息
                         $(".helpTable").hide();
                         $(".nothing").show();
                         return;
                     }
-                    packHelp(data.data);
+                    packUpdateHelp(data.data);
                 },
                 error: function () {
                     console.log("help error");
@@ -302,7 +442,72 @@ function packHelp(data) {
     $(".icon-delete").off("click").on("click", helpDelete);  //删除
 }
 
-//add new help
+//封装更新后的帮助信息
+function packUpdateHelp(data) {
+    $(".helpTable").show();
+    $(".nothing").hide();
+    for (i = 0; i < data.list.length; i++) {
+        $(".helpTable tbody").append("<tr value='" + data.list[i].id + "'><td>" + (i + 1) + "</td><td class='trTitle'>" +
+            data.list[i].title + "</td><td>" + formatDate(data.list[i].createTime) + "</td><td class='updateTime'>" +
+            formatDate(data.list[i].updateTime) + "</td><td><span class='iconfont icon-close-eye' title='隐藏'></span>" +
+            "<span class='iconfont icon-chakan' title='查看'></span><span class='iconfont icon-bianji' title='编辑'>" +
+            "</span><span class='iconfont icon-delete' title='删除'></span></td></tr><tr style='border:none'>" +
+            "<td colspan='5' style='padding: 0'><div class='inner'>" + data.list[i].content + "</div></td></tr>");
+    }
+    $(".icon-close-eye").off("click").on("click", helpHide);    //隐藏
+    $(".icon-chakan").off("click").on("click", helpView);    //查看
+    $(".icon-bianji").off("click").on("click", helpEdit);    //编辑
+    $(".icon-delete").off("click").on("click", helpDelete);  //删除
+}
+
+//封装帮助的搜索信息
+function packSearchHelp(data) {
+    $(".helpTable").show();
+    $(".nothing").hide();
+    for (i = 0; i < data.list.length; i++) {
+        $(".helpTable tbody").append("<tr value='" + data.list[i].id + "'><td>" + (i + 1) + "</td><td class='trTitle'>" +
+            data.list[i].title + "</td><td>" + formatDate(data.list[i].createTime) + "</td><td class='updateTime'>" +
+            formatDate(data.list[i].updateTime) + "</td><td><span class='iconfont icon-close-eye' title='隐藏'></span>" +
+            "<span class='iconfont icon-chakan' title='查看'></span><span class='iconfont icon-bianji' title='编辑'>" +
+            "</span><span class='iconfont icon-delete' title='删除'></span></td></tr><tr style='border:none'>" +
+            "<td colspan='5' style='padding: 0'><div class='inner'>" + data.list[i].content + "</div></td></tr>");
+    }
+    //4.pages
+    $(".page").paging({
+        totalPage: data.pages,
+        callback: function (num) {
+            $.ajax({
+                type: "get",
+                url: "/manage/helpInfo/search.action",
+                data: {"pageNum": num, "content": searchInp},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
+                    $(".helpTable tbody").empty();
+                    if (data.status == -1) {    //没有匹配信息
+                        $(".helpTable").hide();
+                        $(".nothing").show();
+                        return;
+                    }
+                    packSearchHelp(data.data);
+                }
+            });
+        }
+    });
+    $(".icon-close-eye").off("click").on("click", helpHide);    //隐藏
+    $(".icon-chakan").off("click").on("click", helpView);    //查看
+    $(".icon-bianji").off("click").on("click", helpEdit);    //编辑
+    $(".icon-delete").off("click").on("click", helpDelete);  //删除
+}
+
+//添加帮助信息
 function addHelp() {
     var title = $("#subTitle").val();
     var text = editor.txt.text();
@@ -315,28 +520,7 @@ function addHelp() {
             data: {"title": title, "content": content},
             dataType: "json",
             success: function (data) {
-                console.log(JSON.stringify(data));
-                if (data.status == 0) {
-                    alert(data.msg);
-                    return;
-                }
-                var addDate = getformatDate();
-                var num = $(".helpTable").children().length + 1;
-                $(".helpTable tbody").append("<tr value='" + data.data + "'><td>" + num + "</td><td class='trTitle'>" +
-                    title + "</td><td>" + addDate + "</td><td class='updateTime'>" +
-                    addDate + "</td><td><span class='iconfont icon-close-eye' title='隐藏'></span>" +
-                    "<span class='iconfont icon-chakan' title='查看'></span><span class='iconfont icon-bianji' title='编辑'>" +
-                    "</span><span class='iconfont icon-delete' title='删除'></span></td></tr><tr style='border:none'>" +
-                    "<td colspan='5' style='padding: 0'><div class='inner'>" + content + "</div></td></tr>");
-                $(".icon-close-eye").off("click").on("click", helpHide);    //隐藏
-                $(".icon-chakan").off("click").on("click", helpView);    //查看
-                $(".icon-bianji").off("click").on("click", helpEdit);    //编辑
-                $(".icon-delete").off("click").on("click", helpDelete);  //删除
-                $(".helpTable").show();
-                $("#bg").slideUp();
-                $(".opeContainer").slideUp();
-                $("#subTitle").val("");
-                $(".opeContainer .w-e-text").html("");
+                window.location.href = "admin.html?catalog=2";
             },
             error: function () {
                 console.log("add title error");
@@ -345,14 +529,14 @@ function addHelp() {
     }
 }
 
-//hide help's content
+//隐藏帮助信息的内容
 function helpHide() {
     $(this).parent().parent().next().find(".inner").css({"height": "0", "min-height": "0"});
     $(this).css({"font-size": "0", "margin": "0"});
     $(this).next().show();
 }
 
-//view help's content
+//查看帮助信息的内容
 function helpView() {
     //collapse other helpView
     $(".inner").css({"height": "0", "min-height": "0"});
@@ -366,11 +550,12 @@ function helpView() {
 
 var that;
 
-//edit help
+//编辑帮助信息的内容
 function helpEdit() {
     var helpId = $(this).parent().parent().attr("value");
     $("#bg").slideDown();
-    $(".opeContainer").empty().append("<span value='" + helpId + "' class='iconfont icon-baocun'></span><input type='text' id='subTitle' placeholder='Help Title. No more than 20 words'><div id='editor'></div>");
+    $(".opeContainer").empty().append("<span value='" + helpId + "' class='iconfont icon-baocun'></span>" +
+        "<input type='text' id='subTitle' placeholder='帮助信息标题，不要超过20字'><div id='editor'></div>");
     showEditor();
     $(".opeContainer #subTitle").val($(this).parent().parent().find(".trTitle").html());
     $(".opeContainer #editor .w-e-text").html($(this).parent().parent().next().find(".inner").html());
@@ -380,7 +565,7 @@ function helpEdit() {
     $("#subTitle").off("change").on("change", titleChange);
 }
 
-//save changes
+//保存修改
 function helpSave() {
     var text = editor.txt.text();
     var content = editor.txt.html();
@@ -394,18 +579,7 @@ function helpSave() {
             data: {"title": title, "content": content, "id": id},
             dataType: "json",
             success: function (data) {
-                var data = 1;
-                if (data.status == 0) {
-                    alert(data.msg);
-                    return;
-                }
-                that.find(".trTitle").html(title);
-                that.next().find(".inner").html(content);
-                that.find(".updateTime").html(getformatDate());
-                $("#bg").slideUp();
-                $(".opeContainer").slideUp();
-                $("#subTitle").val("");
-                $(".opeContainer .w-e-text").html("");
+                window.location.href = "admin.html?catalog=2";
             },
             error: function () {
                 console.log("save error");
@@ -414,7 +588,7 @@ function helpSave() {
     }
 }
 
-//subTitle's change event todo 判断重复
+//修改子标题 todo 判断重复
 function titleChange() {
     if ($(this).val().trim() == "") {
         $("#subTitle").css("border-color", "red");
@@ -423,7 +597,7 @@ function titleChange() {
     }
 }
 
-//delete help
+//删除帮助信息
 function helpDelete() {
     var that = $(this).parent().parent();
     $.ajax({
@@ -432,27 +606,70 @@ function helpDelete() {
         data: {"helpInfoId": that.attr("value")},
         dataType: "json",
         success: function (data) {
-            if (data.status == 0) {
-                alert(data.msg);
-                return;
-            }
-            that.next().remove();
-            that.remove();
-            if ($(".helpTable tbody tr").length == 0) {
-                $(".helpTable").hide();
-                $(".nothing").show();
-            }
+            window.location.href = "admin.html?catalog=2";
         }
     });
 }
 
-/*4*/
+
+/* 3 */
+function resClick() {
+    $(".resContainer").show().siblings().hide();
+    $(".catalog li").eq(2).addClass("clicked").siblings().removeClass("clicked");
+    $(".right .location span").html($(this).children().last().html());
+    //禁止搜索
+    $("#searchInp").attr("disabled", true);
+}
+
+/* 4 */
+function feedClick() {
+    $("#searchInp").removeAttr("disabled").val("");
+    $.ajax({
+        type: "get",
+        url: "/manage/feedback/list.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            if (data.status == 0) {     //非法参数
+                alert(data.msg);
+                return;
+            }
+            $("#feedbackTable tbody").empty();
+            if (data.status == -1) {
+                $("#feedbackTable").hide();
+                $(".nothing").show();
+                return;
+            }
+            $(".feedbackContainer").show().siblings().hide();
+            $(".catalog li").eq(3).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html($(this).children().last().html());
+            packFeedback(data.data);
+        },
+        error: function () {
+            console.log("feedback error");
+        }
+    });
+}
+
+//封装反馈信息
+var readClass;
+
 function packFeedback(data) {
+    $("#feedbackTable").show();
     $(".nothing").hide();
     for (i = 0; i < data.list.length; i++) {
-        $("#feedbackTable tbody").append("<tr level='" + data.list[i].level + "' value='" + data.list[i].id + "'><td>" +
-            (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td><td class='feedContent'>" +
-            data.list[i].content + "</td><td class='feedDate'>" + data.list[i].createTime + "</td></tr>");
+        readClass = data.list[i].status == 1 ? "" : "read";
+        $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
+            data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
+            "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
+            "</td></tr>");
     }
     $("#feedbackTable tbody tr").off("click").on("click", feedDetail);
     //4.pages
@@ -465,17 +682,25 @@ function packFeedback(data) {
                 data: {"pageNum": num},
                 dataType: "json",
                 success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
                     if (data.status == 0) {
                         alert(data.msg);
                         return;
                     }
                     $("#feedbackTable tbody").empty();
-                    if (data.data == undefined) {
+                    if (data.status == -1) {    //没有匹配信息
                         $("#feedbackTable").hide();
                         $(".nothing").show();
                         return;
                     }
-                    packFeedback(data.data);
+                    packUpdateFeedback(data.data);
                 },
                 error: function () {
                     console.log("feedback error");
@@ -485,18 +710,115 @@ function packFeedback(data) {
     });
 }
 
+//封装更新后的反馈信息
+function packUpdateFeedback(data) {
+    $("#feedbackTable").show();
+    $(".nothing").hide();
+    for (i = 0; i < data.list.length; i++) {
+        readClass = data.list[i].status == 1 ? "" : "read";
+        $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
+            data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
+            "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
+            "</td></tr>");
+    }
+    $("#feedbackTable tbody tr").off("click").on("click", feedDetail);
+}
+
+//封装反馈的搜索信息
+function packSearchFeedback(data) {
+    $("#feedbackTable").show();
+    $(".nothing").hide();
+    for (i = 0; i < data.list.length; i++) {
+        readClass = data.list[i].status == 1 ? "" : "read";
+        $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
+            data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
+            "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
+            "</td></tr>");
+    }
+    $("#feedbackTable tbody tr").off("click").on("click", feedDetail);
+    //4.pages
+    $(".page").paging({
+        totalPage: data.pages,
+        callback: function (num) {
+            $.ajax({
+                type: "get",
+                url: "/manage/feedback/search.action",
+                data: {"content": searchInp, "pageNum": num},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
+                    if (data.status == 0) {
+                        alert(data.msg);
+                        return;
+                    }
+                    $("#feedbackTable tbody").empty();
+                    if (data.status == -1) {    //没有匹配信息
+                        $("#feedbackTable").hide();
+                        $(".nothing").show();
+                        return;
+                    }
+                    packSearchFeedback(data.data);
+                },
+                error: function () {
+                    console.log("feedback error");
+                }
+            });
+        }
+    });
+}
+
+var receiveId;
 //查看反馈详情
+var level;
+
 function feedDetail() {
+    var that=$(this);
+    level = $(this).attr("level");
+    $.ajax({
+        type: "get",
+        url: "/manage/feedback/updateFeedStatus.action",
+        data: {"level": level},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {  //用户未登录
+                window.location.href = "index.jsp";
+                return;
+            }
+            if (data.status == -3) {  //参数错误
+                alert(data.msg);
+            }
+            that.addClass("read");
+        },
+        error: function () {
+            console.log("update feed error");
+        }
+    });
     $.ajax({
         type: "get",
         url: "/manage/feedback/detail.action",
-        data: {"level": $(this).attr("level")},
+        data: {"level": level},
         success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
             if (data.status == 0) {
                 alert(data.msg);
                 return;
             }
             $("#bg").slideDown();
+            receiveId = data.data[0].userId;
             $(".feedbackDetail").empty().append("<div class='sender'>" + data.data[0].username + "</div>" +
                 "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
             $(".feedBtn").off("click").on("click", sendFeedback);
@@ -507,7 +829,7 @@ function feedDetail() {
                     + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
                     data.data[i].avatar + "'><span class='content'>" + data.data[i].content + "</span></div>");
             }
-            $(".feedbackDetail").slideDown()
+            $(".feedbackDetail").slideDown();
         }
     });
 }
@@ -523,41 +845,83 @@ function sendFeedback() {
     $.ajax({
         type: "post",
         url: "/manage/feedback/reply.action",
-        data: {"content": response, "parent": parent, "sequence": sequence},
+        data: {"content": response, "parent": parent, "sequence": sequence, "receiveId": receiveId},
         dataType: "json",
         success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
             if (data.status == 0) {
                 alert(data.msg);
                 return;
             }
             $(".response").val("");
-            $(".chats").append("<div parent='" + parent + "' sequence='" + sequence + "' class='rightSide'>" +
+            $(".chats").append("<div parent='" + parent + "' sequence='" + data.data + "' class='rightSide'>" +
                 "<div class='date'>" + getformatDate() + "</div><img src='" + adminAvatar + "'>" +
                 "<span class='content'>" + response + "</span></div>");
+            dwrMessage.publishFeed(receiveId);
         }
     });
 }
 
-/*5*/
-function packStrategy(data) {
-    //1.province
-    $(".province").empty().append("<option value='0'>全部</option>");
-    if (data.cities.length > 0) {
-        for (i = 0; i < data.cities.length; i++) {
-            $(".province").append("<option value='" + data.cities[i].id + "'>" + data.cities[i].name + "</option>");
+//推送信息处理
+function showMessage(data) {
+    $("#msgDot").css("display", "inline-block");
+}
+
+/* 5 */
+function strategyClick() {
+    $("#searchInp").removeAttr("disabled").val("");
+    $.ajax({
+        type: "get",
+        url: "/manage/strategy/list.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
+            //没有匹配信息
+            if (data.data.cities == undefined || data.data.strategies == undefined || data.data.durations == undefined) {
+                $(".nothing").show();
+                return;
+            }
+            packStrategy(data.data);
+            $(".strategyContainer").show().siblings().hide();
+            $(".catalog li").eq(4).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html($(this).children().last().html());
+        },
+        error: function () {
+            console.log("admin strategy error");
         }
-        //province click event
-        $(".province").change(update);
+    });
+}
+
+//封装攻略信息
+function packStrategy(data) {
+    $(".nothing").hide();
+    //1.cities
+    $(".province").empty().append("<option value='0'>全部</option>");
+    for (i = 0; i < data.cities.length; i++) {
+        $(".province").append("<option value='" + data.cities[i].id + "'>" + data.cities[i].name + "</option>");
     }
+    $(".province").change(update);  //province click event
     //2.duration
     $(".duration").empty().append("<option>全部</option>");
-    if (data.durations.length > 0) {
-        for (i = 0; i < data.durations.length; i++) {
-            $(".duration").append("<option>" + data.durations[i] + "</option>")
-        }
-        //duration click event
-        $(".duration").change(update);
+    for (i = 0; i < data.durations.length; i++) {
+        $(".duration").append("<option>" + data.durations[i] + "</option>")
     }
+    $(".duration").change(update);  //duration click event
+    //3.strategies
     $(".strategies").empty();
     for (i = 0; i < data.strategies.list.length; i++) {
         $(".strategies").append("<input type='checkbox' class='adminStrategy' value='" + data.strategies.list[i].strategyId +
@@ -577,11 +941,20 @@ function packStrategy(data) {
                 data: {"pageNum": num},
                 dataType: "json",
                 success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
                     if (data.status == 0) {
                         alert(data.msg);
                         return;
                     }
-                    packStrategy(data.data);
+                    $(".strategies").empty();
+                    packUpdateStrategy(data.data);
                 },
                 error: function () {
                     console.log("admin strategy error");
@@ -592,8 +965,9 @@ function packStrategy(data) {
     $(".strategies .strategyItem").off("click").on("click", strategyDetail);
 }
 
+//封装更新的攻略信息
 function packUpdateStrategy(data) {
-    $(".strategies").empty();
+    $(".nothing").hide();
     for (i = 0; i < data.strategies.list.length; i++) {
         $(".strategies").append("<input type='checkbox' class='adminStrategy' value='" + data.strategies.list[i].strategyId +
             "'><div value='" + data.strategies.list[i].strategyId + "' class='strategyItem'>" +
@@ -602,6 +976,21 @@ function packUpdateStrategy(data) {
             "</span><span>" + data.strategies.list[i].cityName + " " + data.strategies.list[i].duration +
             "</span></div></div>");
     }
+    $(".strategies .strategyItem").off("click").on("click", strategyDetail);
+}
+
+//封装更新的攻略信息
+function packCityDurationStrategy(data) {
+    $(".nothing").hide();
+    for (i = 0; i < data.strategies.list.length; i++) {
+        $(".strategies").append("<input type='checkbox' class='adminStrategy' value='" + data.strategies.list[i].strategyId +
+            "'><div value='" + data.strategies.list[i].strategyId + "' class='strategyItem'>" +
+            "<img src='" + data.strategies.list[i].mainImg + "'><div class='strategyInfo'><span>"
+            + data.strategies.list[i].strategyName + "</span><span>" + data.strategies.list[i].username +
+            "</span><span>" + data.strategies.list[i].cityName + " " + data.strategies.list[i].duration +
+            "</span></div></div>");
+    }
+    $(".strategies .strategyItem").off("click").on("click", strategyDetail);
     //4.pages
     $(".page").paging({
         totalPage: data.strategies.pages,
@@ -612,11 +1001,66 @@ function packUpdateStrategy(data) {
                 data: {"pageNum": num},
                 dataType: "json",
                 success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
                     if (data.status == 0) {
                         alert(data.msg);
                         return;
                     }
-                    packStrategy(data.data);
+                    $(".strategies").empty();
+                    packUpdateStrategy(data.data);
+                },
+                error: function () {
+                    console.log("admin strategy error");
+                }
+            });
+        }
+    });
+}
+
+//封装攻略的搜索信息
+function packSearchStrategy(data) {
+    $(".nothing").hide();
+    for (i = 0; i < data.list.length; i++) {
+        $(".strategies").append("<input type='checkbox' class='adminStrategy' value='" + data.list[i].strategyId + "'>" +
+            "<div value='" + data.list[i].strategyId + "' class='strategyItem'><img src='" + data.list[i].mainImg + "'>" +
+            "<div class='strategyInfo'><span>" + data.list[i].strategyName + "</span><span>" + data.list[i].username +
+            "</span><span>" + data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
+    }
+    //4.pages
+    $(".page").paging({
+        totalPage: data.pages,
+        callback: function (num) {
+            $.ajax({
+                type: "get",
+                url: "/manage/strategy/search.action",
+                data: {"content": searchInp, "pageNum": num},
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == -2) {    //用户未登录
+                        window.location.href = "adminSignin.html";
+                        return;
+                    }
+                    if (data.status == -4) {    //非管理员
+                        window.location.href = "../pages/index.jsp";
+                        return;
+                    }
+                    if (data.status == 0) {
+                        alert(data.msg);
+                        return;
+                    }
+                    $(".strategies").empty();
+                    if (data.status == -1) {
+                        $(".nothing").show();
+                        return;
+                    }
+                    packSearchStrategy(data.data);
                 },
                 error: function () {
                     console.log("admin strategy error");
@@ -627,6 +1071,7 @@ function packUpdateStrategy(data) {
     $(".strategies .strategyItem").off("click").on("click", strategyDetail);
 }
 
+//更新攻略列表
 function update() {
     var cityId = $(".province option:selected").val();
     var duration = $(".duration option:selected").text();
@@ -647,11 +1092,24 @@ function update() {
         data: sendData,
         dataType: "json",
         success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
             if (data.status == 0) {
                 alert(data.msg);
                 return;
             }
-            packUpdateStrategy(data.data);
+            $(".strategies").empty();
+            if (data.data.strategies == undefined) {
+                $(".nothing").show();
+                return;
+            }
+            packCityDurationStrategy(data.data);
         },
         error: function () {
             console.log("updateStrategies error");
@@ -659,6 +1117,7 @@ function update() {
     });
 }
 
+//攻略详情
 function strategyDetail() {
     var strategyId = $(this).attr("value");
     $.ajax({
@@ -667,7 +1126,14 @@ function strategyDetail() {
         data: {"strategyId": strategyId},
         dataType: "json",
         success: function (data) {
-            console.log(JSON.stringify(data));
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "adminSignin.html";
+                return;
+            }
+            if (data.status == -4) {    //非管理员
+                window.location.href = "../pages/index.jsp";
+                return;
+            }
             if (data.status == 0) {
                 alert(data.msg);
                 return;

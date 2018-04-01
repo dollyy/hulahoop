@@ -166,15 +166,15 @@
 
     <select id="list" parameterType="map" resultType="com.yc.hulahoop.vo.StrategyVo">
         SELECT s.id AS strategyId,
-               s.main_img AS mainImg,
-               u.avatar,
-               u.username,
-               s.name AS strategyName,
-               c.name AS cityName,
-               s.duration
+        s.main_img AS mainImg,
+        u.avatar,
+        u.username,
+        s.name AS strategyName,
+        c.name AS cityName,
+        s.duration
         FROM strategies s
-               JOIN users u ON s.user_id=u.id
-               JOIN cities c ON s.city_id=c.id
+        JOIN users u ON s.user_id=u.id
+        JOIN cities c ON s.city_id=c.id
         <where>
             <if test="cityId != null">
                 city_id=#{cityId}
@@ -198,7 +198,7 @@
 
     <select id="detail" parameterType="int" resultMap="strategyResultMap">
         SELECT
-            s.id AS strategyId,
+            s.id   AS strategyId,
             s.content,
             c.name AS cityName,
             s.duration,
@@ -271,30 +271,34 @@
     </update>
 
     <select id="searchByUsername" parameterType="string" resultType="com.yc.hulahoop.vo.StrategyVo">
-        SELECT s.id AS strategyId,
-               s.main_img AS mainImg,
-               u.avatar,
-               u.username,
-               s.name AS strategyName,
-               c.name AS cityName,
-               s.duration
+        SELECT
+            s.id       AS strategyId,
+            s.main_img AS mainImg,
+            u.avatar,
+            u.username,
+            s.name     AS strategyName,
+            c.name     AS cityName,
+            s.duration
         FROM strategies s
-            JOIN users u ON s.user_id=u.id
-            JOIN cities c ON s.city_id=c.id
-        where user_id IN (SELECT users.id FROM users WHERE username LIKE #{username})
+            JOIN users u ON s.user_id = u.id
+            JOIN cities c ON s.city_id = c.id
+        WHERE user_id IN (SELECT users.id
+                          FROM users
+                          WHERE username LIKE #{username})
     </select>
 
-    <select id="searchByStrategyName" parameterType="string"  resultType="com.yc.hulahoop.vo.StrategyVo">
-        SELECT s.id AS strategyId,
-               s.main_img AS mainImg,
-               u.avatar,
-               u.username,
-               s.name AS strategyName,
-               c.name AS cityName,
-               s.duration
+    <select id="searchByStrategyName" parameterType="string" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT
+            s.id       AS strategyId,
+            s.main_img AS mainImg,
+            u.avatar,
+            u.username,
+            s.name     AS strategyName,
+            c.name     AS cityName,
+            s.duration
         FROM strategies s
-            JOIN users u ON s.user_id=u.id
-            JOIN cities c ON s.city_id=c.id
+            JOIN users u ON s.user_id = u.id
+            JOIN cities c ON s.city_id = c.id
         WHERE s.name LIKE #{strategyName}
     </select>
 
@@ -302,7 +306,7 @@
         <id column="city_id" property="cityId"/>
         <result column="cityName" property="cityName"/>
         <collection ofType="com.yc.hulahoop.vo.StrategyVo" property="strategyVoList">
-            <result column="strategyId" property="id"/>
+            <result column="strategyId" property="strategyId"/>
             <result column="strategyName" property="strategyName"/>
             <result column="duration" property="duration"/>
             <result column="mainImg" property="mainImg"/>
@@ -311,7 +315,7 @@
 
     <select id="queryUserStrategy" parameterType="int" resultMap="userStrategy">
         SELECT
-            s.id,
+            s.id       AS strategyId,
             s.name     AS strategyName,
             s.duration,
             city_id,
@@ -333,6 +337,23 @@
         FROM strategies
         GROUP BY duration
         ORDER BY duration
+    </select>
+
+    <select id="searchByAdmin" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT
+            s.id       AS strategyId,
+            s.main_img AS mainImg,
+            u.avatar,
+            u.username,
+            s.name     AS strategyName,
+            c.name     AS cityName,
+            s.duration
+        FROM strategies s
+            JOIN users u ON s.user_id = u.id
+            JOIN cities c ON s.city_id = c.id
+        WHERE s.name LIKE #{content} OR s.content LIKE #{content} OR user_id IN (SELECT id
+                                                                                 FROM users
+                                                                                 WHERE username LIKE #{content})
     </select>
 
 </mapper>

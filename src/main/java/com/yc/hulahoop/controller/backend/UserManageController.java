@@ -49,11 +49,13 @@ public class UserManageController {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
         }
         //检查当前用户是否为管理员
         if (currentUser.getRole() != Const.Role.ADMIN) {    //非管理员
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NON_ADMIN.getCode(),
+                    Const.ResponseCode.NON_ADMIN.getDescription());
         }
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccessMessage("管理员退出登录成功");

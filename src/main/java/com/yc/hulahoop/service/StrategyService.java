@@ -8,7 +8,7 @@ public interface StrategyService {
 
     ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
 
-    ServerResponse updateStrategyList(int pageNum, Integer cityId, String duration);
+    ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
 
     ServerResponse detail(Integer strategyId);
 
@@ -20,9 +20,9 @@ public interface StrategyService {
 
     ServerResponse updateForOrCollect(Strategy strategy);
 
-    ServerResponse search(String type, String val, int pageNum);
+    ServerResponse search(String content, int pageNum, int pageSize);
 
     ServerResponse queryUserStrategy(Integer userId);
 
-    ServerResponse queryUserCollection(int userId, int pageNum, int pageSize, String orderBy);
+    ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
 }

@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>center</title>
@@ -15,15 +16,18 @@
     <link rel="stylesheet" href="../font/iconfont.css">
 </head>
 <body>
+
 <!--side tools-->
 <div class="sideTool">
     <span class="iconfont icon-fankui"></span>
     <span class="iconfont icon-fanhuidingbu"></span>
 </div>
 
+<jsp:include page="nav.jsp"/>
+
 <div class="head">
-    <img id="avatar" src="../images/notfound.jpg">
-    <span id="headuser">username</span>
+    <img id="avatar" src="">
+    <span id="headuser"></span>
     <img src="../images/center.jpg">
 </div>
 <div class="body">
@@ -39,12 +43,6 @@
                 <use xlink:href="#icon-zhixiang"></use>
             </svg>
             <span>我的收藏</span>
-        </li>
-        <li id="navUpload">
-            <svg class="icon" aria-hidden="true" style="font-size: 60px">
-                <use xlink:href="#icon-shangchuan"></use>
-            </svg>
-            <span>上传攻略</span>
         </li>
         <li id="navEdit">
             <svg class="icon" aria-hidden="true" style="font-size: 60px">
@@ -68,37 +66,41 @@
                 </div>
                 <div id="pageDot"><span id="mapDot"></span><span id="pieDot"></span></div>
             </div>
+            <span class="strategyNothing"></span>
             <div id="separate"></div>
             <div id="strategies" style="height: auto;overflow: hidden"></div>
         </div>
         <div id="collectContainer">
             <ul class="collectCatalog">
-                <li>当前排序方式 : <span>按收藏数降序</span></li>
                 <li>
-                    城市
-                    <select class="js-example-basic-single collectProvince" name="state">
-                        <option value="0">全部</option>
-                    </select>
+                    <span class="iconfont icon-shengxu"></span>
+                    <span class="iconfont icon-jiangxu"></span>
+                    <span>按城市排序</span>
                 </li>
                 <li>
                     <span class="iconfont icon-shengxu"></span>
                     <span class="iconfont icon-jiangxu"></span>
-                    按时间排序
+                    <span>按时间排序</span>
                 </li>
                 <li>
                     <span class="iconfont icon-shengxu"></span>
                     <span class="iconfont icon-jiangxu"></span>
-                    按收藏数排序
+                    <span>按收藏数排序</span>
                 </li>
                 <li>
                     <span class="iconfont icon-shengxu"></span>
                     <span class="iconfont icon-jiangxu"></span>
-                    按点赞数排序
+                    <span>按点赞数排序</span>
                 </li>
             </ul>
-            <div class="collects"></div>
+            <div class="rightCollect">
+                <div class="collects"></div>
+                <div id="pageNum">
+                    <div id="page" class="page_div"></div>
+                </div>
+            </div>
+            <span class="collectNothing"></span>
         </div>
-        <div id="uploadContainer"></div>
         <div id="editContainer">
             <ul class="editCatalog">
                 <li id="editUpdate" class="editCilck">编辑资料</li>
@@ -109,79 +111,71 @@
                     <div class="left">
                         <div>
                             <div>用户名</div>
-                            <input type="text" name="username" id="username">
+                            <span class="nameWarn"></span><br>
+                            <input type="text" name="username" id="centerUsername">
                         </div>
                         <div>
-                            <div>性别</div>
+                            <div>性别</div><br>
                             <select class="js-example-basic-single" name="gender" id="gender">
-                                <option value="0">未知</option>
-                                <option value="1">女</option>
-                                <option value="2">男</option>
+                                <option value="unknown">未知</option>
+                                <option value="female">女</option>
+                                <option value="male">男</option>
                             </select>
                         </div>
                         <div>
                             <div>手机号</div>
+                            <span class="phoneWarn"></span><br>
                             <input type="text" name="phone" id="phone" value="18366666666">
                             <input type="button" id="updateBtn" value="获取验证码" disabled><br>
                         </div>
                         <div class="codeContainer">
-                            <div>code</div>
+                            <div>code</div><br>
                             <input type="text" id="code"><br>
                         </div>
                         <div>
-                            <div>城市</div>
+                            <div>城市</div><br>
                             <input type="text" name="city" id="city"><br>
                         </div>
                         <div>
-                            <div>个人简介</div>
+                            <div>个人简介</div><br>
                             <textarea type="text" name="bio" id="bio"
                                       placeholder="Tell us a little bit about yourself"></textarea><br>
                         </div>
-                        <input type="button" id="editBtn" value="保 存">
+                        <input type="button" id="editBtn" value="保 存" disabled>
                     </div>
                 </form>
-                <form enctype="multipart/form-data" id="avatarForm" method="post"
-                      action="/user/updateAvatar.action">
+                <form enctype="multipart/form-data" id="avatarForm" method="post">
                     <div class="right">
                         <img id="usericon" src="../images/notfound.jpg"><br>
-                        <input type="submit" id="uploadIcon" value="上传图片" onclick="iconPath.click()"><br>
                         <input type="file" name="file" id="iconPath" onchange="getPath(this)"><br>
+                        <input type="submit" id="uploadIcon" value="上传图片" onclick="iconPath.click()"><br>
                     </div>
                 </form>
                 <form class="reset">
                     <div>
-                        <div>旧密码</div>
+                        <div>旧密码</div><br>
                         <input type="text" class="oldPwd"><br>
+                        <span class="oldPwdWarn"></span><br>
                     </div>
                     <div>
-                        <div>新密码</div>
-                        <input type="text" class="newPwd" disabled><br>
+                        <div>新密码</div><br>
+                        <input type="text" class="newPwd" disabled><br><br>
                     </div>
                     <div>
-                        <div>再次输入</div>
+                        <div>再次输入</div><br>
                         <input type="text" class="rePwd" disabled><br>
+                        <span class="rePwdWarn"></span><br>
                     </div>
                     <input type="button" value="重置密码" id="resetBtn" disabled>
                 </form>
             </div>
         </div>
         <div id="msgContainer">
-            <div class="msg">
-                        <span class="msgContent">
-                            <span class="send">user1</span>
-                            <span class="msgInfo">1234578765432</span>
-                        </span>
-                <span class="msgDate">2018-01-12 12:23:35</span>
-            </div>
-            <div class="msg read">
-                        <span class="msgContent">
-                            <span class="send">user1</span>
-                            <span class="msgInfo">1234578765432</span>
-                        </span>
-                <span class="msgDate">2018-01-12 12:23:35</span>
-            </div>
+            <div id="msgs"></div>
+            <span class="msgNothing"></span>
         </div>
     </div>
+    <div class="feedbackDetail"></div>
 </div>
 
 <script src="../js/jquery-3.2.1.min.js"></script>
@@ -192,11 +186,13 @@
 <script src="../vendors/select2-4.0.6-rc.1/dist/js/select2.min.js"></script>
 <!-- iconfont -->
 <script src="../font/iconfont.js"></script>
+<!-- jquery form -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"
         integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i"
         crossorigin="anonymous"></script>
+<!-- paging -->
+<script src="../js/paging.js"></script>
 
 <script src="../js/center.js"></script>
-<script src="../js/common.js"></script>
 </body>
 </html>

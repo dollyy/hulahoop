@@ -11,6 +11,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Yang Chen on 18-2-28.
  */
@@ -23,18 +26,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse<String> verify(String val, String type) {
         if (StringUtils.isBlank(val) || StringUtils.isBlank(type)) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         int count;
         switch (type) {
-            case Const.USERNAME:    //校验 用户名
+            //校验 用户名
+            case Const.USERNAME:
                 count = userMapper.verifyUsername(val);
                 break;
-            case Const.PHONE:       //校验 手机号
+            //校验 手机号
+            case Const.PHONE:
                 count = userMapper.verifyPhone(val);
                 break;
             default:
-                return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+                return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                        Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         if (count > 0) {    //参数已存在
             return ServerResponse.createByErrorMessage("参数已存在");
@@ -51,7 +58,15 @@ public class UserServiceImpl implements UserService {
             return ServerResponse.createByErrorMessage("用户名已存在");
         }
         //校验 手机号
-        serverResponse = verify(user.getPhone(), Const.PHONE);
+        //验证格式
+        String phone=user.getPhone();
+        Pattern pattern=Pattern.compile(Const.PHONE_REGEX);
+        Matcher matcher=pattern.matcher(phone);
+        if(!matcher.matches()){
+            return ServerResponse.createByErrorMessage("手机号格式错误");
+        }
+        //验证唯一性
+        serverResponse = verify(phone, Const.PHONE);
         if (!serverResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("手机号已存在");
         }
@@ -59,10 +74,10 @@ public class UserServiceImpl implements UserService {
         user.setPassword(MD5Util.MD5Encode(user.getPassword(), "utf-8"));
         //设置当前用户的角色
         user.setRole(Const.Role.USER);
-        //设置头像
+        //设置默认头像
         user.setAvatar(PropertiesUtil.getProperty("ftp.avatar.default"));
 
-        //添加用户
+        //注册
         int count = userMapper.insert(user);
         //注册成功
         if (count > 0) {
@@ -75,20 +90,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse login(String type, String val, String password) {
         if (StringUtils.isBlank(val) || StringUtils.isBlank(password)) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //密码MD5加密
         password = MD5Util.MD5Encode(password, "utf-8");
         User user;
         switch (type) {
-            case Const.USERNAME:    //用户名登录
+            //用户名登录
+            case Const.USERNAME:
                 user = userMapper.loginByUsername(val, password);
                 break;
-            case Const.PHONE:   //手机号登录
+            //手机号登录
+            case Const.PHONE:
                 user = userMapper.loginByPhone(val, password);
                 break;
             default:
-                return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+                return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                        Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //登录成功
         if (user != null) {
@@ -102,7 +121,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse resetPassword(String passwordOld, String passwordNew, User user) {
         if (StringUtils.isBlank(passwordOld) || StringUtils.isBlank(passwordNew)) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //校验旧密码
         passwordOld = MD5Util.MD5Encode(passwordOld, "utf-8");
@@ -133,12 +153,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public ServerResponse queryUserInformation(Integer userId) {
         if (userId == null) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        //查找用户信息
         User user = userMapper.selectByPrimaryKey(userId);
+        //用户不存在
         if (user == null) {
-            return ServerResponse.createByErrorMessage(Const.NO_USER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
         }
+        //返回前密码先置空
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccessData(user);
     }
@@ -153,16 +178,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ServerResponse updateAvatar(User user) {
+        if(user == null){
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        //更新用户头像
+        int count = userMapper.updateByPrimaryKeySelective(user);
+        if(count > 0){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByErrorMessage("更新头像失败");
+    }
+
+    @Override
     public ServerResponse adminLogin(String username, String password) {
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        //密码MD5加密
         password = MD5Util.MD5Encode(password, "utf-8");
+        //管理员登陆
         User user = userMapper.adminLogin(username, password);
         if (user != null) {
-            user.setPassword(StringUtils.EMPTY);        //密码置空
+            //密码置空
+            user.setPassword(StringUtils.EMPTY);
             return ServerResponse.createBySuccess("管理员登陆成功", user);
         }
+        //判断是否存在管理员
         int count = userMapper.existAdmin();
         if (count > 0) {
             return ServerResponse.createByErrorMessage("管理员用户名或密码错误");
@@ -177,10 +221,13 @@ public class UserServiceImpl implements UserService {
         count = userMapper.insert(admin);
         //获取user的信息
         user = userMapper.selectByPrimaryKey(admin.getId());
+        //设置管理员成功，登陆成功
         if (count > 0) {
             user.setPassword(StringUtils.EMPTY);        //密码置空
-            return ServerResponse.createBySuccess("管理员登陆成功", user);
+            return ServerResponse.createBySuccess("设置管理员成功，登陆成功", user);
         }
-        return ServerResponse.createByErrorMessage("管理员登陆失败");
+        //设置管理员失败
+        return ServerResponse.createByErrorMessage("设置管理员失败");
     }
+
 }

@@ -19,13 +19,20 @@ public class HelpInfoController {
     @Autowired
     HelpInfoService helpInfoService;
 
-    @RequestMapping(value = "list.action",method = RequestMethod.GET)
+    /**
+     * 查找'上传攻略'页面的帮助信息
+     *
+     * @param session 当前用户
+     * @return list
+     */
+    @RequestMapping(value = "listByUpload.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse list(HttpSession session){
+    private ServerResponse listByUpload(HttpSession session) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
         }
         return helpInfoService.listByUpload();
     }

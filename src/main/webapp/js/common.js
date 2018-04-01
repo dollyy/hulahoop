@@ -17,6 +17,26 @@ function operateNumber(that){
     return true;
 }
 
+//解析地址
+function getQueryStringArgs() {
+    var args=[];
+    //取得查询字符串并去掉开头的问号--->第一个是问号
+    var parameters = (location.search.length > 0 ? location.search.substring(1) : "");
+    //取得每一项
+    var items = parameters.length ? parameters.split("&") : [];
+    var item, value;
+    //逐个讲每一项添加到args对象中
+    for (i = 0; i < items.length; i++) {
+        item = items[i].split("=");
+        name = decodeURIComponent(item[0]);
+        value = decodeURIComponent(item[1]);
+        if (name.length > 0) {
+            args[name] = value;
+        }
+    }
+    return args[name];
+}
+
 function formatDate(time){
     var date=new Date(time);
     var year=date.getFullYear();

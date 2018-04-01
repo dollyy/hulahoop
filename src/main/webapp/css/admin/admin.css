@@ -29,6 +29,21 @@ body{
     width: 100%;
     text-align: right;
 }
+#msgTip{
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+}
+#msgDot{
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 16px;
+    right: 1px;
+    display: none;
+}
 .hulahoop{
     font-size: 35px;
     vertical-align: sub;
@@ -213,6 +228,9 @@ table td,table th{
 .feedbackContainer{
     display: none;
 }
+.read{
+    color: #999;
+}
 .feedbackContainer table tbody tr:hover{
     background: #ccc;
     cursor: pointer;
@@ -236,7 +254,7 @@ table td,table th{
     left: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
-    z-index: 5;
+    z-index: 15;
     display: none;
 }
 .sender{
@@ -249,7 +267,6 @@ table td,table th{
     box-sizing: border-box;
 }
 .chats{
-    height: auto;
     overflow: hidden;
     padding: 0 20px 20px 20px;
     box-sizing: border-box;
@@ -312,6 +329,7 @@ table td,table th{
     display: flex;
     justify-content: space-around;
     margin: 20px 0;
+    align-items: center;
 }
 .adminStrategy{
     width: auto;
@@ -324,6 +342,8 @@ table td,table th{
 }
 .strategyOpe,.deleteAdminStrategy{
     cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
 }
 .deleteAdminStrategy{
     display: none;

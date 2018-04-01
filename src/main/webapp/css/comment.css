@@ -1,9 +1,11 @@
 /*list comments --start*/
 /*the div of all comments*/
 #comments{
-    background: #f2f2f2;
+    background: #fff;
     padding: 10px;
     box-sizing: border-box;
+    width: 1000px;
+    margin: 30px auto;
 }
 /*each comment*/
 #comments>div{

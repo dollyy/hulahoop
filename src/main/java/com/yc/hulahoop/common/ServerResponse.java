@@ -72,5 +72,8 @@ public class ServerResponse<T> {
     public static <T> ServerResponse<T> createByErrorMessage(String msg){
         return new ServerResponse<T>(Const.ResponseCode.ERROR.getCode(), msg);
     }
+    public static <T> ServerResponse<T> createByErrorCodeMessage(int code, String msg){
+        return new ServerResponse<T>(code, msg);
+    }
 
 }

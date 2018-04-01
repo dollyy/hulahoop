@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>strategy</title>
@@ -20,6 +21,9 @@
     <span class="iconfont icon-fankui"></span>
     <span class="iconfont icon-fanhuidingbu"></span>
 </div>
+
+<jsp:include page="nav.jsp"/>
+
 <!-- catalog -->
 <div class="catalog">
         <span class="provTab">
@@ -34,17 +38,10 @@
                 <option>全部</option>
             </select>
         </span>
-    <span class="searchContainer">
-           <select class="searchSelect">
-               <option>标题</option>
-               <option>作者</option>
-           </select>
-           <input type="text" id="searchInp">
-            <span class="iconfont icon-fangdajing"></span>
-        </span>
 </div>
 
 <div class="body">
+    <div class="nothing"></div>
     <div class="content"></div>
     <div id="pageNum">
         <div id="page" class="page_div"></div>

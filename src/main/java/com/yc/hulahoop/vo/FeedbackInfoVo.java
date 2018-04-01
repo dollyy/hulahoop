@@ -7,11 +7,12 @@ public class FeedbackInfoVo {
     private String level;
     private int parent;
     private int sequence;
+    private int userId;
     private String username;
     private String avatar;
-    private String title;
     private String content;
-    private String createTime;
+    private String updateTime;
+    private int status;
 
     public int getId() {
         return id;
@@ -45,6 +46,14 @@ public class FeedbackInfoVo {
         this.sequence = sequence;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -61,14 +70,6 @@ public class FeedbackInfoVo {
         this.avatar = avatar;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getContent() {
         return content;
     }
@@ -77,11 +78,19 @@ public class FeedbackInfoVo {
         this.content = content;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getUpdateTime() {
+        return updateTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

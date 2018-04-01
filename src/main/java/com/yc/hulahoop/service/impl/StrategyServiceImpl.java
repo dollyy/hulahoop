@@ -44,32 +44,41 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     public ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
         Map<String, Object> result = Maps.newHashMap();
-        //获取所有的攻略
         //1.startPage--start
         PageHelper.startPage(pageNum, pageSize);
-        //2.填充自己的sql查询逻辑
+        //获取所有的攻略
         List<StrategyVo> strategyList = strategyMapper.list(cityId, duration);
-        //3.pageHelper--end
-        PageInfo pageInfo = new PageInfo(strategyList);
-        result.put("strategies", pageInfo);
+        if (strategyList.size() > 0) {
+            //2.pageHelper--end
+            PageInfo pageInfo = new PageInfo(strategyList);
+            result.put("strategies", pageInfo);
+        }
 
         //获取所有的cities
         List<City> cities = cityMapper.selectCities();
-        result.put("cities", cities);
+        if (cities.size() > 0) {
+            result.put("cities", cities);
+        }
 
         //获取所有的时长
         List<String> durations = strategyMapper.selectAllDurations();
-        result.put("durations", durations);
+        if (durations.size() > 0) {
+            result.put("durations", durations);
+        }
         return ServerResponse.createBySuccessData(result);
     }
 
     @Override
-    public ServerResponse updateStrategyList(int pageNum, Integer cityId, String duration) {
+    public ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
         //1.startPage--start
-        PageHelper.startPage(pageNum, Const.PAGE_SIZE);
-        //2.填充自己的sql查询逻辑
+        PageHelper.startPage(pageNum, pageSize);
         List<StrategyVo> strategyList = strategyMapper.list(cityId, duration);
-        //3.pageHelper--end
+        //没有信息
+        if (strategyList.size() == 0) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
+        }
+        //2.pageHelper--end
         PageInfo pageInfo = new PageInfo(strategyList);
         return ServerResponse.createBySuccessData(pageInfo);
     }
@@ -78,14 +87,17 @@ public class StrategyServiceImpl implements StrategyService {
     public ServerResponse detail(Integer strategyId) {
         Map<String, Object> result = Maps.newHashMap();
         if (strategyId == null) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //获取该攻略的详细信息
         StrategyVo strategyVo = strategyMapper.detail(strategyId);
+        //攻略不存在
         if (strategyVo == null) {
-            return ServerResponse.createByErrorMessage("攻略不存在");
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
         }
-        //strategy
+        //封装strategy对象
         String content = strategyVo.getContent();
         String[] item;
         List<String> catalog = Lists.newArrayList();
@@ -103,13 +115,17 @@ public class StrategyServiceImpl implements StrategyService {
             strategyContent.add(item[1]);
         }
         catalog.add("评论");
+        //攻略对象
         result.put("strategy", strategyVo);
+        //攻略目录
         result.put("catalog", catalog);
+        //攻略内容
         result.put("content", strategyContent);
-        //comment
+        //封装comment对象
         List<CommentVo> commentVos = commentMapper.listByStrategy(strategyVo.getStrategyId());
         for (CommentVo commentVo : commentVos) {
-            commentVo.setCommentCount(commentMapper.queryCommentCount(commentVo.getStrategyId(), commentVo.getLevel() + ".%"));
+            commentVo.setCommentCount(commentMapper.queryCommentCount(commentVo.getStrategyId(), commentVo.getLevel() +
+                    ".%"));
         }
         result.put("comments", commentVos);
         return ServerResponse.createBySuccessData(result);
@@ -118,19 +134,17 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     public ServerResponse add(Strategy strategy) {
         if (strategy == null) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //为main_img赋值
-        String content = strategy.getContent();
-        if (StringUtils.isNotBlank(content)) {
-            int startLen = content.indexOf(PropertiesUtil.getProperty("ftp.server.http.prefix"));
-            if (startLen == -1) {
-                strategy.setMainImg(PropertiesUtil.getProperty("ftp.strategy.default"));
-            } else {
-                int endLen = content.indexOf(" ", startLen) - 1;
-                strategy.setMainImg(content.substring(startLen, endLen));
-            }
+        String mainImg = mainImgValue(strategy.getContent());
+        //内容为空非法操作
+        if(StringUtils.isBlank(mainImg)){
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        strategy.setMainImg(mainImg);
         //向数据库新增攻略信息
         int count = strategyMapper.insert(strategy);
         //新增成功
@@ -141,20 +155,26 @@ public class StrategyServiceImpl implements StrategyService {
         return ServerResponse.createByErrorMessage("新增失败");
     }
 
+    //todo 删除collections里面的关联
     @Override
     public ServerResponse delete(Integer userId, String strategyId) {
         if (StringUtils.isBlank(strategyId)) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
-        //删除1/多个攻略
-        String[] strategyIds = strategyId.split(",");
         List<Integer> strategyList = Lists.newArrayList();
-        for (String str : strategyIds) {
-            strategyList.add(Integer.parseInt(str));
+        //删除一/多个攻略
+        if (strategyId.contains(",")) {   //删除多个
+            String[] strategyIds = strategyId.split(",");
+            for (String str : strategyIds) {
+                strategyList.add(Integer.parseInt(str));
+            }
+        } else { //删除一个
+            strategyList.add(Integer.parseInt(strategyId));
         }
         int count;
-        if (userId == Const.ADMIN_ID) {
-            count=strategyMapper.deleteByAdmin(strategyList);
+        if (userId == Const.ADMIN_ID) { //管理员删除
+            count = strategyMapper.deleteByAdmin(strategyList);
         } else {
             //删除时添加user_id防止横向越权
             count = strategyMapper.deleteByUserIdAndStrategyId(strategyList, userId);
@@ -174,12 +194,13 @@ public class StrategyServiceImpl implements StrategyService {
         strategy.setCollectNum(null);
         strategy.setCreateTime(null);
         //为main_img赋值
-        String content = strategy.getContent();
-        if (StringUtils.isNotBlank(content)) {
-            int startLen = content.indexOf(PropertiesUtil.getProperty("ftp.server.http.prefix"));
-            int endLen = content.indexOf(" ", startLen) - 1;
-            strategy.setMainImg(content.substring(startLen, endLen));
+        String mainImg = mainImgValue(strategy.getContent());
+        //内容为空非法操作
+        if(StringUtils.isBlank(mainImg)){
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        strategy.setMainImg(mainImg);
         //防止横向越权
         int count = strategyMapper.updateByUserIdAndStrategyId(strategy);
         //更新成功
@@ -192,6 +213,11 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse updateForOrCollect(Strategy strategy) {
+        if (strategy == null) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        //没有指定禁止修改的字段是因为在updateForOrCollect中只允许修改for或者against
         int count = strategyMapper.updateForOrCollect(strategy);
         //更新成功
         if (count > 0) {
@@ -202,35 +228,31 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public ServerResponse search(String type, String val, int pageNum) {
-        PageHelper.startPage(pageNum, Const.PAGE_SIZE);
-        List<StrategyVo> strategyList;
-        //根据type选择搜索的类型
-        switch (type) {
-            case Const.USERNAME:    //按username来搜索
-                strategyList = strategyMapper.searchByUsername("%" + val + "%");
-                break;
-            case Const.STRATEGY_NAME:   //按攻略名来搜索
-                strategyList = strategyMapper.searchByStrategyName("%" + val + "%");
-                break;
-            default:    //错误的参数类型
-                return ServerResponse.createByErrorMessage("参数类型错误");
+    public ServerResponse search(String content, int pageNum, int pageSize) {
+        if (StringUtils.isBlank(content)) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        //1.startPage--start
+        PageHelper.startPage(pageNum, pageSize);
+        //查询
+        List<StrategyVo> strategyList = strategyMapper.searchByAdmin("%" + content + "%");
+        //没有匹配信息
         if (strategyList.size() == 0) {
-            return ServerResponse.createBySuccessMessage("没有匹配信息");
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
         }
+        //2.pageHelper--end
         PageInfo pageInfo = new PageInfo(strategyList);
         return ServerResponse.createBySuccessData(pageInfo);
     }
 
     @Override
     public ServerResponse queryUserStrategy(Integer userId) {
-        if (userId == null) {
-            return ServerResponse.createByErrorMessage(Const.ILLEGAL_PARAMETER);
-        }
         List<UserStrategyVo> userStrategyVoList = strategyMapper.queryUserStrategy(userId);
         if (userStrategyVoList.size() == 0) {
-            return ServerResponse.createBySuccessMessage("没有匹配信息");
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
         }
         //为count赋值
         int count;
@@ -242,15 +264,42 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public ServerResponse queryUserCollection(int userId, int pageNum, int pageSize, String orderBy) {
-        PageHelper.startPage(pageNum, pageSize);
+    public ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy) {
         //处理排序
-        if (Const.StrategyOrderBy.STRATEGY_ORDER.contains(orderBy)) {
-            String[] orders = orderBy.split("\\|");
-            PageHelper.orderBy(orders[0] + " " + orders[1]);
+        if (!Const.StrategyOrderBy.STRATEGY_ORDER.contains(orderBy)) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        } else {
+            //1.startPage--start
+            PageHelper.startPage(pageNum, pageSize);
+            //需要排序
+            if(!StringUtils.isBlank(orderBy)){
+                String[] orders = orderBy.split("\\|");
+                PageHelper.orderBy(orders[0] + " " + orders[1]);
+            }
+            List<CollectionVo> collectionVoList = collectionMapper.queryCollectionList(userId);
+            //没有匹配信息
+            if (collectionVoList.size() == 0) {
+                return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                        Const.ResponseCode.NO_INFO.getDescription());
+            }
+            //2.pageHelper--end
+            PageInfo pageInfo = new PageInfo(collectionVoList);
+            return ServerResponse.createBySuccessData(pageInfo);
         }
-        List<CollectionVo> collectionVoList = collectionMapper.queryCollectionList(userId);
-        PageInfo pageInfo = new PageInfo(collectionVoList);
-        return ServerResponse.createBySuccessData(pageInfo);
+    }
+
+    //操作攻略主图
+    private String mainImgValue(String content) {
+        if (StringUtils.isNotBlank(content)) {
+            int startLen = content.indexOf(PropertiesUtil.getProperty("ftp.server.http.prefix"));
+            if (startLen == -1) {   //攻略默认主图
+                return PropertiesUtil.getProperty("ftp.strategy.default");
+            } else {
+                int endLen = content.indexOf(" ", startLen) - 1;
+                return content.substring(startLen, endLen);
+            }
+        }
+        return "";
     }
 }

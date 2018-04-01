@@ -20,6 +20,8 @@
         <span class="iconfont icon-fanhuidingbu"></span>
     </div>
 
+    <jsp:include page="nav.jsp"/>
+
     <div class="body">
         <!-- catalog -->
         <ul class="catalog">
@@ -27,8 +29,8 @@
         </ul>
         <!-- right -->
         <div class="ItemRight">
-            <!-- nav -->
-            <nav>
+            <!-- ItemNav -->
+            <div class="ItemNav">
                 位置 : <span class="tags"></span>
                 <span class="navOpe">
                         <span class="iconfont icon-zan1"></span>
@@ -36,7 +38,7 @@
                         <span class="iconfont icon-collection-b"></span>
                         <span class="navCollect"></span>
                     </span>
-            </nav>
+            </div>
             <!-- content -->
             <div class="content" value="">
                 <div class="strategyInfo">

@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
 <html>
 <head>
     <title>resetPassword</title>
@@ -14,45 +15,51 @@
     <link rel="stylesheet" href="../font/iconfont.css">
 </head>
 <body>
-    <!--side tools-->
-    <div class="sideTool">
-        <span class="iconfont icon-fankui"></span>
-        <span class="iconfont icon-fanhuidingbu"></span>
-    </div>
 
-    <div class="body">
-        <!-- catalog -->
+<jsp:include page="nav.jsp"/>
+
+<div class="resetContainer">
+    <div class="top">
+        <div class="title">找回密码</div>
         <ul class="catalog">
-            <li><span class="iconfont icon-bookmark"></span>Contents</li>
+            <li class="success">
+                <span class="iconfont icon-jiangluo"></span>
+                确认帐号
+                <span class="iconfont icon-qifei"></span>
+            </li>
+            <li>
+                <span class="iconfont icon-jiangluo"></span>
+                重置密码
+                <span class="iconfont icon-qifei"></span>
+            </li>
+            <li>
+                <span class="iconfont icon-jiangluo"></span>
+                成功
+                <span class="iconfont icon-qifei"></span>
+            </li>
         </ul>
-        <!-- right -->
-        <div class="ItemRight">
-            <!-- nav -->
-            <nav>
-                位置 : <span class="tags"></span>
-                <span class="navOpe">
-                        <span class="iconfont icon-zan1"></span>
-                        <span class="navFor"></span>
-                        <span class="iconfont icon-collection-b"></span>
-                        <span class="navCollect"></span>
-                    </span>
-            </nav>
-            <!-- content -->
-            <div class="content">
-                <div class="strategyInfo">
-                    <span class="title">title</span>
-                    <span class="author">author</span>
-                </div>
-                <div class="contentContainer"></div>
-                <!-- comment -->
-                <div class="cata commentTitle">评论</div>
-                <div class="comments"></div>
-            </div>
-        </div>
     </div>
+    <div class="error"></div>
+    <div class="content">
+        <div class="step step1">
+            <div>
+                <input type="text" id="phone" placeholder="Phone Number">
+                <input type="button" value="获取验证码" id="queryCode" disabled>
+            </div>
+            <input type="text" id="code" placeholder="Message Code">
+            <input type="button" id="confirmBtn" value="确 认" disabled>
+        </div>
+        <div class="step step2">
+            <input type="text" id="password" placeholder="Password">
+            <input type="text" id="passwordRe" placeholder="Password Again">
+            <input type="button" id="resetBtn" value="确 认" disabled>
+        </div>
+        <div class="step step3">重置密码成功，<span id="counttime">5</span>s后返回首页</div>
+    </div>
+</div>
 
-    <script src="../js/jquery-3.2.1.min.js"></script>
-    <script src="../js/strategyItem.js"></script>
-    <script src="../js/common.js"></script>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script src="../js/resetPassword.js"></script>
+
 </body>
 </html>

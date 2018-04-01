@@ -3,6 +3,8 @@ package com.yc.hulahoop.service;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.User;
 
+import java.util.List;
+
 public interface UserService {
 
     ServerResponse<String> verify(String val, String type);
@@ -18,6 +20,8 @@ public interface UserService {
     ServerResponse queryUserInformation(Integer userId);
 
     ServerResponse updateUserInformation(User user);
+
+    ServerResponse updateAvatar(User user);
 
     ServerResponse adminLogin(String username, String password);
 

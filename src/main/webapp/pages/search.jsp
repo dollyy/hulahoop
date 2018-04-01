@@ -1,23 +1,32 @@
 <%--
   Created by IntelliJ IDEA.
   User: yangchen
-  Date: 2018/3/24
-  Time: 16:00
+  Date: 2018/3/31
+  Time: 14:26
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>index</title>
+    <title>search</title>
     <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/search.css">
 </head>
 <body>
 
 <jsp:include page="nav.jsp"/>
 
+<div class="nothing"></div>
+<div class="searchContainer"></div>
+<div id="pageNum">
+    <div id="page" class="page_div"></div>
+</div>
+
 <script src="../js/jquery-3.2.1.min.js"></script>
-<script src="../js/index.js"></script>
+<script src="../js/paging.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/search.js"></script>
+
 </body>
 </html>

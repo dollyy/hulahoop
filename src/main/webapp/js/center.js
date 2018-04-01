@@ -1,21 +1,64 @@
 //1.highlight color of province?
 //2.the gradient color of map
-var pieData, myChart;
+var pieData, myChart, i, userAvatar;
 $(function () {
+    var parameter=getQueryStringArgs();
+    if(parameter == "message"){
+        msgClick();
+    }
+
+    //click bg
+    $("#bg").height($(document).height()).width($(document).width());
+    $("#bg").click(function () {
+        /*$(this).slideUp();
+        $(".feedbackDetail").slideUp();*/
+        history.go(0);
+    });
 
     //select2
     $(document).ready(function () {
         $('.js-example-basic-single').select2();
     });
 
+    //获取当前用户信息
+    $.ajax({
+        type: "get",
+        url: "/user/queryUserInformation.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "index.jsp";
+                return;
+            }
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            userAvatar = data.data.avatar;
+            $("#headuser").html(data.data.username);  //用户名
+            $("#avatar").attr("src", userAvatar);    //用户头像
+        }
+    });
+
+    //获取用户的攻略
     $.ajax({
         type: "get",
         url: "/strategy/queryUserStrategy.action",
         dataType: "json",
         success: function (data) {
-            if (data.msg == "用户未登录") {
+            if (data.status == -2) {    //用户未登录
                 window.location.href = "index.jsp";
+                return;
             }
+            if (data.status == -1) {  //没有匹配信息
+                $(".strategyNothing").html("您还没有上传过攻略，现在去上传吧...").css("opacity", 1);
+                $("#pageDot").hide();
+                $("#separate").hide();
+                return;
+            }
+            $(".strategyNothing").css("opacity", 0);
+            $("#pageDot").show();
+            $("#separate").show();
             pieData = data.data;
             showMap(data.data);
             for (i = 0; i < data.data.length; i++) {
@@ -26,42 +69,45 @@ $(function () {
                     "<span class='delete'>删除</span>&nbsp;<span class='cancle'>取消</span>" +
                     "</span></div><div class='all' id='all" + i + "'></div></div>");
                 for (j = 0; j < data.data[i].strategyVoList.length; j++) {
-                    $("#all" + i).append("<input type='checkbox' value='" + data.data[i].strategyVoList[j].id + "'>" +
-                        "<div class='each' value='" + data.data[i].strategyVoList[j].id + "'>" +
+                    $("#all" + i).append("<input type='checkbox' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
+                        "<div class='each' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
                         "<img src='" + data.data[i].strategyVoList[j].mainImg + "'><div class='title'>" +
                         data.data[i].strategyVoList[j].strategyName + "</div></div>");
                 }
             }
-            $("#strategies .strategy .each").off("click").on("click", function () {
+            var strategyDom = $("#strategies .strategy");
+            //前往攻略详情页面
+            strategyDom.find(".each").off("click").on("click", function () {
                 window.location.href = "strategyItem.jsp?strategyId=" + $(this).attr("value");
             });
-            $("#strategies .strategy").find(".icon-zhankai").hide();
-            //展开
-            $("#strategies .strategy .icon-zhankai").off("click").on("click", function () {
+            //隐藏所有的展开
+            strategyDom.find(".icon-zhankai").hide();
+            //展开的点击事件
+            strategyDom.find(".icon-zhankai").off("click").on("click", function () {
                 $(this).hide().next().show();
                 $(this).parent().next().show();
             });
-            //收起
-            $("#strategies .strategy .icon-shouqi").off("click").on("click", function () {
+            //收起的点击事件
+            strategyDom.find(".icon-shouqi").off("click").on("click", function () {
                 $(this).hide().next().show().next().hide();
                 $(this).hide().prev().show();
                 $(this).parent().next().hide();
                 $(this).parent().next().find("input[type='checkbox']").css("opacity", "0");
             });
-            //操作
-            $("#strategies .strategy .operate").off("click").on("click", function () {
+            //操作的点击事件
+            strategyDom.find(".operate").off("click").on("click", function () {
                 if (!$(this).prev().is(":hidden")) {
                     $(this).hide().next().show();
                     $(this).parent().next().find("input[type='checkbox']").css("opacity", "1");
                 }
             });
-            //取消
-            $("#strategies .strategy .cancle").off("click").on("click", function () {
+            //取消的点击事件
+            strategyDom.find(".cancle").off("click").on("click", function () {
                 $(this).parent().hide().prev().show();
                 $(this).parent().parent().next().find("input[type='checkbox']").css("opacity", "0");
             });
-            //删除
-            $("#strategies .strategy .delete").off("click").on("click", function () {
+            //删除的点击事件
+            strategyDom.find(".delete").off("click").on("click", function () {
                 var parent = $(this).parent().parent().parent();
                 var select = parent.find("input[type='checkbox']");
                 var selectId = "";
@@ -74,28 +120,31 @@ $(function () {
                 if (selectId == "" || selectId == null) {
                     return;
                 }
-                var deleteId = selectId.split(",");
-                for (i = 0; i < deleteId.length; i++) {
-                    parent.find(".all").find("[value='" + deleteId[i] + "']").remove();
-                }
-                var totalNum = parent.find(".number span").html();
-                parent.find(".number span").html(parseInt(totalNum) - deleteId.length);
                 $.ajax({
-                    type:"get",
-                    url:"",
-                    data:{},
-                    dataType:"json",
-                    success:function (data) {
-                        
+                    type: "get",
+                    url: "/strategy/delete.action",
+                    data: {"strategyId": selectId},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status == 0) {
+                            alert(data.msg);
+                            return;
+                        }
+                        var deleteId = selectId.split(",");
+                        for (i = 0; i < deleteId.length; i++) {
+                            parent.find(".all").find("[value='" + deleteId[i] + "']").remove();
+                        }
+                        var totalNum = parent.find(".number span").html();
+                        parent.find(".number span").html(parseInt(totalNum) - deleteId.length);
                     },
-                    error:function () {
-                        
+                    error: function () {
+
                     }
-                })
+                });
             });
         },
         error: function () {
-            alert("init error");
+            console.log("init error");
         }
     });
 
@@ -107,10 +156,14 @@ $(function () {
     });
     //echarts
     $(window).resize(function () {
+        if (myChart == undefined) {
+            return;
+        }
         myChart.resize();
     });
     $("#mapDot").click(function () {
         $("#strategyMap").show().siblings().hide();
+        showMap(pieData);
     });
     $("#pieDot").click(function () {
         $("#strategyPie").show().siblings().hide();
@@ -124,11 +177,17 @@ $(function () {
             url: "/strategy/queryUserCollection.action",
             dataType: "json",
             success: function (data) {
-                $(".collects").empty();
-                if (!data.data) {
-                    $(".collects").append("<span class='nothing'>暂无收藏，去逛逛吧...</span>");
+                if (data.status == -2) {    //用户未登录
+                    window.location.href = "index.jsp";
                     return;
                 }
+                $(".collects").empty();
+                if (data.status == -1) {  //没有匹配信息
+                    $(".collectNothing").html("暂无收藏，去逛逛吧...").css("opacity", 1);
+                    return;
+                }
+                $(".collectCatalog").show();
+                $(".collectNothing").css("opacity", 0);
                 for (i = 0; i < data.data.list.length; i++) {
                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
                         "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
@@ -149,16 +208,17 @@ $(function () {
                             data: {"pageNum": num},
                             dataType: "json",
                             success: function (data) {
-                                $(".collects").empty();
                                 for (i = 0; i < data.data.list.length; i++) {
                                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                                        "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                                        data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                                        "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                                        "<span class='iconfont icon-zan1'></span><span class='forNum'>" + data.data.list[i].forNum +
-                                        "</span><span class='iconfont icon-collection-b'></span><span>" + data.data.list[i].collectNum +
-                                        "</span></span></span></div></div>");
+                                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
+                                        "<div class='collectInfo'><span><span class='title'>"
+                                        + data.data.list[i].strategyName + "</span><span class='author'>" +
+                                        data.data.list[i].username + "</span><span class='city'>" +
+                                        data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
+                                        + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +
+                                        "</span><span class='forNum'>" + data.data.list[i].forNum + "</span>" +
+                                        "<span class='iconfont icon-collection-b'></span><span>" +
+                                        data.data.list[i].collectNum + "</span></span></span></div></div>");
                                 }
                             }
 
@@ -183,14 +243,7 @@ $(function () {
         sortCollection("desc", $(this).next().html());
     });
 
-    /* 3.上传攻略 */
-    $("#navUpload").click(function () {
-        $(this).find(".icon").addClass("iconClick");
-        $(this).siblings().find(".icon").removeClass("iconClick");
-        $("#uploadContainer").show().siblings().hide();
-    });
-
-    /* 4.修改资料 */
+    /* 3.修改资料 */
     var oldPhone;
     $("#navEdit").click(function () {
         $.ajax({
@@ -198,14 +251,18 @@ $(function () {
             url: "/user/queryUserInformation.action",
             dataType: "json",
             success: function (data) {
-                console.log(JSON.stringify(data));
+                if (data.status == -2) {    //用户未登录
+                    window.location.href = "index.jsp";
+                    return;
+                }
                 oldPhone = data.data.phone;
-                $("#username").val(data.data.username);
+                $("#centerUsername").val(data.data.username);
                 //todo 性别赋值有问题
                 $("#gender").val(data.data.gender);
                 $("#phone").val(data.data.phone);
                 $("#city").val(data.data.city);
                 $("#bio").val(data.data.bio);
+                $("#usericon").attr("src", data.data.avatar);
             },
             error: function () {
                 console.log("info error");
@@ -218,7 +275,9 @@ $(function () {
     //编辑资料
     $("#editUpdate").click(function () {
         $(this).addClass("editCilck").siblings().removeClass("editCilck");
-        $(".edit").show().siblings().hide();
+        $(".edit").show();
+        $("#avatarForm").show();
+        $(".reset").hide();
     });
     //更新头像
     $("#avatarForm").ajaxForm(function (result) {
@@ -227,20 +286,36 @@ $(function () {
             alert("更新失败");
             return;
         }
-        //将页面头部的头像更新过来
-        $("#avatar").attr("src", result.file_path);
+        if (result.status == 1) {
+            //将页面头部的头像更新过来
+            $("#avatar").attr("src", result.file_path);
+        }
+    });
+    //修改用户名
+    $("#centerUsername").focusout(function () {
+        var value = $(this).val();
+        if (value == null || value == "") {
+            $(".nameWarn").html("用户名不得为空");
+            $("#editBtn").attr("disabled", "true");
+            return;
+        }
+        $(".nameWarn").html("");
+        $("#editBtn").removeAttr("disabled");
     });
     //校验手机号格式
     $("#phone").focusout(function () {
         var newPhone = $(this).val().trim();
         if (!checkPhoneFormat(newPhone)) {    //手机号格式错误
-            //todo 手机号格式错误
+            $(".phoneWarn").html("手机号错误");
             return;
         }
+        $(".phoneWarn").html("");
         if (oldPhone == newPhone) {
             $("#updateBtn").attr("disabled", "true");
+            $("#editBtn").attr("disabled", "true");
         } else {
             $("#updateBtn").removeAttr("disabled");
+            $("#editBtn").removeAttr("disabled");
             //todo 获取验证码
         }
     });
@@ -254,7 +329,7 @@ $(function () {
             type: "post",
             url: "/user/updateUserInformation.action",
             data: {
-                "username": $("#username").val(),
+                "username": $("#centerUsername").val(),
                 "phone": $("#phone").val(),
                 "bio": $("#bio").val(),
                 "gender": $("#gender").val(),
@@ -262,11 +337,15 @@ $(function () {
             },
             dataType: "json",
             success: function (data) {
-                //更新失败
-                if(data.status == 0){
-
+                if (data.status == -2) {    //用户未登录
+                    window.location.href = "index.jsp";
+                    return;
                 }
-                //更新成功
+                if (data.status == 0) { //更新失败
+                    alert(data.msg);
+                    return;
+                }
+                alert("更新成功");
             },
             error: function () {
                 console.log("update error");
@@ -279,18 +358,28 @@ $(function () {
         $(this).addClass("editCilck").siblings().removeClass("editCilck");
         $(".reset").show().siblings().hide();
     });
+    //旧密码
     $(".oldPwd").focusout(function () {
-        $(".newPwd").removeAttr("disabled");
+        var value = $(this).val();
+        if (value != null && value != "") {
+            $(".newPwd").removeAttr("disabled");
+        }
     });
+    //新密码
     $(".newPwd").focusout(function () {
-        $(".rePwd").removeAttr("disabled");
+        var value = $(this).val();
+        if (value != null && value != "") {
+            $(".rePwd").removeAttr("disabled");
+        }
     });
+    //再次输入新密码
     $(".rePwd").focusout(function () {
         if ($(".newPwd").val().trim() != $(this).val().trim()) {
-            alert("different");
             //todo 两次密码不一致
+            $(".rePwdWarn").html("两次密码不一致");
             return;
         }
+        $(".rePwdWarn").html("");
         $("#resetBtn").removeAttr("disabled");
     });
     //重置密码
@@ -301,8 +390,23 @@ $(function () {
             data: {"passwordOld": $(".oldPwd").val(), "passwordNew": $(".newPwd").val()},
             dataType: "json",
             success: function (data) {
-                //todo
-                alert(data.msg);
+                if (data.status == -2) {    //用户未登录
+                    window.location.href = "index.jsp";
+                    return;
+                }
+                if (data.status == 0) {
+                    if (data.msg == "原始密码错误") {
+                        $(".oldPwdWarn").html("原始密码错误");
+                        return;
+                    }
+                    alert(data.msg);
+                }
+                //重置密码成功
+                alert("重置成功");
+                $(".oldPwdWarn").html("");
+                $(".oldPwd").val("");
+                $(".newPwd").val("").attr("disabled", "true");
+                $(".rePwd").val("").attr("disabled", "true");
             },
             error: function () {
                 console.log("reset error");
@@ -311,26 +415,84 @@ $(function () {
     });
 
     /* 5.消息中心 */
-    //todo list feedback + dwr
-    $("#navMsg").click(function () {
-        $(this).find(".icon").addClass("iconClick");
-        $(this).siblings().find(".icon").removeClass("iconClick");
-        $.ajax({
-            type: "post",
-            url: "",
-            dataType: "json",
-            success: function (data) {
-                var data = {"msg": [[]]};
-            },
-            error: function () {
-
-            }
-        });
-        $("#msgContainer").show().siblings().hide();
-    });
+    $("#navMsg").click(msgClick);
 
 });
 
+function msgClick() {
+    $(this).find(".icon").addClass("iconClick");
+    $(this).siblings().find(".icon").removeClass("iconClick");
+    $.ajax({
+        type: "get",
+        url: "/feedback/listByUser.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "index.jsp";
+                return;
+            }
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            $("#msgs").empty();
+            if (data.status == -1) {  //没有匹配信息
+                $(".msgNothing").html("暂无任何信息...").css("opacity", 1);
+                $("#msgDot").css("display","none");
+                return;
+            }
+            $(".msgNothing").css("opacity", 0);
+            var readClass;
+            for (i = 0; i < data.data.list.length; i++) {
+                readClass = data.data.list[i].status == 1 ? "" : "read";
+                if (data.data.list[i].id != null) {
+                    $("#msgs").append("<div class='msg "+readClass+"' level='" + data.data.list[i].level + "'>" +
+                        "<span class='msgContent'><span class=send>admin</span>" +
+                        "<span class='call'>回复你</span><span class='msgInfo'>" + data.data.list[i].content +
+                        "</span></span><span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                } else {
+                    $("#msgs").append("<div class='dwr " + readClass + "' id='" + data.data.list[i].dwrId +
+                        "' sequence='" + data.data.list[i].commentSequence + "'><span class='msgContent'>" +
+                        "<span class='send'>" + data.data.list[i].responseName + "</span><span class='call'>@你" +
+                        "</span><span class='msgInfo'>" + data.data.list[i].content + "</span></span>" +
+                        "<span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                }
+            }
+            $("#msgs .msg").off("click").on("click", detail);
+            $("#msgs .dwr").off("click").on("click", function () {
+                var that=$(this);
+                if($(this).attr("class").indexOf("read") == -1){
+                    $.ajax({
+                        type: "get",
+                        url: "/feedback/updateDwr.action",
+                        data: {"dwrId":that.attr("id")},
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.status == -2){  //用户未登录
+                                window.location.href="index.jsp";
+                                return;
+                            }
+                            if(data.status == -3){  //参数错误
+                                alert(data.msg);
+                                return;
+                            }
+                        },
+                        error: function () {
+                            console.log("update dwr error");
+                        }
+                    });
+                }
+                window.location.href = "comment.jsp?level=" + that.attr("sequence");
+            });
+        },
+        error: function () {
+            console.log("msg error");
+        }
+    });
+    $("#msgContainer").show().siblings().hide();
+}
+
+//显示饼图
 function showPie(pieData) {
     var province = new Array();
     var count = new Array();
@@ -384,6 +546,7 @@ function showPie(pieData) {
     myChart.setOption(option);
 }
 
+//显示地图
 function showMap(datas) {
     var color = new Array();
     var i;
@@ -486,8 +649,8 @@ function showMap(datas) {
     myChart.setOption(option);
 }
 
+//上传图片
 function getPath(node) {
-
     var path = "";
     try {
         var file = null;
@@ -515,8 +678,10 @@ function getPath(node) {
         }
     }
     $("#usericon").attr("src", path);
+    $("#avatarForm").attr("action", "/user/updateAvatar.action").submit();
 }
 
+//排序我的收藏
 function sortCollection(order, parameter) {
     var orderBy = "";
     if (parameter.indexOf("城市") != -1) {
@@ -534,7 +699,14 @@ function sortCollection(order, parameter) {
         data: {"orderBy": orderBy},
         dataType: "json",
         success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "index.jsp";
+                return;
+            }
             $(".collects").empty();
+            if (data.status == -1) {  //没有匹配信息
+                //todo
+            }
             for (i = 0; i < data.data.list.length; i++) {
                 $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
                     "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
@@ -545,33 +717,88 @@ function sortCollection(order, parameter) {
                     "</span><span class='iconfont icon-collection-b'></span><span>" + data.data.list[i].collectNum +
                     "</span></span></span></div></div>");
             }
-            //pages
-            $("#page").paging({
-                totalPage: data.data.pages,
-                callback: function (num) {
-                    $.ajax({
-                        type: "get",
-                        url: "/strategy/queryUserCollection.action",
-                        data: {"pageNum": num},
-                        dataType: "json",
-                        success: function (data) {
-                            $(".collects").empty();
-                            for (i = 0; i < data.data.list.length; i++) {
-                                $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                                    "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                                    data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                                    "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                                    "<span class='iconfont icon-zan1'></span><span class='forNum'>" + data.data.list[i].forNum +
-                                    "</span><span class='iconfont icon-collection-b'></span><span>" + data.data.list[i].collectNum +
-                                    "</span></span></span></div></div>");
-                            }
-                        }
-
-                    });
-                }
-            });
         }
 
+    });
+}
+
+var level;
+//查看消息的详情
+function detail() {
+    var that=$(this);
+    level = $(this).attr("level");
+    //将feedback的status置为0
+    if($(this).attr("class").indexOf("read") == -1){
+        $.ajax({
+            type: "get",
+            url: "/feedback/updateFeedStatus.action",
+            data: {"level":level},
+            dataType: "json",
+            success: function (data) {
+                if(data.status == -2){  //用户未登录
+                    window.location.href="index.jsp";
+                    return;
+                }
+                if(data.status == -3){  //参数错误
+                    alert(data.msg);
+                    return;
+                }
+                that.addClass("read");
+            },
+            error: function () {
+                console.log("update feed error");
+            }
+        });
+    }
+    $.ajax({
+        type: "get",
+        url: "/feedback/detail.action",
+        data: {"level": level},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            $("#bg").slideDown();
+            $(".feedbackDetail").empty().append("<div class='sender'>admin</div>" +
+                "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
+            $(".feedBtn").off("click").on("click", sendFeedback);
+            var feedClass;
+            for (i = 0; i < data.data.length; i++) {
+                feedClass = data.data[i].username == "admin" ? "" : "class='rightSide'";
+                $(".chats").append("<div parent='" + data.data[i].parent + "' sequence='" + data.data[i].sequence + "' "
+                    + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
+                    data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
+            }
+            $(".feedbackDetail").slideDown();
+        }
+    });
+}
+
+//发送信息
+function sendFeedback() {
+    var response = $(".response").val().trim();
+    if (response == null || response == "") {
+        return;
+    }
+    var parent = $(".chats>div:last").attr("parent");
+    var sequence = $(".chats>div:last").attr("sequence");
+    $.ajax({
+        type: "post",
+        url: "/feedback/reply.action",
+        data: {"content": response, "parent": parent, "sequence": sequence},
+        dataType: "json",
+        success: function (data) {
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            $(".response").val("");
+            $(".chats").append("<div parent='" + parent + "' sequence='" + sequence + "' class='rightSide'>" +
+                "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
+                "<span class='feedContent'>" + response + "</span></div>");
+            dwrMessage.publishFeed(8);
+        }
     });
 }

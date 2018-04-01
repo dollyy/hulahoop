@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dwr PUBLIC
+        "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN"
+        "http://getahead.org/dwr/dwr30.dtd">
+
+<dwr>
+    <allow>
+        <!-- creator设置成spring表示通过spring创建对象实例,设置为new表示通过new创建对象实例 -->
+        <!-- javascript表示页面引用的脚本名 -->
+        <create creator="spring" javascript="dwrMessage" scope="session">
+            <!-- name为beanName,value为bean的id -->
+            <!-- name为class,value为类的路径 -->
+            <param name="beanName" value="dWRController"/>
+        </create>
+        <!-- convert用于负责定义Java类型和js类型之间的对应关系 -->
+        <!-- converter为bean表示是对象转换器,match表示转换com.yc.hulahoop.pojo下所有的类 -->
+        <convert converter="bean" match="com.yc.hulahoop.pojo.User"/>
+    </allow>
+</dwr>

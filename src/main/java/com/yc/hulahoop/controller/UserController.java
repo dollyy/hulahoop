@@ -32,9 +32,8 @@ public class UserController {
     @Autowired
     FileService fileService;
 
-
     /**
-     * 验证注册时的参数
+     * 验证注册时的参数(username / phone)
      *
      * @param val  验证的值
      * @param type username / phone
@@ -71,7 +70,7 @@ public class UserController {
     @ResponseBody
     private ServerResponse login(String type, String val, String password, HttpSession session) {
         ServerResponse serverResponse = userService.login(type, val, password);
-        if (serverResponse.isSuccess()) {
+        if (serverResponse.isSuccess()) {   //登陆成功
             session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
         }
         return serverResponse;
@@ -83,16 +82,18 @@ public class UserController {
      * @param session 当前用户
      * @return 退出
      */
-    @RequestMapping(value = "logout.action", method = RequestMethod.POST)
+    @RequestMapping(value = "logout.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse logout(HttpSession session) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            session.removeAttribute(Const.CURRENT_USER);
+            return ServerResponse.createBySuccessMessage("退出登录成功");
         }
-        session.removeAttribute(Const.CURRENT_USER);
-        return ServerResponse.createBySuccessMessage("退出登录成功");
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -105,19 +106,29 @@ public class UserController {
     @RequestMapping(value = "resetPassword.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse resetPassword(HttpSession session, String passwordOld, String passwordNew) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return userService.resetPassword(passwordOld, passwordNew, currentUser);
         }
-        return userService.resetPassword(passwordOld, passwordNew, currentUser);
+        //身份校验失败
+        return serverResponse;
     }
 
-
+    /**
+     * 忘记密码下的修改密码
+     *
+     * @param passwordNew 新密码
+     * @param phone       手机号
+     * @return 修改成功/失败
+     */
     @RequestMapping(value = "updatePassword.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updatePassword(String passwordNew, String phone){
-        return userService.updatePassword(passwordNew);
+    private ServerResponse updatePassword(String passwordNew, String phone) {
+        return ServerResponse.createBySuccessMessage("重置密码成功");
+        //return userService.updatePassword(passwordNew);
     }
 
     /**
@@ -129,12 +140,15 @@ public class UserController {
     @RequestMapping(value = "queryUserInformation.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse queryUserInformation(HttpSession session) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return userService.queryUserInformation(currentUser.getId());
         }
-        return userService.queryUserInformation(currentUser.getId());
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -147,29 +161,31 @@ public class UserController {
     @RequestMapping(value = "updateUserInformation.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse updateUserInformation(HttpSession session, User user) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
-        }
-        //防止横向越权
-        user.setId(currentUser.getId());
-        //禁止修改的字段
-        user.setPassword(null);
-        user.setRole(null);
-        user.setCreateTime(null);
-        //todo 2.手机号可不可以更新???
-
-        ServerResponse serverResponse = userService.updateUserInformation(user);
-        //将修改后的信息存进session
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
         if (serverResponse.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, user);
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            //防止横向越权
+            user.setId(currentUser.getId());
+            //禁止修改的字段
+            user.setPassword(null);
+            user.setRole(null);
+            user.setCreateTime(null);
+            //todo 更新手机号
+
+            serverResponse = userService.updateUserInformation(user);
+            //将修改后的信息存进session
+            if (serverResponse.isSuccess()) {
+                session.setAttribute(Const.CURRENT_USER, user);
+            }
         }
+        //身份校验失败
         return serverResponse;
     }
 
     /**
-     * todo 1.上传头像图片
+     * 上传头像图片
      *
      * @param session 当前用户
      * @param file    头像文件
@@ -178,21 +194,51 @@ public class UserController {
     @RequestMapping(value = "updateAvatar.action", method = RequestMethod.POST)
     @ResponseBody
     private Map updateAvatar(HttpSession session, MultipartFile file) {
-        Map<String, Object> resultMap = Maps.newHashMap();  //返回的结果集
-        //上传头像
-        String uploadFileName=fileService.upload(file,Const.AVATAR);
-        //上传失败
-        if(StringUtils.isBlank(uploadFileName)){
-            resultMap.put("status",0);
-            resultMap.put("msg", "上传文件失败");
+        System.out.println("======"+file);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //返回的结果集
+        Map<String, Object> resultMap = Maps.newHashMap();
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            //上传头像
+            String uploadFileName = fileService.upload(file, Const.AVATAR);
+            //上传失败
+            if (StringUtils.isBlank(uploadFileName)) {
+                resultMap.put("status", 0);
+                resultMap.put("msg", "上传文件失败");
+                return resultMap;
+            }
+            //上传成功
+            String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.avatar")
+                    + uploadFileName;
+            User currentUser=(User)session.getAttribute(Const.CURRENT_USER);
+            currentUser.setAvatar(path);
+            serverResponse= userService.updateAvatar(currentUser);
+            if(serverResponse.isSuccess()){
+                resultMap.put("status", 1);
+                resultMap.put("msg", "上传文件成功");
+                resultMap.put("file_path", path);
+                return resultMap;
+            }
+            resultMap.put("status", 0);
+            resultMap.put("msg", "头像更新失败");
             return resultMap;
         }
-        //上传成功
-        resultMap.put("status", 1);
-        resultMap.put("msg", "上传文件成功");
-        String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.avatar")
-                + uploadFileName;
-        resultMap.put("file_path", path);
+        //身份校验失败
+        resultMap.put("status", -2);
+        resultMap.put("msg", "用户未登录");
         return resultMap;
+    }
+
+    //检查用户是否登录
+    private ServerResponse<Object> isLogin(HttpSession session) {
+        //检查用户是否登录
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {     //用户未登录
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
+        }
+        return ServerResponse.createBySuccess();
     }
 }

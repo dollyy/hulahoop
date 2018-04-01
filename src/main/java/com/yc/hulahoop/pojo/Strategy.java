@@ -130,21 +130,4 @@ public class Strategy {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
-
-    @Override
-    public String toString() {
-        return "Strategy{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", name='" + name + '\'' +
-                ", cityId=" + cityId +
-                ", duration='" + duration + '\'' +
-                ", content='" + content + '\'' +
-                ", mainImg='" + mainImg + '\'' +
-                ", forNum=" + forNum +
-                ", collectNum=" + collectNum +
-                ", createTime=" + createTime +
-                ", updateTime=" + updateTime +
-                '}';
-    }
 }

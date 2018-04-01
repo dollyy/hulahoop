@@ -1,13 +1,56 @@
-//5.save password (localStorage)
-$(function(){
-    
+$(function () {
+
+    var userId;
+    //获取当前用户的信息
+    $.ajax({
+        type: "get",
+        url: "/user/queryUserInformation.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status != 1) {
+                return;
+            }
+            userId = data.data.id;
+            //dwr页面加载
+            dwrMessage.onPageLoad(userId);
+            /*
+                        $(document).ready(function () {
+                        });*/
+        },
+        error: function () {
+            console.log("info error");
+        }
+    });
+
+    //有没有消息未查看
+    $.ajax({
+        type: "get",
+        url: "/feedback/queryNotice.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status != 1) {
+                $("#msgDot").css("display", "none");
+                return;
+            }
+            $("#msgDot").css("display", "inline-block");
+        },
+        error: function () {
+            console.log("get notice error");
+        }
+    });
+
+    //查看消息
+    $(".icon-lingdang").click(function () {
+        window.location.href = "center.jsp?query=message";
+    });
+
     /* 为背景的宽高赋值 */
     $("#bg").height($(document).height()).width($(document).width());
-    $(window).resize(function(){    //宽高随着浏览器大小变化
+    $(window).resize(function () {    //宽高随着浏览器大小变化
         $("#bg").height($(document).height()).width($(document).width());
     });
     /* 点击背景(隐藏背景和登录/注册框) */
-    $("#bg").click(function(){
+    $("#bg").click(function () {
         $(this).slideUp();  //隐藏bg
         $("#signinContainer").slideUp();    //隐藏登陆框
         $("#signinContainer")[0].reset();   //清空登陆框
@@ -15,200 +58,207 @@ $(function(){
         $("#signupContainer")[0].reset();   //清空注册框
         $("#signWarn").html("");    //清空错误提示
         //移除css样式
-        $("#signinContainer input").each(function(i,item){
+        $("#signinContainer input").each(function (i, item) {
             $(item).removeClass("warnBorder");
         });
-        $("#signupContainer input").each(function(i,item){
+        $("#signupContainer input").each(function (i, item) {
             $(item).removeClass("warnBorder");
         });
     });
-    
+
     /* 点击搜索 */
-    $(".icon-fangdajing").click(search);
-    
+    $(".icon-fangdajing").click(function () {
+        var searchInp = search();
+        if (searchInp == undefined) {
+            return;
+        }
+        window.location.href = "search.jsp?search=" + searchInp;
+    });
+
     /* 点击注册 */
-    $("#signup").click(function(){
+    $("#signup").click(function () {
         $("#signupContainer").slideDown();  //显示注册框
         $("#bg").slideDown();   //显示背景
-    }); 
-    
+    });
+
     /* 点击登录 */
-    $("#signin").click(function(){
+    $("#signin").click(function () {
         $("#signinContainer").slideDown();  //显示登录框
         $("#bg").slideDown();   //显示背景
     });
-    
+
     /* "去注册" */
-    $("#goUp").click(function(){
+    $("#goUp").click(function () {
         $("#signupContainer").slideDown();  //显示注册框
-        $("#signinContainer").css("display","none");    //隐藏登录框
+        $("#signinContainer").css("display", "none");    //隐藏登录框
         $("#signupContainer")[0].reset();   //清空注册框
         $("#signWarn").html("");    //清空错误提示
         //移除css样式
-        $("#signupContainer input").each(function(i,item){
+        $("#signupContainer input").each(function (i, item) {
             $(item).removeClass("warnBorder");
         });
     });
-    
+
     /* "去登陆" */
-    $("#goIn").click(function(){
+    $("#goIn").click(function () {
         $("#signinContainer").slideDown();  //显示登陆框
-        $("#signupContainer").css("display","none");    //隐藏注册框
+        $("#signupContainer").css("display", "none");    //隐藏注册框
         $("#signinForm")[0].reset();    //清空登陆框
         $("#signWarn").html("");    //清空错误提示
         //移除css样式
-        $("#signinForm input").each(function(i,item){
+        $("#signinForm input").each(function (i, item) {
             $(item).removeClass("warnBorder");
         });
     });
-    
+
     /* 注册 */
     //校验注册时所需参数是否符合规范的标记
-    var upNameFlag,upPwdFlag,upPwdReFlag,upPhoneFlag;
+    var upNameFlag, upPwdFlag, upPwdReFlag, upPhoneFlag;
     //注册时输入的密码
     var upPwd;
     //校验用户名
-    $("#upName").focusout(function(){
-        var upName=$("#upName").val().trim();
-        if(upName == null || upName == ""){
-            upNameFlag==false;
+    $("#upName").focusout(function () {
+        var upName = $("#upName").val().trim();
+        if (upName == null || upName == "") {
+            upNameFlag == false;
             $("#upName").addClass("warnBorder");    //css样式添加警告框
             $("#signWarn").html("");    //清空错误提示
-            $("#upBtn").attr("disabled","true");    //注册按钮置为无效
-            return;1
+            $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
+            return;
+            1
         }
         //如果用户名满足手机号的正则表达式则不符合规范
-        if(checkPhoneFormat(upName)){
-            upNameFlag==false;
+        if (checkPhoneFormat(upName)) {
+            upNameFlag == false;
             $("#upName").addClass("warnBorder");    //css样式添加警告框
             $("#signWarn").html("用户名不符合格式规范");    //清空错误提示
-            $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+            $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
         $.ajax({
-            type:"post",
-            url:"/user/verify.action",
-            data:{"val":upName,"type":"username"},
-            dataType:"json",
-            success:function(data){
+            type: "post",
+            url: "/user/verify.action",
+            data: {"val": upName, "type": "username"},
+            dataType: "json",
+            success: function (data) {
                 //用户名校验失败
-                if(data.status == 0){
-                    upNameFlag==false;
+                if (data.status == 0) {
+                    upNameFlag == false;
                     $("#upName").addClass("warnBorder");    //css样式添加警告框
                     $("#signWarn").html("用户名已存在");  //错误提示
-                    $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+                    $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
                 //用户名校验成功
-                upNameFlag=true;
+                upNameFlag = true;
                 $("#upName").removeClass("warnBorder");//css样式移除警告框
                 $("#signWarn").html("");//清空错误提示
-                if(upPwdFlag && upPwdReFlag && upPhoneFlag){    //输入参数均符合规范注册按钮置为有效
+                if (upPwdFlag && upPwdReFlag && upPhoneFlag) {    //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
             },
-            error:function(){
-                alert("nameValid error");
+            error: function () {
+                console.log("nameValid error");
             }
         });
     });
     //校验密码
-    $("#upPwd").focusout(function(){
-        upPwd=$("#upPwd").val().trim();
-        if(upPwd == null || upPwd == ""){
-            upPwdFlag==false;
+    $("#upPwd").focusout(function () {
+        upPwd = $("#upPwd").val().trim();
+        if (upPwd == null || upPwd == "") {
+            upPwdFlag == false;
             $("#upPwd").addClass("warnBorder");//css样式添加警告框
-            $("#upBtn").attr("disabled","true");//注册按钮置为无效
+            $("#upBtn").attr("disabled", "true");//注册按钮置为无效
             return;
         }
-        upPwdFlag=true;
+        upPwdFlag = true;
         $("#upPwd").removeClass("warnBorder");  //css样式移除警告框
-        if(upNameFlag && upPwdReFlag && upPhoneFlag){   //输入参数均符合规范注册按钮置为有效
+        if (upNameFlag && upPwdReFlag && upPhoneFlag) {   //输入参数均符合规范注册按钮置为有效
             $("#upBtn").removeAttr("disabled");
         }
     });
     //校验再次输入密码
-    $("#upPwdRe").focusout(function(){
-        var upPwdRe=$("#upPwdRe").val().trim();
-        if(upPwdRe == null || upPwdRe == ""){
-            upPwdReFlag==false;
+    $("#upPwdRe").focusout(function () {
+        var upPwdRe = $("#upPwdRe").val().trim();
+        if (upPwdRe == null || upPwdRe == "") {
+            upPwdReFlag == false;
             $("#upPwdRe").addClass("warnBorder");   //css样式添加警告框
-            $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+            $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
-        if(upPwd != null && upPwd != ""){
+        if (upPwd != null && upPwd != "") {
             //两次输入的密码相同
-            if(upPwd == upPwdRe){
-                upPwdReFlag=true;
+            if (upPwd == upPwdRe) {
+                upPwdReFlag = true;
                 $("#upPwdRe").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
-                if(upNameFlag && upPwdFlag && upPhoneFlag){ //输入参数均符合规范注册按钮置为有效
+                if (upNameFlag && upPwdFlag && upPhoneFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
                 return;
             }
             //两次输入的密码不同
-            upPwdReFlag==false;
+            upPwdReFlag == false;
             $("#upPwdRe").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("两次密码不一致"); //错误提示
-            $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+            $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
         }
     });
-    //校验手机号 
-    $("#upPhone").focusout(function(){
-        var upPhone=$("#upPhone").val().trim();
-        if(upPhone == null || upPhone == ""){
-            upPhoneFlag==false;
+    //校验手机号
+    $("#upPhone").focusout(function () {
+        var upPhone = $("#upPhone").val().trim();
+        if (upPhone == null || upPhone == "") {
+            upPhoneFlag == false;
             $("#upPhone").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("");    //清空错误提示
-            $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+            $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
         //手机号正则表达式
-        if(!checkPhoneFormat(upPhone)){
-            upPhoneFlag=false;
+        if (!checkPhoneFormat(upPhone)) {
+            upPhoneFlag = false;
             $("#upPhone").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("手机号码格式错误");    //错误提示
             return;
         }
         //校验手机号是否重复
         $.ajax({
-            type:"post",
-            url:"/user/verify.action",
-            data:{"val":upPhone,"type":"phone"},
-            dataType:"json",
-            success:function(data){
+            type: "post",
+            url: "/user/verify.action",
+            data: {"val": upPhone, "type": "phone"},
+            dataType: "json",
+            success: function (data) {
                 //手机号校验失败
-                if(data.status == 0){
-                    upPhoneFlag==false;
+                if (data.status == 0) {
+                    upPhoneFlag == false;
                     $("#upPhone").addClass("warnBorder");   //css样式添加警告框
                     $("#signWarn").html("手机号已存在");  //错误提示
-                    $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+                    $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
                 //手机号校验成功
-                upPhoneFlag=true;
+                upPhoneFlag = true;
                 $("#upPhone").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
-                if(upNameFlag && upPwdFlag && upPwdReFlag){ //输入参数均符合规范注册按钮置为有效
+                if (upNameFlag && upPwdFlag && upPwdReFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
             },
-            error:function(){
+            error: function () {
                 alert("verify phone error");
             }
         });
     });
     //点击注册
-    $("#upBtn").click(function(){
+    $("#upBtn").click(function () {
         $.ajax({
-            type:"post",
-            url:"/user/register.action",
-            data:$("#signupContainer").serialize(),
-            dataType:"json",
-            success:function(data){
+            type: "post",
+            url: "/user/register.action",
+            data: $("#signupContainer").serialize(),
+            dataType: "json",
+            success: function (data) {
                 //注册失败
-                if(data.status == 0){
+                if (data.status == 0) {
                     $("#signWarn").html("注册失败");    //错误提示
                     return;
                 }
@@ -216,92 +266,100 @@ $(function(){
                 $("#signupContainer")[0].reset();   //清空输入框
                 $("#signupContainer").slideUp();    //隐藏注册框
                 $("#signinContainer").slideDown();  //显示登陆框
-                $("#upBtn").attr("disabled","true");    //注册按钮置为无效
+                $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             },
-            error:function(){
-                alert("signup error");
+            error: function () {
+                console.log("signup error");
             }
         });
     });
-    
+
     /* 登录 */
     //校验登录时所需参数是否符合规范的标记
-    var inNameFlag,inPwdFlag;
-    var inName,inPwd;
+    var inNameFlag, inPwdFlag;
+    var inName, inPwd;
     //校验用户名
-    $("#inName").keyup(function(){
-        inName=$("#inName").val().trim();
-        if(inName == null || inName == ""){
-            inNameFlag=false;
+    $("#inName").keyup(function () {
+        inName = $("#inName").val().trim();
+        if (inName == null || inName == "") {
+            inNameFlag = false;
             $("#inName").addClass("warnBorder");    //css样式添加警告框
-            $("#inBtn").attr("disabled","true");    //登录按钮置为无效
+            $("#inBtn").attr("disabled", "true");    //登录按钮置为无效
             return;
         }
-        inNameFlag=true;
+        inNameFlag = true;
         $("#inName").removeClass("warnBorder"); //css样式移除警告框
-        if(inPwdFlag){
+        if (inPwdFlag) {
             $("#inBtn").removeAttr("disabled"); //输入参数均符合规范登录按钮置为有效
         }
     });
     //校验密码
-    $("#inPwd").keyup(function(){
-        inPwd=$("#inPwd").val().trim();
-        if(inPwd == null || inPwd == ""){
-            inPwdFlag=false;
+    $("#inPwd").keyup(function () {
+        inPwd = $("#inPwd").val().trim();
+        if (inPwd == null || inPwd == "") {
+            inPwdFlag = false;
             $("#inPwd").addClass("warnBorder"); //css样式添加警告框
-            $("#inBtn").attr("disabled","true");    //登录按钮置为无效
+            $("#inBtn").attr("disabled", "true");    //登录按钮置为无效
             return;
         }
-        inPwdFlag=true;
+        inPwdFlag = true;
         $("#inPwd").removeClass("warnBorder");  //css样式移除警告框
-        if(inNameFlag){ //输入参数均符合规范登录按钮置为有效
+        if (inNameFlag) { //输入参数均符合规范登录按钮置为有效
             $("#inBtn").removeAttr("disabled");
         }
     });
     //点击登录
-    $("#inBtn").click(function(){
-        type=checkPhoneFormat(inName) ? "phone" : "username";
+    $("#inBtn").click(function () {
+        type = checkPhoneFormat(inName) ? "phone" : "username";
         $.ajax({
-            type:"post",
-            url:"/user/login.action",
-            data:{"type":type,"val":inName,"password":inPwd},
-            dataType:"json",
-            success:function(data){
+            type: "post",
+            url: "/user/login.action",
+            data: {"type": type, "val": inName, "password": inPwd},
+            dataType: "json",
+            success: function (data) {
                 //登录失败
-                if(data.status == 0){
-                    $("#signWarn").html("登录失败");    //错误提示
+                if (data.status == 0) {
+                    $("#signWarn").html(data.msg);    //错误提示
                     return;
                 }
                 //登陆成功
-                $("#bg").slideUp(); //隐藏bg
-                $("#signinContainer").slideUp();    //隐藏登录框
-                $("#signinContainer")[0].reset();   //清空输入框
-                $("#inBtn").attr("disabled","true");    //登录按钮置为无效
-                $("#sign").css("display","none");   //隐藏"登录 注册"
-                $("#username").html(data.username); //为用户名赋值
-                $("#userIcon img").attr("src",data.avatar); //为用户头像赋值
-                $("#userIcon").css("display","inline-block");   //显示用户信息
+                history.go(0);
+                /*                $("#bg").slideUp(); //隐藏bg
+                                $("#signinContainer").slideUp();    //隐藏登录框
+                                $("#signinContainer")[0].reset();   //清空输入框
+                                $("#inBtn").attr("disabled","true");    //登录按钮置为无效
+                                $("#sign").css("display","none");   //隐藏"登录 注册"
+                                $("#username").html(data.data.username); //为用户名赋值
+                                $("#userIcon img").attr("src",data.data.avatar); //为用户头像赋值
+                                $("#userIcon").css("display","inline-block");   //显示用户信息
+                                $("#signWarn").html("");    //清空错误提示*/
             },
-            error:function(){
-                alert("signin error");
+            error: function () {
+                console.log("signin error");
             }
         });
     });
-    
+
     /* 退出登录 */
-    $("#logout").click(function(){
+    $("#logout").click(function () {
         $.ajax({
-            type:"get",
-            url:"/user/logout.action",
-            dataType:"json",
-            success:function(data){
+            type: "get",
+            url: "/user/logout.action",
+            dataType: "json",
+            success: function (data) {
                 //退出登录成功
-                if(data.status == 1){
-                    $("#sign").css("display","inline-block");   //隐藏用户信息
-                    $("#userIcon").css("display","none");   //显示"登录 注册"
+                if (data.status == 1) {
+                    $("#sign").css("display", "inline-block");   //隐藏用户信息
+                    $("#userIcon").css("display", "none");   //显示"登录 注册"
                 }
             }
         });
     });
-    
+
 });
+
+//推送信息处理
+function showMessage(data) {
+    alert(data);
+    $("#msgDot").css("display", "inline-block");
+}

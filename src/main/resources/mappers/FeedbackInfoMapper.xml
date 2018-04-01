@@ -4,16 +4,19 @@
     <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.FeedbackInfo">
         <constructor>
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="send_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="receive_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="level" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="parent" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="sequence" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, content, level, parent, sequence, create_time
+        id, send_id, receive_id, content, level, parent, sequence, status, create_time, update_time
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -26,12 +29,13 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
-        INSERT INTO feedback_info (id, user_id, content,
-                                   level, parent, sequence,
-                                   create_time)
-        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
-                #{level,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER},
-                now())
+        INSERT INTO feedback_info (id, send_id, receive_id,
+                                   content, level, parent,
+                                   sequence, status, create_time,
+                                   update_time)
+        VALUES (#{id,jdbcType=INTEGER}, #{sendId,jdbcType=INTEGER}, #{receiveId,jdbcType=INTEGER},
+                #{content,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER},
+                #{sequence,jdbcType=INTEGER}, 1, now(), now())
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
         insert into feedback_info
@@ -39,8 +43,11 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="userId != null">
-                user_id,
+            <if test="sendId != null">
+                send_id,
+            </if>
+            <if test="receiveId != null">
+                receive_id,
             </if>
             <if test="content != null">
                 content,
@@ -54,16 +61,25 @@
             <if test="sequence != null">
                 sequence,
             </if>
+            <if test="status != null">
+                status,
+            </if>
             <if test="createTime != null">
                 create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
+            <if test="sendId != null">
+                #{sendId,jdbcType=INTEGER},
+            </if>
+            <if test="receiveId != null">
+                #{receiveId,jdbcType=INTEGER},
             </if>
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
@@ -77,7 +93,13 @@
             <if test="sequence != null">
                 #{sequence,jdbcType=INTEGER},
             </if>
+            <if test="status != null">
+                1,
+            </if>
             <if test="createTime != null">
+                now(),
+            </if>
+            <if test="updateTime != null">
                 now(),
             </if>
         </trim>
@@ -85,8 +107,11 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
         update feedback_info
         <set>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
+            <if test="sendId != null">
+                send_id = #{sendId,jdbcType=INTEGER},
+            </if>
+            <if test="receiveId != null">
+                receive_id = #{receiveId,jdbcType=INTEGER},
             </if>
             <if test="content != null">
                 content = #{content,jdbcType=VARCHAR},
@@ -100,34 +125,46 @@
             <if test="sequence != null">
                 sequence = #{sequence,jdbcType=INTEGER},
             </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = now(),
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.FeedbackInfo">
         UPDATE feedback_info
-        SET user_id     = #{userId,jdbcType=INTEGER},
+        SET send_id     = #{sendId,jdbcType=INTEGER},
+            receive_id  = #{receiveId,jdbcType=INTEGER},
             content     = #{content,jdbcType=VARCHAR},
             level       = #{level,jdbcType=VARCHAR},
             parent      = #{parent,jdbcType=INTEGER},
             sequence    = #{sequence,jdbcType=INTEGER},
-            create_time = #{createTime,jdbcType=TIMESTAMP}
+            status      = #{status,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = now()
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
+
     <select id="queryFeedbackList" resultType="com.yc.hulahoop.vo.FeedbackInfoVo">
         SELECT
-            f.id,
-            f.level,
-            u.username,
-            f.content,
-            DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
+            f.id                                      AS id,
+            level,
+            u.id                                      AS userId,
+            username,
+            content,
+            DATE_FORMAT(f.update_time, '%Y-%m-%d %T') AS updateTime,
+            status
         FROM feedback_info f
             JOIN users u ON f.user_id = u.id
         WHERE parent = 0
-        ORDER BY createTime
+        ORDER BY status DESC, f.update_time DESC
     </select>
 
     <select id="queryFeedbackCount" resultType="int">
@@ -142,6 +179,7 @@
             f.level,
             f.parent,
             f.sequence,
+            u.id                                      AS userId,
             u.username,
             u.avatar,
             f.content,
@@ -149,6 +187,52 @@
         FROM feedback_info f
             JOIN users u ON f.user_id = u.id
         WHERE level LIKE #{level}
-        ORDER BY level
+        ORDER BY sequence
     </select>
+
+    <select id="search" resultType="int">
+        SELECT parent
+        FROM feedback_info
+        WHERE content LIKE #{content} OR user_id IN (SELECT id
+                                                     FROM users
+                                                     WHERE username LIKE #{content})
+    </select>
+
+    <select id="queryVoById" resultType="com.yc.hulahoop.vo.FeedbackInfoVo">
+        SELECT
+            f.id,
+            f.level,
+            u.username,
+            f.content,
+            f.status,
+            DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
+        FROM feedback_info f
+            JOIN users u ON f.user_id = u.id
+        WHERE level = #{feedBackId}
+        ORDER BY createTime
+    </select>
+
+    <select id="listByUser" resultType="int">
+        SELECT level
+        FROM feedback_info
+        WHERE user_id = #{userId} AND parent = 0
+    </select>
+
+    <select id="queryNotice" resultType="int">
+        SELECT COUNT(*)
+        FROM feedback_info
+        WHERE status = 1 AND user_id = #{userId}
+    </select>
+
+    <update id="updateStatusByFeedId" parameterType="map">
+        UPDATE feedback_info
+        SET status = #{status}
+        WHERE user_id = #{responseId} AND level LIKE #{level}
+    </update>
+
+    <update id="updateUpdateTimeByLevel" parameterType="string">
+        UPDATE feedback_info
+        SET update_time = now()
+        WHERE level LIKE #{level}
+    </update>
 </mapper>

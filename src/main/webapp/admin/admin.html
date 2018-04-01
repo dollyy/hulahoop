@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="../font/iconfont.css">
     <link rel="stylesheet" href="../css/admin/admin.css">
 </head>
-<body>
+<body onload="dwr.engine.setActiveReverseAjax(true);dwr.engine.setNotifyServerOnPageUnload(true);">
     <div id="bg"></div>
     <div class="tips"></div>
     <div class="left">
        <div class="head">
            <span>
+                <span id="msgTip">
+                    <span class="iconfont icon-lingdang"></span>
+                    <span id="msgDot"></span>
+                </span>
                <span class="username">Hi, admin</span>
                <span class="iconfont icon-icon" title="退出"></span>
            </span>
@@ -92,6 +96,11 @@
             </li>
         </ul>
     </div>
+
+    <!-- dwr的js支持库 -->
+    <script type='text/javascript' src='/dwr/engine.js'></script>
+    <script type='text/javascript' src='/dwr/interface/dwrMessage.js'></script>
+    <script type='text/javascript' src='/dwr/util.js'></script>
 
     <script src="../js/jquery-3.2.1.min.js"></script>
     <!-- wangEditor -->

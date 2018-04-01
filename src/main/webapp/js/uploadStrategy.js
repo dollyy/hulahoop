@@ -53,15 +53,20 @@ $(function () {
         tags: true,
     });
 
+    //设置富文本框的高度
+    $(".w-e-text-container").css("height","669px");
+
     $.ajax({
         type: "get",
-        url: "/helpInfo/list.action",
+        url: "/helpInfo/listByUpload.action",
         dataType: "json",
         success: function (data) {
-/*            var data = {
-                "tips": [["--- tip1.攻略标签是什么？ ---", "从下拉框中为这篇攻略打上关于地点、时长的tag吧！"], ["--- tip2.交换Days ---", "&#8226;step1:<br><img src='../images/help/uploadStrategy1.png'>", "&#8226;step2:<br><img src='../images/help/uploadStrategy2.png'>", "&#8226;step3:<br><img src='../images/help/uploadStrategy3.png'>"]],
-                "tags": [["省份", [['1', '安徽'], ['2', '澳门'], ['3', '北京'], ['4', '重庆'], ['5', '福建'], ['6', '吉林'], ['7', '江苏'], ['8', '江西'], ['9', '海南'], ['10', '河北'], ['11', '河南'], ['12', '黑龙江'], ['13', '湖北'], ['14', '湖南'], ['15', '甘肃'], ['16', '广东'], ['17', '广西'], ['18', '贵州'], ['19', '辽宁'], ['20', '南海诸岛'], ['21', '内蒙古'], ['22', '宁夏'], ['23', '青海'], ['24', '山东'], ['25', '山西'], ['26', '陕西'], ['27', '上海'], ['28', '四川'], ['29', '台湾'], ['30', '天津'], ['31', '西藏'], ['32', '香港'], ['33', '新疆'], ['34', '云南'], ['35', '浙江']]], ["时长", [["1", "3天"], ["1", "5天"], ["1", "7天"], ["1", "15天"], ["1", "30天+"]]]]
-            };*/
+            if(data.status == -2){  //用户未登录
+                //todo index
+            }
+            if(data.data.helpInfo ==undefined || data.data.cities ==undefined){
+                return;
+            }
             //1.tips
             for (i = 0; i < data.data.helpInfo.length; i++) {
                 $(".helpPage").append("<div class='tip' id='tip'><div>" + data.data.helpInfo[i].title + "</div></div>");
@@ -239,17 +244,3 @@ function exchangeDay() {
         $(days[i]).find(".content").attr("id", "day" + (i + 1)); //update content's id
     }
 }
-
-//simditor
-/*var editor=new Simditor({
-    textarea: $("#editor"),
-    placeholder: "",
-    toolbar: true,
-    toolbarFloat: false,//Fixed the toolbar on the top of the browser when scrolling
-    toolbarHidden: false,
-    defaultImage: "",//Default image placeholder. Used when inserting pictures in Simditor.
-    tabIndent: true,//Use 'tab' key to make indent.
-    params: {},//Insert a hidden input in textarea to store params (key-value pairs)
-    upload: true,
-    pasteImage: true//only FF and Chrome
-});*/

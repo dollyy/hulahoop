@@ -5,9 +5,7 @@ input{
 /*nav*/
 nav{
     padding: 5px 50px;
-    /*background: #090723;*/
     background: #000000;
-    /*box-shadow: 0 2px 10px #666;*/
     font-size: 14px;
     color: #fff;
 }
@@ -17,6 +15,10 @@ nav{
     position: relative;
     display: flex;
     align-items: center;
+}
+#strategy{
+    color: #fff;
+    margin-left: 50px;
 }
 nav img{
     height: 45px;
@@ -39,21 +41,24 @@ nav img{
     position: absolute;
     right: 0;
 }
-#userIcon{
+/*#userIcon{
     display: none;
-}
+}*/
 #signin,#signup,#userIcon img,#msgTip{
     vertical-align: middle;
     margin-left: 20px;
 }
-#signin,#signup,#logout{
+#uploadStrategy{
+    color: #fff;
+}
+#signin,#signup,#logout,#uploadStrategy{
     cursor: pointer;
     margin-left: 20px;
 }
 #username{
     margin-left: 10px;
 }
-#signin:hover,#signup:hover,#logout:hover{
+#signin:hover,#signup:hover,#logout:hover,#uploadStrategy:hover{
     text-shadow: 0 0 6px #fff;
 }
 #userIcon img{
@@ -66,7 +71,6 @@ nav img{
     position: relative;
 }
 #msgDot{
-    display: inline-block;
     width: 6px;
     height: 6px;
     background: red;
@@ -74,14 +78,16 @@ nav img{
     position: absolute;
     top: 16px;
     right: 3px;
+    display: none;
 }
+
 /* signContainer */
 .signContainer{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    z-index: 3;
+    z-index: 13;
 }
 #signinContainer,#signupContainer{
     height: 235px;
@@ -132,6 +138,7 @@ nav img{
 #resetPwd:hover{
     color: #777;
 }
+
 /* signupContainer */
 #signupContainer{
     width: 254px;
@@ -147,4 +154,3 @@ nav img{
     height: 23px;
     cursor: pointer;
 }
-/**/

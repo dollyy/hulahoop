@@ -20,4 +20,6 @@ public interface HelpInfoMapper {
     List<HelpInfo> list();
 
     List<HelpInfo> listByUpload();
+
+    List<HelpInfo> search(String content);
 }

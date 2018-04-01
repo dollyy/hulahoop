@@ -1,6 +1,6 @@
 .body{
     width: 1100px;
-    margin: 0 auto;
+    margin: 30px auto;
 }
 /* ---catalog start--- */
 .catalog{
@@ -37,7 +37,7 @@
     padding: 0 10px 10px 10px;
     box-sizing: border-box;
 }
-nav{
+.ItemNav{
     margin-bottom: 5px;
     padding: 0 5px;
     font-size: 14px;

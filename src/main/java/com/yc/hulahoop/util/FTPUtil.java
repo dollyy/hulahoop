@@ -18,6 +18,7 @@ public class FTPUtil {
     private static final String FTP_PASSWORD = PropertiesUtil.getProperty("ftp.password");
     private static final String FTP_STRATEGY = PropertiesUtil.getProperty("ftp.strategy");
     private static final String FTP_AVATAR = PropertiesUtil.getProperty("ftp.avatar");
+    private static final String FTP_HELPINFO = PropertiesUtil.getProperty("ftp.helpInfo");
 
     private static FTPClient ftpClient;
 
@@ -46,6 +47,8 @@ public class FTPUtil {
                     case Const.STRATEGY:ftpClient.changeWorkingDirectory(FTP_STRATEGY);break;
                     //更换上传路径至头像
                     case Const.AVATAR:ftpClient.changeWorkingDirectory(FTP_AVATAR);break;
+                    //更换上传路径至帮助信息
+                    case Const.HELPINFO:ftpClient.changeWorkingDirectory(FTP_HELPINFO);break;
                     default:return false;
                 }
                 //设置1M的缓存

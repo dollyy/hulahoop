@@ -6,7 +6,7 @@ $(function(){
     $("#phone").focusout(checkAccountValue);
     $("#code").keyup(checkAccountValue);
     $("#confirmBtn").click(function(){
-        console.log("phone->"+value1+",code->"+value2);
+        console.log("phone->"+phone+",code->"+value);
         $(".step1").hide();
         $(".step2").css("display","flex");
         $("ul li").eq(1).addClass("success");
@@ -20,11 +20,9 @@ $(function(){
         $.ajax({
             type: "post",
             url: "/user/updatePassword.action",
-            //todo 验证码正确才能重置密码
             data: {"phone":phone,"passwordNew": passwordNew},
             dataType: "json",
             success:function(data){
-                var data={"status":1};
                 if(data.status == 0){
                     $(".error").html("修改密码失败").show();
                     return;
@@ -35,7 +33,7 @@ $(function(){
                 var time=$("#counttime").html();
                 setInterval(function(){
                     if(time == 0){
-                        //window.location.href="index.html";
+                        window.location.href="signin.html";
                         return;
                     }
                     $("#counttime").html(--time);
@@ -55,7 +53,7 @@ function checkAccountValue(){
         $("#confirmBtn").attr("disabled","true");
         return;
     }
-    if(!checkPhoneFormat(value1)){
+    if(!checkPhoneFormat(phone)){
         $(".error").html("手机号错误").show();
         $("#queryCode").attr("disabled","true");
         return;

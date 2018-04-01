@@ -30,12 +30,14 @@ public class CommentController {
     @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse list(HttpSession session, Integer level) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            return commentService.listByLevel(level);
         }
-        return commentService.listByLevel(level);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -48,14 +50,17 @@ public class CommentController {
     @RequestMapping(value = "add.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse add(HttpSession session, Comment comment) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            //防止横向越权
+            comment.setUserId(currentUser.getId());
+            return commentService.add(comment);
         }
-        //防止横向越权
-        comment.setUserId(currentUser.getId());
-        return commentService.add(comment);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -68,14 +73,17 @@ public class CommentController {
     @RequestMapping(value = "reply.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse reply(HttpSession session, Comment comment) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            //防止横向越权
+            comment.setUserId(currentUser.getId());
+            return commentService.reply(comment);
         }
-        //防止横向越权
-        comment.setUserId(currentUser.getId());
-        return commentService.reply(comment);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -90,12 +98,26 @@ public class CommentController {
     @RequestMapping(value = "forOrAgainstComment.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse forOrAgainstComment(HttpSession session, Integer id, String type, Integer number) {
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return commentService.forOrAgainstComment(currentUser.getId(), id, type, number);
+        }
+        //身份校验失败
+        return serverResponse;
+    }
+
+    //检查用户是否登录
+    private ServerResponse<Object> isLogin(HttpSession session) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
         }
-        return commentService.forOrAgainstComment(currentUser.getId(), id, type, number);
+        return ServerResponse.createBySuccess();
     }
 
 }

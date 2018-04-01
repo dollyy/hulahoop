@@ -66,18 +66,17 @@ public class StrategyManageController {
     /**
      * 搜索攻略
      *
-     * @param type username/strategy_name
-     * @param val  搜索的值
+     * @param content  搜索的内容
      * @return 符合条件的strategy的list
      */
     @RequestMapping(value = "search.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse search(HttpSession session, String type, String val,
+    private ServerResponse search(HttpSession session, String content,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return strategyService.search(type, val, pageNum);
+            return strategyService.search(content, pageNum, Const.PAGE_SIZE_ADMIN);
         }
         return serverResponse;
     }
@@ -127,11 +126,13 @@ public class StrategyManageController {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
         }
         //检查当前用户是否为管理员
         if (currentUser.getRole() != Const.Role.ADMIN) {    //非管理员
-            return ServerResponse.createByErrorMessage(Const.NON_ADMIN);
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NON_ADMIN.getCode(),
+                    Const.ResponseCode.NON_ADMIN.getDescription());
         }
         return ServerResponse.createBySuccess();
     }

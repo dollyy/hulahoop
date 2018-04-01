@@ -92,10 +92,20 @@
     </update>
 
     <select id="list" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM help_info
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM help_info
     </select>
 
     <select id="listByUpload" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM help_info WHERE id IN (1,2)
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM help_info WHERE id IN (1,2)
+    </select>
+
+    <select id="search" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM help_info
+        WHERE content LIKE #{content} OR title LIKE #{content}
     </select>
 </mapper>

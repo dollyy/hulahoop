@@ -46,12 +46,20 @@ public class StrategyController {
         return strategyService.queryStrategyList(pageNum, Const.PAGE_SIZE, cityId, duration);
     }
 
+    /**
+     * 更新strategy list
+     *
+     * @param pageNum  页码
+     * @param cityId   城市编号
+     * @param duration 时长
+     * @return 攻略集合
+     */
     @RequestMapping(value = "updateList.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse updateList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                                       @RequestParam(value = "cityId", required = false) Integer cityId,
                                       @RequestParam(value = "duration", required = false) String duration) {
-        return strategyService.updateStrategyList(pageNum, cityId, duration);
+        return strategyService.updateStrategyList(pageNum, Const.PAGE_SIZE, cityId, duration);
     }
 
     /**
@@ -64,12 +72,14 @@ public class StrategyController {
     @RequestMapping(value = "detail.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse detail(HttpSession session, Integer strategyId) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            return strategyService.detail(strategyId);
         }
-        return strategyService.detail(strategyId);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -82,13 +92,16 @@ public class StrategyController {
     @RequestMapping(value = "add.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse add(HttpSession session, Strategy strategy) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            strategy.setUserId(currentUser.getId());
+            return strategyService.add(strategy);
         }
-        strategy.setUserId(currentUser.getId());
-        return strategyService.add(strategy);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -101,12 +114,15 @@ public class StrategyController {
     @RequestMapping(value = "delete.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse delete(HttpSession session, String strategyId) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.delete(currentUser.getId(), strategyId);
         }
-        return strategyService.delete(currentUser.getId(), strategyId);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -119,14 +135,17 @@ public class StrategyController {
     @RequestMapping(value = "update.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse update(HttpSession session, Strategy strategy) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            //防止横向越权
+            strategy.setUserId(currentUser.getId());
+            return strategyService.update(strategy);
         }
-        //防止横向越权
-        strategy.setUserId(currentUser.getId());
-        return strategyService.update(strategy);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -139,26 +158,27 @@ public class StrategyController {
     @RequestMapping(value = "updateForOrCollect.action", method = RequestMethod.POST)
     @ResponseBody
     private ServerResponse updateForOrCollect(HttpSession session, Strategy strategy) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            return strategyService.updateForOrCollect(strategy);
         }
-        return strategyService.updateForOrCollect(strategy);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
      * 搜索攻略
      *
-     * @param type username/strategy_name
-     * @param val  搜索的值
+     * @param content 搜索的值
      * @return 符合条件的strategy的list
      */
-    @RequestMapping(value = "search.action", method = RequestMethod.POST)
+    @RequestMapping(value = "search.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse search(String type, String val,
+    private ServerResponse search(String content,
                                   @RequestParam(value = "pageNum", defaultValue = "1") int pageNum) {
-        return strategyService.search(type, val, pageNum);
+        return strategyService.search(content, pageNum, Const.PAGE_SIZE);
     }
 
     /**
@@ -170,35 +190,39 @@ public class StrategyController {
     @RequestMapping(value = "queryUserStrategy.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse queryUserStrategy(HttpSession session) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.queryUserStrategy(currentUser.getId());
         }
-        return strategyService.queryUserStrategy(currentUser.getId());
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
      * 查看我的收藏
      *
-     * @param session  当前用户
-     * @param pageNum  页码
-     * @param pageSize 一页显示的个数
-     * @param orderBy  排序
+     * @param session 当前用户
+     * @param pageNum 页码
+     * @param orderBy 排序
      * @return strategy的list
      */
     @RequestMapping(value = "queryUserCollection.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse queryUserCollection(HttpSession session,
                                                @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                               @RequestParam(value = "pageSize", defaultValue = "2") int pageSize,
                                                @RequestParam(value = "orderBy", defaultValue = "") String orderBy) {
-        //检查用户是否登录
-        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {     //用户未登录
-            return ServerResponse.createByErrorMessage(Const.NOT_LOGIN);
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.queryUserCollection(currentUser.getId(), Const.PAGE_SIZE, pageNum, orderBy);
         }
-        return strategyService.queryUserCollection(currentUser.getId(), pageNum, pageSize, orderBy);
+        //身份校验失败
+        return serverResponse;
     }
 
     /**
@@ -209,24 +233,44 @@ public class StrategyController {
      */
     @RequestMapping(value = "richtext_img_upload.action", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> richtextImgUpload(MultipartFile file) {
+    public Map<String, Object> richtextImgUpload(HttpSession session, MultipartFile file) {
         //返回的结果集
         Map<String, Object> resultMap = Maps.newHashMap();
-        //上传文件
-        String uploadFileName = fileService.upload(file, Const.STRATEGY);
-        //文件上传失败
-        if (StringUtils.isBlank(uploadFileName)) {
-            resultMap.put("status", 0);
-            resultMap.put("msg", "上传文件失败");
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            //上传文件
+            String uploadFileName = fileService.upload(file, Const.STRATEGY);
+            //文件上传失败
+            if (StringUtils.isBlank(uploadFileName)) {
+                resultMap.put("status", 0);
+                resultMap.put("msg", "上传文件失败");
+                return resultMap;
+            }
+            //文件上传成功
+            resultMap.put("status", 1);
+            resultMap.put("msg", "上传文件成功");
+            String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.strategy")
+                    + uploadFileName;
+            resultMap.put("file_path", path);
             return resultMap;
         }
-        //文件上传成功
-        resultMap.put("status", 1);
-        resultMap.put("msg", "上传文件成功");
-        String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.strategy")
-                + uploadFileName;
-        resultMap.put("file_path", path);
+        //身份校验失败
+        resultMap.put("status", -2);
+        resultMap.put("msg", "用户未登录");
         return resultMap;
+    }
+
+    //检查用户是否登录
+    private ServerResponse<Object> isLogin(HttpSession session) {
+        //检查用户是否登录
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {     //用户未登录
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
+                    Const.ResponseCode.NEED_LOGIN.getDescription());
+        }
+        return ServerResponse.createBySuccess();
     }
 
 }

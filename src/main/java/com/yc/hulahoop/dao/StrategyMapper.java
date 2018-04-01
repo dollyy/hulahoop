@@ -41,4 +41,6 @@ public interface StrategyMapper {
     int countUserStrategy(@Param("userId") Integer userId, @Param("cityId") Integer cityId);
 
     List<String> selectAllDurations();
+
+    List<StrategyVo> searchByAdmin(String content);
 }

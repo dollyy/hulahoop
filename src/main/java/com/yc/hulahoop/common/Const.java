@@ -10,19 +10,18 @@ import java.util.Set;
 public class Const {
 
     public static final int ADMIN_ID=8;
+    public static final String ADMIN_NAME="admin";
     public static final String USERNAME = "username";
     public static final String PHONE = "phone";
-    public static final String CURRENT_USER = "currentUSer";
-    public static final String STRATEGY_NAME="strategyName";
+    public static final String CURRENT_USER = "currentUser";
     public static final String STRATEGY="strategy";
     public static final String AVATAR="avatar";
+    public static final String HELPINFO="helpInfo";
+    public static final String PHONE_REGEX="^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";
 
-    public static final String ILLEGAL_PARAMETER = "非法参数";
-    public static final String NOT_LOGIN = "用户未登录";
-    public static final String NO_USER = "用户不存在";
-    public static final String NON_ADMIN="非管理员无权操作";
     public static final int PAGE_SIZE=12;
     public static final int PAGE_SIZE_ADMIN=8;
+    public static final int ADMIN_HELPINFO_PAGESIZE=10;
 
     public interface Role {
         int ADMIN = 1;
@@ -36,18 +35,22 @@ public class Const {
 
     public interface StrategyOrderBy{
         //List contains的时间复杂度是O(n),Set contains的时间复杂度是O(1)
-        Set<String> STRATEGY_ORDER= Sets.newHashSet("s.create_time|desc","s.create_time|asc","for_num|desc","for_num|asc"
+        Set<String> STRATEGY_ORDER= Sets.newHashSet("","s.create_time|desc","s.create_time|asc","for_num|desc","for_num|asc"
                 ,"collect_num|desc","collect_num|asc","city_id|desc","city_id|asc");
     }
 
     public enum ResponseCode {
         SUCCESS(1, "成功"),
-        ERROR(0, "失败");
+        ERROR(0, "失败"),
+        NO_INFO(-1,"没有匹配信息"),
+        NEED_LOGIN(-2,"用户未登录"),
+        ILLEGAL_PARAMETER(-3,"非法参数"),
+        NON_ADMIN(-4,"非管理员无权操作");
 
-        private final int code;
+        private final Integer code;
         private final String description;
 
-        public int getCode() {
+        public Integer getCode() {
             return code;
         }
 
@@ -55,7 +58,7 @@ public class Const {
             return description;
         }
 
-        ResponseCode(int code, String description) {
+        ResponseCode(Integer code, String description) {
             this.code = code;
             this.description = description;
         }

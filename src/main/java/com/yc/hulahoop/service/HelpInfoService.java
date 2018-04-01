@@ -15,4 +15,6 @@ public interface HelpInfoService {
 
     ServerResponse listByUpload();
 
+    ServerResponse search(Integer pageNum, String content);
+
 }
