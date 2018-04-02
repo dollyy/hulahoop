@@ -80,7 +80,7 @@ public class FeedbackManageController {
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return feedbackService.updateFeedStatus(currentUser.getId(), receiveId, level, 0);
+            return feedbackService.updateFeedStatus(receiveId, currentUser.getId(), level, 0);
         }
         //身份校验失败
         return serverResponse;

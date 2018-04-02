@@ -159,12 +159,11 @@
             u.id                                      AS userId,
             username,
             content,
-            DATE_FORMAT(f.update_time, '%Y-%m-%d %T') AS updateTime,
-            status
+            DATE_FORMAT(f.update_time, '%Y-%m-%d %T') AS updateTime
         FROM feedback_info f
             JOIN users u ON f.send_id = u.id
         WHERE parent = 0
-        ORDER BY status DESC, f.update_time DESC
+        ORDER BY f.update_time DESC
     </select>
 
     <select id="queryFeedbackCount" resultType="int">
@@ -212,6 +211,10 @@
         ORDER BY createTime
     </select>
 
+    <select id="queryStatus" resultType="int">
+        SELECT COUNT(*) FROM feedback_info WHERE receive_id=#{receiveId} AND status=1 AND level like #{level}
+    </select>
+
     <select id="listByUser" resultType="int">
         SELECT level
         FROM feedback_info
@@ -227,7 +230,7 @@
     <update id="updateStatusByFeedId" parameterType="map">
         UPDATE feedback_info
         SET status = #{status}
-        WHERE send_id=${sendId} AND receive_id = #{responseId} AND level LIKE #{level}
+        WHERE send_id=#{sendId} AND receive_id = #{receiveId} AND level LIKE #{level}
     </update>
 
     <update id="updateUpdateTimeByLevel" parameterType="string">

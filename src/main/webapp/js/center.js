@@ -444,7 +444,7 @@ function msgClick() {
             $(".msgNothing").css("opacity", 0);
             var readClass;
             for (i = 0; i < data.data.list.length; i++) {
-                readClass = data.data.list[i].status == 1 ? "" : "read";
+                readClass = data.data.list[i].status > 0 ? "" : "read";
                 if (data.data.list[i].id != null) {
                     $("#msgs").append("<div class='msg "+readClass+"' level='" + data.data.list[i].level + "'>" +
                         "<span class='msgContent'><span class=send>admin</span>" +

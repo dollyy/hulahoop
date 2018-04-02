@@ -39,6 +39,9 @@ public class FeedbackServiceImpl implements FeedbackService {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
                     Const.ResponseCode.NO_INFO.getDescription());
         }
+        for(FeedbackInfoVo feedbackInfoVo : feedbackInfoList){
+            feedbackInfoVo.setStatus(feedbackInfoMapper.queryStatus(Const.ADMIN_ID, feedbackInfoVo.getLevel()));
+        }
         //2.pageHelper--end
         PageInfo pageInfo = new PageInfo(feedbackInfoList);
         return ServerResponse.createBySuccessData(pageInfo);
@@ -156,7 +159,9 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (index.size() > 0) {
             //根据parent据查询该反馈的完整信息
             for (Integer integer : index) {
-                results.add(feedbackInfoMapper.queryVoById(integer));
+                FeedbackInfoVo feedbackInfoVo = feedbackInfoMapper.queryVoById(integer);
+                feedbackInfoVo.setStatus(feedbackInfoMapper.queryStatus(userId, feedbackInfoVo.getLevel() + "%"));
+                results.add(feedbackInfoVo);
             }
         }
         //dwr

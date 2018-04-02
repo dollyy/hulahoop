@@ -242,14 +242,18 @@ CREATE TABLE `feedback_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
-INSERT INTO feedback_info(sned_id, receive_id, content, level, parent, sequence, status, create_time, update_time)
-VALUES (4,8,'你好呀',1,0,1,1,'2018-02-27 12:23:45','2018-02-27 12:26:45');
+INSERT INTO feedback_info(send_id, receive_id, content, level, parent, sequence, status, create_time, update_time)
+VALUES (8,4,'你好呀2',2.2,2,2,1,'2018-02-27 12:23:45','2018-02-27 12:26:45'),
+  (8,4,'你好呀2',2.3,2,3,1,'2018-02-27 12:23:45','2018-02-27 12:26:45');
 
 SELECT level FROM feedback_info WHERE user_id=4 AND parent=0;
 
 SELECT COUNT(*)
 FROM feedback_info
 WHERE status = 1;
+
+SELECT * FROM feedback_info WHERE receive_id=8 AND status=1 AND level like '2%';
+
 
 DROP TABLE IF EXISTS dwr_record;
 -- ------------------------------------

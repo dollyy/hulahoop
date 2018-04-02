@@ -29,6 +29,8 @@ public interface FeedbackInfoMapper {
 
     FeedbackInfoVo queryVoById(Integer feedBackId);
 
+    int queryStatus(@Param(value = "receiveId") Integer receiveId, @Param(value = "level") String level);
+
     List<Integer> listByUser(Integer userId);
 
     int queryNotice(Integer userId);

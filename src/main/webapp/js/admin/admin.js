@@ -2,6 +2,7 @@ var adminAvatar;    //管理员头像
 var i;              //循环参数
 var editor;         //富文本编辑器
 var searchInp;      //搜索框
+var userId;
 
 $(function () {
 
@@ -665,9 +666,9 @@ function packFeedback(data) {
     $("#feedbackTable").show();
     $(".nothing").hide();
     for (i = 0; i < data.list.length; i++) {
-        readClass = data.list[i].status == 1 ? "" : "read";
+        readClass = data.list[i].status > 0 ? "" : "read";
         $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
-            data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
+            data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend' value='" + data.list[i].userId + "'>" + data.list[i].username + "</td>" +
             "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
             "</td></tr>");
     }
@@ -715,7 +716,7 @@ function packUpdateFeedback(data) {
     $("#feedbackTable").show();
     $(".nothing").hide();
     for (i = 0; i < data.list.length; i++) {
-        readClass = data.list[i].status == 1 ? "" : "read";
+        readClass = data.list[i].status > 0 ? "" : "read";
         $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
             data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
             "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
@@ -729,7 +730,7 @@ function packSearchFeedback(data) {
     $("#feedbackTable").show();
     $(".nothing").hide();
     for (i = 0; i < data.list.length; i++) {
-        readClass = data.list[i].status == 1 ? "" : "read";
+        readClass = data.list[i].status > 0 ? "" : "read";
         $("#feedbackTable tbody").append("<tr class='" + readClass + "' level='" + data.list[i].level + "' value='" +
             data.list[i].id + "'><td>" + (i + 1) + "</td><td class='feedSend'>" + data.list[i].username + "</td>" +
             "<td class='feedContent'>" + data.list[i].content + "</td><td class='feedDate'>" + data.list[i].updateTime +
@@ -779,12 +780,13 @@ var receiveId;
 var level;
 
 function feedDetail() {
-    var that=$(this);
+    var that = $(this);
     level = $(this).attr("level");
+    alert(that.find(".feedSend").attr("value"));
     $.ajax({
         type: "get",
         url: "/manage/feedback/updateFeedStatus.action",
-        data: {"level": level},
+        data: {"level": level, "receiveId": that.find(".feedSend").attr("value")},
         dataType: "json",
         success: function (data) {
             if (data.status == -2) {  //用户未登录
@@ -825,7 +827,7 @@ function feedDetail() {
             var feedClass;
             for (i = 0; i < data.data.length; i++) {
                 feedClass = data.data[i].username == "admin" ? "class='rightSide'" : "";
-                $(".chats").append("<div parent='" + data.data[i].parent + "' sequence='" + data.data[i].sequence + "' "
+                $(".chats").append("<div level='" + data.data[i].level + "' parent='" + data.data[i].parent + "' sequence='" + data.data[i].sequence + "' "
                     + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
                     data.data[i].avatar + "'><span class='content'>" + data.data[i].content + "</span></div>");
             }
@@ -841,6 +843,7 @@ function sendFeedback() {
         return;
     }
     var parent = $(".chats>div:last").attr("parent");
+    parent = parent == 0 ? $(".chats>div:last").attr("level") : parent;
     var sequence = $(".chats>div:last").attr("sequence");
     $.ajax({
         type: "post",
