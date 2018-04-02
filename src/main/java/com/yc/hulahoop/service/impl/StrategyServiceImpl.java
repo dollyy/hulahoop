@@ -84,7 +84,7 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public ServerResponse detail(Integer strategyId) {
+    public ServerResponse detail(Integer userId, Integer strategyId) {
         Map<String, Object> result = Maps.newHashMap();
         if (strategyId == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
@@ -121,6 +121,12 @@ public class StrategyServiceImpl implements StrategyService {
         result.put("catalog", catalog);
         //攻略内容
         result.put("content", strategyContent);
+        //是否收藏
+        int count = collectionMapper.isCollected(userId, strategyId);
+        result.put("collect", count == 1);  //收藏返回true
+        //是否点赞 todo
+        //count=isFor(userId, strategyId);SELECT status FROM strategy_for WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+        result.put("for", count == 1);  //点赞返回true
         //封装comment对象
         List<CommentVo> commentVos = commentMapper.listByStrategy(strategyVo.getStrategyId());
         for (CommentVo commentVo : commentVos) {
@@ -140,7 +146,7 @@ public class StrategyServiceImpl implements StrategyService {
         //为main_img赋值
         String mainImg = mainImgValue(strategy.getContent());
         //内容为空非法操作
-        if(StringUtils.isBlank(mainImg)){
+        if (StringUtils.isBlank(mainImg)) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
@@ -179,6 +185,8 @@ public class StrategyServiceImpl implements StrategyService {
             //删除时添加user_id防止横向越权
             count = strategyMapper.deleteByUserIdAndStrategyId(strategyList, userId);
         }
+        //删除用户收藏
+        count=collectionMapper.deleteByStrategyId(strategyList);
         //删除成功
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("删除成功");
@@ -196,7 +204,7 @@ public class StrategyServiceImpl implements StrategyService {
         //为main_img赋值
         String mainImg = mainImgValue(strategy.getContent());
         //内容为空非法操作
-        if(StringUtils.isBlank(mainImg)){
+        if (StringUtils.isBlank(mainImg)) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
@@ -225,6 +233,26 @@ public class StrategyServiceImpl implements StrategyService {
         }
         //更新失败
         return ServerResponse.createByErrorMessage("更新失败");
+    }
+
+    @Override
+    public ServerResponse updateForStatus(Integer userId, Integer strategyId, Integer status) {
+        if (userId == null || strategyId == null || status == null) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        //todo
+        //SELECT COUNT(*) FROM strategy_for WHERE user_id=4 AND strategy_id=5
+        int count=0;
+        if(count > 0){  //更新
+            //count=UPDATE strategy_for SET status=#{status} WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+        }else{  //新增
+            //count=insert();
+        }
+        if(count > 0){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByErrorMessage("for error");
     }
 
     @Override
@@ -273,7 +301,7 @@ public class StrategyServiceImpl implements StrategyService {
             //1.startPage--start
             PageHelper.startPage(pageNum, pageSize);
             //需要排序
-            if(!StringUtils.isBlank(orderBy)){
+            if (!StringUtils.isBlank(orderBy)) {
                 String[] orders = orderBy.split("\\|");
                 PageHelper.orderBy(orders[0] + " " + orders[1]);
             }

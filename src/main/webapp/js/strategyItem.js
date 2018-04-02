@@ -18,9 +18,17 @@ $(function () {
                 window.location.href="notFound.jsp";
                 return;
             }
-            //1.province + duration
+            //1.province + duration + for + collect
             $(".ItemNav .tags").html(data.data.strategy.cityName + " > " + data.data.strategy.duration);
+            //用户已点赞
+            if(data.data.for){
+                $(".ItemNav .navFor").addClass("navColor");
+            }
             $(".ItemNav .navFor").html(data.data.strategy.forNum);
+            //用户已收藏
+            if(data.data.collect){
+                $(".ItemNav .navCollect").addClass("collectColor");
+            }
             $(".ItemNav .navCollect").html(data.data.strategy.collectNum);
 
             //2.catalog
@@ -110,18 +118,32 @@ $(function () {
     });
     //收藏攻略
     $(".ItemNav .icon-collection-b").click(function () {
+        var status;
         var value = $(this).next().html();
         if ($(this).attr("class").indexOf("collectColor") != -1) {
             $(this).removeClass("collectColor");
             $(this).next().html(--value).removeClass("collectColor");
+            status=0;
         } else {
             $(this).addClass("collectColor");
             $(this).next().html(++value).addClass("collectColor");
+            status=1;
         }
         $.ajax({
             type: "post",
             url: "/strategy/updateForOrCollect.action",
             data: {"collectNum": value, "id": strategyId},
+            success: function () {
+
+            },
+            error: function () {
+
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "/strategy/updateForStatus.action",
+            data: {"status": status, "id": strategyId},
             success: function () {
 
             },

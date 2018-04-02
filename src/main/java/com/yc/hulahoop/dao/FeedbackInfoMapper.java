@@ -33,8 +33,8 @@ public interface FeedbackInfoMapper {
 
     int queryNotice(Integer userId);
 
-    int updateStatusByFeedId(@Param(value = "responseId") Integer responseId, @Param(value = "level") String level,
-                             @Param(value = "status") Integer status);
+    int updateStatusByFeedId(@Param(value = "sendId") Integer sendId, @Param(value = "receiveId") Integer receiveId,
+                             @Param(value = "level") String level, @Param(value = "status") Integer status);
 
     int updateUpdateTimeByLevel(@Param(value = "level") String level);
 }

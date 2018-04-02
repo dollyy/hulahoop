@@ -10,7 +10,7 @@ public interface StrategyService {
 
     ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
 
-    ServerResponse detail(Integer strategyId);
+    ServerResponse detail(Integer userId, Integer strategyId);
 
     ServerResponse add(Strategy strategy);
 
@@ -23,6 +23,8 @@ public interface StrategyService {
     ServerResponse search(String content, int pageNum, int pageSize);
 
     ServerResponse queryUserStrategy(Integer userId);
+
+    ServerResponse updateForStatus(Integer userId, Integer strategyId, Integer status);
 
     ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
 }

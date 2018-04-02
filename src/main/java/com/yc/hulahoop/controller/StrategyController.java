@@ -76,7 +76,8 @@ public class StrategyController {
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功
         if (serverResponse.isSuccess()) {
-            return strategyService.detail(strategyId);
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.detail(currentUser.getId(), strategyId);
         }
         //身份校验失败
         return serverResponse;
@@ -163,6 +164,20 @@ public class StrategyController {
         //身份校验成功
         if (serverResponse.isSuccess()) {
             return strategyService.updateForOrCollect(strategy);
+        }
+        //身份校验失败
+        return serverResponse;
+    }
+
+    @RequestMapping(value = "updateForStatus.action", method = RequestMethod.POST)
+    @ResponseBody
+    private ServerResponse updateForStatus(HttpSession session, Integer strategyId, Integer status){
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.updateForStatus(currentUser.getId(), strategyId, status);
         }
         //身份校验失败
         return serverResponse;

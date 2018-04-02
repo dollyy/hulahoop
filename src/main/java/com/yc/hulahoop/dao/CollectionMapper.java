@@ -20,4 +20,8 @@ public interface CollectionMapper {
     int updateByPrimaryKey(Collection record);
 
     List<CollectionVo> queryCollectionList(int userId);
+
+    int isCollected(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
+
+    int deleteByStrategyId(List<Integer> strategyIdList);
 }

@@ -88,4 +88,15 @@
         JOIN cities ci ON s.city_id = ci.id
         WHERE co.user_id = #{userId}
     </select>
+
+    <select id="isCollected" resultType="int">
+        SELECT COUNT(*) FROM collections WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+    </select>
+
+    <delete id="deleteByStrategyId" parameterType="int">
+        DELETE FROM collections WHERE strategy_id IN
+        <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>

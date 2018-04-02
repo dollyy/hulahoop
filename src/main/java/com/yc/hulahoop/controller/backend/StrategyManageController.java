@@ -58,7 +58,8 @@ public class StrategyManageController {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
-            return strategyService.detail(strategyId);
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.detail(currentUser.getId(), strategyId);
         }
         return serverResponse;
     }

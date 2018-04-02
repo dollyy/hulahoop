@@ -162,7 +162,7 @@
             DATE_FORMAT(f.update_time, '%Y-%m-%d %T') AS updateTime,
             status
         FROM feedback_info f
-            JOIN users u ON f.user_id = u.id
+            JOIN users u ON f.send_id = u.id
         WHERE parent = 0
         ORDER BY status DESC, f.update_time DESC
     </select>
@@ -185,7 +185,7 @@
             f.content,
             DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
         FROM feedback_info f
-            JOIN users u ON f.user_id = u.id
+            JOIN users u ON f.send_id = u.id
         WHERE level LIKE #{level}
         ORDER BY sequence
     </select>
@@ -193,7 +193,7 @@
     <select id="search" resultType="int">
         SELECT parent
         FROM feedback_info
-        WHERE content LIKE #{content} OR user_id IN (SELECT id
+        WHERE content LIKE #{content} OR send_id IN (SELECT id
                                                      FROM users
                                                      WHERE username LIKE #{content})
     </select>
@@ -207,7 +207,7 @@
             f.status,
             DATE_FORMAT(f.create_time, '%Y-%m-%d %T') AS createTime
         FROM feedback_info f
-            JOIN users u ON f.user_id = u.id
+            JOIN users u ON f.receive_id = u.id
         WHERE level = #{feedBackId}
         ORDER BY createTime
     </select>
@@ -215,19 +215,19 @@
     <select id="listByUser" resultType="int">
         SELECT level
         FROM feedback_info
-        WHERE user_id = #{userId} AND parent = 0
+        WHERE send_id = #{userId} AND parent = 0
     </select>
 
     <select id="queryNotice" resultType="int">
         SELECT COUNT(*)
         FROM feedback_info
-        WHERE status = 1 AND user_id = #{userId}
+        WHERE status = 1 AND receive_id = #{userId}
     </select>
 
     <update id="updateStatusByFeedId" parameterType="map">
         UPDATE feedback_info
         SET status = #{status}
-        WHERE user_id = #{responseId} AND level LIKE #{level}
+        WHERE send_id=${sendId} AND receive_id = #{responseId} AND level LIKE #{level}
     </update>
 
     <update id="updateUpdateTimeByLevel" parameterType="string">

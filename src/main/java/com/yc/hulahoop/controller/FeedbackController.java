@@ -74,7 +74,7 @@ public class FeedbackController {
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return feedbackService.add(currentUser.getId(), content, Const.ADMIN_ID);
+            return feedbackService.add(currentUser.getId(), content);
         }
         //身份校验失败
         return serverResponse;
@@ -138,7 +138,7 @@ public class FeedbackController {
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return feedbackService.updateFeedStatus(currentUser.getId(), level);
+            return feedbackService.updateFeedStatus(currentUser.getId(), Const.ADMIN_ID, level, 0);
         }
         //身份校验失败
         return serverResponse;

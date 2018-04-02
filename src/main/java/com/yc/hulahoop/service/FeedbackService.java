@@ -6,9 +6,9 @@ public interface FeedbackService {
 
     ServerResponse list(Integer pageNum);
 
-    ServerResponse add(Integer userId, String content, Integer receiveId);
+    ServerResponse add(Integer userId, String content);
 
-    ServerResponse reply(Integer userId, String content, Integer parent, Integer sequence,
+    ServerResponse reply(Integer sendId, String content, Integer parent, Integer sequence,
                          Integer receiveId);
 
     ServerResponse detail(String level);
@@ -19,6 +19,6 @@ public interface FeedbackService {
 
     ServerResponse queryNotice(Integer userId);
 
-    ServerResponse updateFeedStatus(Integer responseId, String level);
+    ServerResponse updateFeedStatus(Integer sendId, Integer receiveId, String level, Integer status);
 
 }

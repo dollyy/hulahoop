@@ -74,13 +74,15 @@ public class FeedbackManageController {
     //将admin的feedback的status从1置为0
     @RequestMapping(value = "updateFeedStatus.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse updateFeedStatus(HttpSession session, String level) {
+    private ServerResponse updateFeedStatus(HttpSession session, String level, Integer receiveId) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
-        if (serverResponse.isSuccess()) {   //身份校验成功
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return feedbackService.updateFeedStatus(currentUser.getId(), level);
+            return feedbackService.updateFeedStatus(currentUser.getId(), receiveId, level, 0);
         }
+        //身份校验失败
         return serverResponse;
     }
 

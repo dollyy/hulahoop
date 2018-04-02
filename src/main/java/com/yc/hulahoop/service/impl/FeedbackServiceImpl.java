@@ -45,7 +45,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public ServerResponse add(Integer userId, String content, Integer receiveId) {
+    public ServerResponse add(Integer userId, String content) {
         if (userId == null || StringUtils.isBlank(content)) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
@@ -53,10 +53,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         //封装FeedbackInfo对象
         FeedbackInfo feedbackInfo = new FeedbackInfo();
         feedbackInfo.setSendId(userId);
-        feedbackInfo.setReceiveId(receiveId);
+        feedbackInfo.setReceiveId(Const.ADMIN_ID);  //发送给admin
         feedbackInfo.setContent(content);
-        feedbackInfo.setParent(0);
-        feedbackInfo.setSequence(1);
+        feedbackInfo.setParent(0);      //添加评论时parent为0
+        feedbackInfo.setSequence(1);    //添加评论时sequence为1
         feedbackInfo.setLevel(String.valueOf(feedbackInfoMapper.queryFeedbackCount() + 1));
         //添加反馈
         int count = feedbackInfoMapper.insert(feedbackInfo);
@@ -69,14 +69,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public ServerResponse reply(Integer userId, String content, Integer parent, Integer sequence,
+    public ServerResponse reply(Integer sendId, String content, Integer parent, Integer sequence,
                                 Integer receiveId) {
-        if (userId == null || StringUtils.isBlank(content) || parent == null || sequence == null) {
+        if (sendId == null || StringUtils.isBlank(content) || parent == null || sequence == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         FeedbackInfo feedbackInfo = new FeedbackInfo();
-        feedbackInfo.setSendId(userId);
+        feedbackInfo.setSendId(sendId);
         feedbackInfo.setReceiveId(receiveId);
         feedbackInfo.setContent(content);
         feedbackInfo.setParent(parent);
@@ -89,7 +89,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             //更新操作时间
             feedbackInfoMapper.updateUpdateTimeByLevel(parent + "%");
             //将feedback的status从0置为1
-            count = feedbackInfoMapper.updateStatusByFeedId(receiveId, parent + "%", 1);
+            count = feedbackInfoMapper.updateStatusByFeedId(sendId, receiveId, parent + "%", 1);
             if (count > 0) {
                 return ServerResponse.createBySuccessData(feedbackInfo.getSequence());
             }
@@ -183,15 +183,15 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public ServerResponse updateFeedStatus(Integer responseId, String level) {
-        if (responseId == null || level == null) {
+    public ServerResponse updateFeedStatus(Integer sendId, Integer receiveId, String level, Integer status) {
+        if (receiveId == null || level == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //更新操作时间
         feedbackInfoMapper.updateUpdateTimeByLevel(level + "%");
-        //将feedback的status从0置为1
-        int count = feedbackInfoMapper.updateStatusByFeedId(responseId, level + "%", 0);
+        //将feedback的status从1置为0
+        int count = feedbackInfoMapper.updateStatusByFeedId(sendId, receiveId, level + "%", 0);
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("更新成功");
         }

@@ -93,6 +93,33 @@ TRUNCATE TABLE collections;
 INSERT INTO collections(strategy_id, user_id)
 VALUES(1,2),(2,3),(3,4),(4,2),(5,3),(6,2),(7,2),(8,4),(9,2),(10,4),(15,3);
 
+SELECT COUNT(*) FROM collections WHERE user_id=4 AND strategy_id=6;
+
+
+
+
+DROP TABLE IF EXISTS strategy_for;
+-- ------------------------------------
+-- Table structure for `strategy_for`
+-- ------------------------------------
+CREATE TABLE `strategy_for` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT 'users.id',
+  `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
+  `status` int(11) NOT NULL COMMENT '0:未点赞,1:已点赞',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO strategy_for(user_id, strategy_id, status)
+VALUES(4,2,1),(4,3,1),(4,4,0),(4,5,1),(10,3,0),(4,6,0),(4,7,0),(10,4,0),(4,8,0),(10,4,0);
+
+SELECT status FROM strategy_for WHERE user_id=4 AND strategy_id=4;
+
+SELECT COUNT(*) FROM strategy_for WHERE user_id=4 AND strategy_id=5;
+
+UPDATE strategy_for SET status=1 WHERE user_id=4 AND strategy_id=5;
+
+
 
 DROP TABLE IF EXISTS cities;
 -- ------------------------------------
@@ -216,9 +243,7 @@ CREATE TABLE `feedback_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 INSERT INTO feedback_info(sned_id, receive_id, content, level, parent, sequence, status, create_time, update_time)
-VALUES (4,'你好呀',1,0,1,1,'2018-02-27 12:23:45','2018-02-27 12:26:45'),(4,'首次登录',2,0,1,1,'2018-02-28 12:23:46','2018-02-27 12:23:48'),
-  (8,'hi!',1.2,1,2,1,'2018-02-27 12:24:47','2018-02-27 12:26:45'),(8,'欢迎你',2.2,2,2,1,'2018-02-28 12:23:48','2018-02-27 12:23:48'),
-  (4,'o(∩∩)o...哈哈',1.3,1,3,1,'2018-02-27 12:25:49','2018-02-27 12:26:45');
+VALUES (4,8,'你好呀',1,0,1,1,'2018-02-27 12:23:45','2018-02-27 12:26:45');
 
 SELECT level FROM feedback_info WHERE user_id=4 AND parent=0;
 
