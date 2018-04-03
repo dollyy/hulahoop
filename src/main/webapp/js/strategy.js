@@ -1,4 +1,3 @@
-//todo 已收藏的要显示
 var i;
 $(function () {
     //select2
@@ -66,11 +65,11 @@ function packageData(data) {
     }
     for (i = 0; i < data.strategies.list.length; i++) {
         $(".content").append("<div value='" + data.strategies.list[i].strategyId + "' class='strategy'>" +
-            "<img id='strategyBg' src='" + data.strategies.list[i].mainImg + "'>" +
-            "<img id='avatar' src='" + data.strategies.list[i].avatar + "'><div class='s_msg'>" +
-            "<span class='title'>标题: " + data.strategies.list[i].strategyName + "</span><span class='user'>作者 : " +
-            data.strategies.list[i].username + "</span><span class='tags'>标签 : " +
-            data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "</span></div></div>");
+        "<img id='strategyBg' src='" + data.strategies.list[i].mainImg + "'>" +
+        "<img id='avatar' src='" + data.strategies.list[i].avatar + "'><div class='s_msg'>" +
+        "<span class='title'>标题: " + data.strategies.list[i].strategyName + "</span><span class='user'>作者 : " +
+        data.strategies.list[i].username + "</span><span class='tags'>标签 : " +
+        data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "</span></div></div>");
     }
     //strategies click
     $(".content .strategy").off("click").on("click", function () {
@@ -126,11 +125,11 @@ function packUpdateList(data) {
     $("#pageNum").show();
     for (i = 0; i < data.list.length; i++) {
         $(".content").append("<div value='" + data.list[i].strategyId + "' class='strategy'>" +
-            "<img id='strategyBg' src='" + data.list[i].mainImg + "'>" +
-            "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
-            "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
-            data.list[i].username + "</span><span class='tags'>标签 : " +
-            data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
+        "<img id='strategyBg' src='" + data.list[i].mainImg + "'>" +
+        "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
+        "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
+        data.list[i].username + "</span><span class='tags'>标签 : " +
+        data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
     }
     //strategies click
     $(".content .strategy").off("click").on("click", function () {

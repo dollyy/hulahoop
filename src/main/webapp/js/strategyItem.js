@@ -10,23 +10,23 @@ $(function () {
         success: function (data) {
             //用户未登录
             if (data.status == -2) {
-                window.location.href="index.jsp";
+                window.location.href = "index.jsp";
                 return;
             }
             //攻略不存在
             if (data.status == -1) {
-                window.location.href="notFound.jsp";
+                window.location.href = "notFound.jsp";
                 return;
             }
             //1.province + duration + for + collect
             $(".ItemNav .tags").html(data.data.strategy.cityName + " > " + data.data.strategy.duration);
             //用户已点赞
-            if(data.data.for){
+            if (data.data.for) {
                 $(".ItemNav .navFor").addClass("navColor");
             }
             $(".ItemNav .navFor").html(data.data.strategy.forNum);
             //用户已收藏
-            if(data.data.collect){
+            if (data.data.collect) {
                 $(".ItemNav .navCollect").addClass("collectColor");
             }
             $(".ItemNav .navCollect").html(data.data.strategy.collectNum);
@@ -34,7 +34,7 @@ $(function () {
             //2.catalog
             for (i = 0; i < data.data.catalog.length; i++) {
                 $(".catalog").append("<li class='mtb10'><a class='cata" + (i + 1) + "' href='#cata" + (i + 1) + "'>" +
-                    data.data.catalog[i] + "</a></li>");
+                data.data.catalog[i] + "</a></li>");
             }
             $(".catalog li a").eq(0).addClass("current");
             $(".commentTitle").attr("id", "cata" + i);
@@ -47,19 +47,19 @@ $(function () {
             $(".content").attr("value", strategyId);
             for (i = 0; i < data.data.content.length; i++) {
                 $(".contentContainer").append("<div id='cata" + (i + 1) + "' class='cata'><div class='dayTitle'>" +
-                    data.data.catalog[i] + "</div><div class='dayContent'>" + data.data.content[i] + "</div></div>");
+                data.data.catalog[i] + "</div><div class='dayContent'>" + data.data.content[i] + "</div></div>");
             }
 
             //4.comment
             for (i = 0; i < data.data.comments.length; i++) {
                 $(".comments").prepend("<div class='comment' value='" + data.data.comments[i].id + "' level='" +
-                    data.data.comments[i].level + "'><img src='" + data.data.comments[i].avatar + "'><div class='response'>" +
-                    "<div class='commInfo'><span class='mr10'>" + data.data.comments[i].responseName + "</span><span class='mr10'>"
-                    + data.data.comments[i].createTime + "</span></div><div class='commContent'>" + data.data.comments[i].content +
-                    "</div><div class='commOperation'><span class='iconfont icon-zan11'></span><span class='mr10'>" +
-                    data.data.comments[i].againstNum + "</span><span class='iconfont icon-zan1'></span><span class='mr10'>" +
-                    data.data.comments[i].forNum + "</span><span>回复 </span><span>" + data.data.comments[i].commentCount +
-                    "</span></div></div></div>");
+                data.data.comments[i].level + "'><img src='" + data.data.comments[i].avatar + "'><div class='response'>" +
+                "<div class='commInfo'><span class='mr10'>" + data.data.comments[i].responseName + "</span><span class='mr10'>"
+                + data.data.comments[i].createTime + "</span></div><div class='commContent'>" + data.data.comments[i].content +
+                "</div><div class='commOperation'><span class='iconfont icon-zan11'></span><span class='mr10'>" +
+                data.data.comments[i].againstNum + "</span><span class='iconfont icon-zan1'></span><span class='mr10'>" +
+                data.data.comments[i].forNum + "</span><span>回复 </span><span>" + data.data.comments[i].commentCount +
+                "</span></div></div></div>");
             }
             //against click
             $(".commOperation .icon-zan1").unbind("click").bind("click", calNumber);
@@ -123,11 +123,11 @@ $(function () {
         if ($(this).attr("class").indexOf("collectColor") != -1) {
             $(this).removeClass("collectColor");
             $(this).next().html(--value).removeClass("collectColor");
-            status=0;
+            status = 0;
         } else {
             $(this).addClass("collectColor");
             $(this).next().html(++value).addClass("collectColor");
-            status=1;
+            status = 1;
         }
         $.ajax({
             type: "post",

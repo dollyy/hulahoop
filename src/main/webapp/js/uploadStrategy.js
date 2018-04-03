@@ -35,7 +35,7 @@ editor.customConfig.uploadImgHooks = {
     customInsert: function (insertImg, result, editor) {
         // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
         // result 必须是一个 JSON 格式字符串！！！否则报错
-        var url = result.file_path
+        var url = result.file_path;
         console.log(url);
         insertImg(url);
     }
@@ -50,21 +50,22 @@ $(function () {
         $('.js-example-basic-single').select2();
     });
     $(".form-control").select2({
-        tags: true,
+        tags: true
     });
 
     //设置富文本框的高度
-    $(".w-e-text-container").css("height","669px");
+    $(".w-e-text-container").css("height", "669px");
 
     $.ajax({
         type: "get",
         url: "/helpInfo/listByUpload.action",
         dataType: "json",
         success: function (data) {
-            if(data.status == -2){  //用户未登录
-                //todo index
+            if (data.status == -2) {  //用户未登录
+                window.location.href = "index.jsp";
+                return;
             }
-            if(data.data.helpInfo ==undefined || data.data.cities ==undefined){
+            if (data.data.helpInfo == undefined || data.data.cities == undefined) {
                 return;
             }
             //1.tips
@@ -79,7 +80,7 @@ $(function () {
             }
         },
         error: function () {
-
+            console.log("listByUpload error");
         }
     });
 
@@ -109,7 +110,11 @@ $(function () {
         if (text != "" && text != null) {
             //alert(editor.txt.html());
             var day = ($(".strategyContainer").find(".day").length + 1);
-            $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' draggable='true' ondragstart='drag(event, this)'><div class='dayTitle mb10'><input id='daySub' type='text' value=" + subTitle + " readonly><span class='iconfont icon-delete' title='删除'></span><span class='iconfont icon-bianji' title='编辑'></span><span class='iconfont icon-baocun' title='保存'></span></div><div class='content' id='day" + day + "'>" + editor.txt.html() + "</div></div>");
+            $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' " +
+            "draggable='true' ondragstart='drag(event, this)'><div class='dayTitle mb10'><input id='daySub' type='text' " +
+            "value=" + subTitle + " readonly><span class='iconfont icon-delete' title='删除'></span>" +
+            "<span class='iconfont icon-bianji' title='编辑'></span><span class='iconfont icon-baocun' title='保存'>" +
+            "</span></div><div class='content' id='day" + day + "'>" + editor.txt.html() + "</div></div>");
             //clean content
             $(".w-e-text").html("");
             $("#subTitle").val("");
@@ -122,13 +127,13 @@ $(function () {
 
     /* submit strategy */
     $("#subBtn").click(function () {
-        var cityId=$(".cities option:selected").val();
-        var duration=$("#duration").val();
-        if(cityId == 0){
+        var cityId = $(".cities option:selected").val();
+        var duration = $("#duration").val();
+        if (cityId == 0) {
             $(".tips").html("请选择城市").show().fadeOut(2000);
             return;
         }
-        if(duration == null || duration == ""){
+        if (duration == null || duration == "") {
             $(".tips").html("请选择时长").show().fadeOut(2000);
             return;
         }
@@ -146,15 +151,20 @@ $(function () {
         $(".strategyContainer .day").each(function () {
             strategy += $(this).find("#daySub").val() + "@#" + $(this).find(".content").html() + "#-";
         });
-        var strategy={"name":title,"cityId":cityId,"duration":duration,"content":strategy.substr(0, strategy.length - 2)};
+        var strategy = {
+            "name": title,
+            "cityId": cityId,
+            "duration": duration,
+            "content": strategy.substr(0, strategy.length - 2)
+        };
         $.ajax({
-            type:"post",
-            url:"/strategy/add.action",
-            data:strategy,
-            beforeSend:function () {
+            type: "post",
+            url: "/strategy/add.action",
+            data: strategy,
+            beforeSend: function () {
                 alert(strategy);
             },
-            success:function (data) {
+            success: function (data) {
                 alert(data.msg);
             }
         })

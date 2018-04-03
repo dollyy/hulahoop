@@ -13,9 +13,6 @@ $(function () {
             userId = data.data.id;
             //dwr页面加载
             dwrMessage.onPageLoad(userId);
-            /*
-                        $(document).ready(function () {
-                        });*/
         },
         error: function () {
             console.log("info error");
@@ -245,7 +242,7 @@ $(function () {
                 }
             },
             error: function () {
-                alert("verify phone error");
+                console.log("verify phone error");
             }
         });
     });
@@ -325,14 +322,14 @@ $(function () {
                 //登陆成功
                 history.go(0);
                 /*                $("#bg").slideUp(); //隐藏bg
-                                $("#signinContainer").slideUp();    //隐藏登录框
-                                $("#signinContainer")[0].reset();   //清空输入框
-                                $("#inBtn").attr("disabled","true");    //登录按钮置为无效
-                                $("#sign").css("display","none");   //隐藏"登录 注册"
-                                $("#username").html(data.data.username); //为用户名赋值
-                                $("#userIcon img").attr("src",data.data.avatar); //为用户头像赋值
-                                $("#userIcon").css("display","inline-block");   //显示用户信息
-                                $("#signWarn").html("");    //清空错误提示*/
+                 $("#signinContainer").slideUp();    //隐藏登录框
+                 $("#signinContainer")[0].reset();   //清空输入框
+                 $("#inBtn").attr("disabled","true");    //登录按钮置为无效
+                 $("#sign").css("display","none");   //隐藏"登录 注册"
+                 $("#username").html(data.data.username); //为用户名赋值
+                 $("#userIcon img").attr("src",data.data.avatar); //为用户头像赋值
+                 $("#userIcon").css("display","inline-block");   //显示用户信息
+                 $("#signWarn").html("");    //清空错误提示*/
             },
             error: function () {
                 console.log("signin error");
@@ -360,6 +357,6 @@ $(function () {
 
 //推送信息处理
 function showMessage(data) {
-    alert(data);
+    console.log(data);
     $("#msgDot").css("display", "inline-block");
 }
