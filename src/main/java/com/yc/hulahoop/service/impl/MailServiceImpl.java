@@ -5,7 +5,9 @@ import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.service.MailService;
 import com.yc.hulahoop.util.MailUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
+@Service("mailService")
 public class MailServiceImpl implements MailService {
 
     @Override

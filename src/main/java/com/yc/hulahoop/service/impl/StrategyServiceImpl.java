@@ -6,12 +6,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
-import com.yc.hulahoop.dao.CityMapper;
-import com.yc.hulahoop.dao.CollectionMapper;
-import com.yc.hulahoop.dao.CommentMapper;
-import com.yc.hulahoop.dao.StrategyMapper;
+import com.yc.hulahoop.dao.*;
 import com.yc.hulahoop.pojo.City;
 import com.yc.hulahoop.pojo.Strategy;
+import com.yc.hulahoop.pojo.StrategyFor;
 import com.yc.hulahoop.service.StrategyService;
 import com.yc.hulahoop.util.PropertiesUtil;
 import com.yc.hulahoop.vo.CollectionVo;
@@ -40,6 +38,9 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Autowired
     CommentMapper commentMapper;
+
+    @Autowired
+    StrategyForMapper strategyForMapper;
 
     @Override
     public ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
@@ -125,7 +126,7 @@ public class StrategyServiceImpl implements StrategyService {
         int count = collectionMapper.isCollected(userId, strategyId);
         result.put("collect", count == 1);  //收藏返回true
         //是否点赞 todo
-        //count=isFor(userId, strategyId);SELECT status FROM strategy_for WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+        count=strategyForMapper.existRecord(userId, strategyId);
         result.put("for", count == 1);  //点赞返回true
         //封装comment对象
         List<CommentVo> commentVos = commentMapper.listByStrategy(strategyVo.getStrategyId());
@@ -169,6 +170,7 @@ public class StrategyServiceImpl implements StrategyService {
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         List<Integer> strategyList = Lists.newArrayList();
+        System.out.println("================"+strategyId);
         //删除一/多个攻略
         if (strategyId.contains(",")) {   //删除多个
             String[] strategyIds = strategyId.split(",");
@@ -178,15 +180,14 @@ public class StrategyServiceImpl implements StrategyService {
         } else { //删除一个
             strategyList.add(Integer.parseInt(strategyId));
         }
-        int count;
         if (userId == Const.ADMIN_ID) { //管理员删除
-            count = strategyMapper.deleteByAdmin(strategyList);
+            strategyMapper.deleteByAdmin(strategyList);
         } else {
             //删除时添加user_id防止横向越权
-            count = strategyMapper.deleteByUserIdAndStrategyId(strategyList, userId);
+            strategyMapper.deleteByUserIdAndStrategyId(userId, strategyList);
         }
         //删除用户收藏
-        count=collectionMapper.deleteByStrategyId(strategyList);
+        int count=collectionMapper.deleteByStrategyId(strategyList);
         //删除成功
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("删除成功");
@@ -242,12 +243,15 @@ public class StrategyServiceImpl implements StrategyService {
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //todo
-        //SELECT COUNT(*) FROM strategy_for WHERE user_id=4 AND strategy_id=5
-        int count=0;
+        int count=strategyForMapper.existRecord(userId, strategyId);
         if(count > 0){  //更新
-            //count=UPDATE strategy_for SET status=#{status} WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+            count=strategyForMapper.updateByUserIdAndStrategyId(userId, strategyId);
         }else{  //新增
-            //count=insert();
+            StrategyFor strategyFor=new StrategyFor();
+            strategyFor.setUserId(userId);
+            strategyFor.setStrategyId(strategyId);
+            strategyFor.setStatus(1);
+            count=strategyForMapper.insert(strategyFor);
         }
         if(count > 0){
             return ServerResponse.createBySuccess();
@@ -312,9 +316,10 @@ public class StrategyServiceImpl implements StrategyService {
                         Const.ResponseCode.NO_INFO.getDescription());
             }
             //获取用户有没有对攻略点赞
+            int count;
             for(CollectionVo collectionVo : collectionVoList){
                 //todo
-                //count=isFor(userId, strategyId);SELECT status FROM strategy_for WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+                count=strategyForMapper.existRecord(userId, collectionVo.getId());
                 collectionVo.setForStatus(1);
             }
             //2.pageHelper--end

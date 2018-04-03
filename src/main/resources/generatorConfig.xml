@@ -90,8 +90,8 @@
 <!--        <table tableName="dwr_record" domainObjectName="DwrRecord" enableCountByExample="false"
                                                               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                                                               selectByExampleQueryId="false"/>-->
-        <table tableName="strategy_for" domainObjectName="StrategyFor" enableCountByExample="false"
+<!--        <table tableName="strategy_for" domainObjectName="StrategyFor" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"/>
+               selectByExampleQueryId="false"/>-->
     </context>
 </generatorConfiguration>

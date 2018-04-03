@@ -23,10 +23,10 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO users(username, password, avatar, email, role, bio, gender, city, create_time, update_time)
-    VALUES ('user1','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
-      ('user2','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
-      ('user3','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
-      ('user4','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate());
+    VALUES ('user1','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen302@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
+      ('user2','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen301@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
+      ('user3','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen303@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
+      ('user4','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen304@163.com',0,'bio','unknown','city',sysdate(),sysdate());
 
 
 
@@ -109,7 +109,9 @@ CREATE TABLE `strategy_for` (
 INSERT INTO strategy_for(user_id, strategy_id, status)
 VALUES(4,2,1),(4,3,1),(4,4,0),(4,5,1),(10,3,0),(4,6,0),(4,7,0),(10,4,0),(4,8,0),(10,4,0);
 
-SELECT status FROM strategy_for WHERE user_id=4 AND strategy_id=4;
+
+
+SELECT ifnull(0,status) FROM strategy_for WHERE user_id=4 AND strategy_id=16;
 
 SELECT COUNT(*) FROM strategy_for WHERE user_id=4 AND strategy_id=5;
 
@@ -128,7 +130,7 @@ CREATE TABLE `cities` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO cities(name)
+INSERT INTO cities(id, name)
 VALUES (1,'安徽'),(2,'澳门'),(3,'北京'),(4,'重庆'),(5,'福建'),(6,'吉林'),(7,'江苏'),(8,'江西'),(9,'海南'),(10,'河北'),
   (11,'河南'),(12,'黑龙江'),(13,'湖北'),(14,'湖南'),(15,'甘肃'),(16,'广东'),(17,'广西'),(18,'贵州'),(19,'辽宁'),
   (20,'南海诸岛'),(21,'内蒙古'),(22,'宁夏'),(23,'青海'),(24,'山东'),(25,'山西'),(26,'陕西'),(27,'上海'),(28,'四川'),

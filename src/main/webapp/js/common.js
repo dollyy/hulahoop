@@ -17,66 +17,6 @@ function operateNumber(that){
     return true;
 }
 
-//点赞攻略
-function likeStrategy(strategyId){
-    var value = $(this).next().html();
-    if ($(this).attr("class").indexOf("navColor") != -1) {
-        $(this).removeClass("navColor");
-        $(this).next().html(--value).removeClass("navColor");
-    } else {
-        $(this).addClass("navColor");
-        $(this).next().html(++value).addClass("navColor");
-    }
-    $.ajax({
-        type: "post",
-        url: "/strategy/updateForOrCollect.action",
-        data: {"forNum": value, "id": strategyId},
-        success: function () {
-
-        },
-        error: function () {
-
-        }
-    });
-}
-
-//收藏攻略
-function collectStrategy(strategyId){
-    var status;
-    var value = $(this).next().html();
-    if ($(this).attr("class").indexOf("collectColor") != -1) {
-        $(this).removeClass("collectColor");
-        $(this).next().html(--value).removeClass("collectColor");
-        status = 0;
-    } else {
-        $(this).addClass("collectColor");
-        $(this).next().html(++value).addClass("collectColor");
-        status = 1;
-    }
-    $.ajax({
-        type: "post",
-        url: "/strategy/updateForOrCollect.action",
-        data: {"collectNum": value, "id": strategyId},
-        success: function () {
-
-        },
-        error: function () {
-
-        }
-    });
-    $.ajax({
-        type: "post",
-        url: "/strategy/updateForStatus.action",
-        data: {"status": status, "id": strategyId},
-        success: function () {
-
-        },
-        error: function () {
-
-        }
-    });
-}
-
 //解析地址
 function getQueryStringArgs() {
     var args=[];

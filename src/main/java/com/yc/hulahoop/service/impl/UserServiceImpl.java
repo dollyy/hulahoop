@@ -59,14 +59,14 @@ public class UserServiceImpl implements UserService {
         }
         //校验 邮箱
         //验证格式
-        String phone=user.getPhone();   //todo String email=user.getEmail();
+        String email=user.getEmail();
         Pattern pattern=Pattern.compile(Const.EMAIL_REGEX);
-        Matcher matcher=pattern.matcher(phone); //todo Matcher matcher=pattern.matcher(email);
+        Matcher matcher=pattern.matcher(email);
         if(!matcher.matches()){
             return ServerResponse.createByErrorMessage("邮箱格式错误");
         }
         //验证唯一性
-        serverResponse = verify(phone, Const.PHONE);    //todo serverResponse = verify(email, Const.EMAIL);
+        serverResponse = verify(email, Const.EMAIL);
         if (!serverResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("邮箱已绑定");
         }
@@ -217,7 +217,7 @@ public class UserServiceImpl implements UserService {
         admin.setPassword(password);
         admin.setRole(Const.Role.ADMIN);
         //admin的email为用户名加邮箱后缀,eg:admin@163.com
-        admin.setPhone(""); //todo admin.setEmail(admin.getUsername()+"@163.com");
+        admin.setEmail(admin.getUsername()+"@163.com");
         count = userMapper.insert(admin);
         //获取user的信息
         user = userMapper.selectByPrimaryKey(admin.getId());

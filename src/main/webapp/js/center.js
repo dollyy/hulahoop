@@ -195,17 +195,71 @@ $(function () {
                     "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
                     data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
                     "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                    "<span class='iconfont icon-zan1'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
+                    "<span class='iconfont icon-zan1 navColor'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
                     "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
                     "</span></span></span></div></div>");
                 }
                 //点赞攻略 todo test
                 $(".icon-zan1").off("click").on("click",function(){
-                    likeStrategy($(this).parent().parent().parent().parent().attr("value"));
+                    var strategyId=$(this).parent().parent().parent().parent().attr("value");
+                    var value = $(this).next().html();
+                    if ($(this).attr("class").indexOf("navColor") != -1) {
+                        $(this).removeClass("navColor");
+                        $(this).next().html(--value).removeClass("navColor");
+                    } else {
+                        $(this).addClass("navColor");
+                        $(this).next().html(++value).addClass("navColor");
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: "/strategy/updateForOrCollect.action",
+                        data: {"forNum": value, "id": strategyId},
+                        success: function () {
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+                    //todo 更新strategy_for表
+                    $.ajax({
+                        type: "post",
+                        url: "/strategy/updateForStatus.action",
+                        data: {"status": status, "id": strategyId},
+                        success: function () {
+
+                        },
+                        error: function () {
+
+                        }
+                    });
                 });
                 //收藏攻略 todo test
                 $(".icon-collection-b").off("click").on("click",function(){
-                    collectStrategy($(this).parent().parent().parent().parent().attr("value"));
+                    var strategyId=$(this).parent().parent().parent().parent().attr("value");
+                    var status;
+                    var value = $(this).next().html();
+                    if ($(this).attr("class").indexOf("collectColor") != -1) {
+                        $(this).removeClass("collectColor");
+                        $(this).next().html(--value).removeClass("collectColor");
+                        status = 0;
+                    } else {
+                        $(this).addClass("collectColor");
+                        $(this).next().html(++value).addClass("collectColor");
+                        status = 1;
+                    }
+                    $.ajax({
+                        type: "post",
+                        url: "/strategy/updateForOrCollect.action",
+                        data: {"collectNum": value, "id": strategyId},
+                        success: function () {
+
+                        },
+                        error: function () {
+
+                        }
+                    });
+                    //todo 更新collections表
                 });
                 //pages
                 $("#page").paging({
@@ -217,6 +271,7 @@ $(function () {
                             data: {"pageNum": num},
                             dataType: "json",
                             success: function (data) {
+                                $(".collects").empty();
                                 for (i = 0; i < data.data.list.length; i++) {
                                     forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +

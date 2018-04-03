@@ -24,7 +24,7 @@ public interface StrategyMapper {
 
     StrategyVo detail(Integer strategyId);
 
-    int deleteByUserIdAndStrategyId(@Param("strategyIdList") List<Integer> strategyIdList, @Param("userId") Integer userId);
+    int deleteByUserIdAndStrategyId(@Param("userId") Integer userId, @Param("strategyIdList") List<Integer> strategyIdList);
 
     int deleteByAdmin(@Param("strategyIdList") List<Integer> strategyIdList);
 

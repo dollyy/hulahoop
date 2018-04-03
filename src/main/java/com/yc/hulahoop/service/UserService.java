@@ -3,8 +3,6 @@ package com.yc.hulahoop.service;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.User;
 
-import java.util.List;
-
 public interface UserService {
 
     ServerResponse<String> verify(String val, String type);

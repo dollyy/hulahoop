@@ -1,25 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yc.hulahoop.dao.UserMapper">
     <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.User">
         <constructor>
-            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="phone" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="role" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="bio" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="gender" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR"/>
-            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="bio" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="gender" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, avatar, phone, role, bio, gender, city, create_time, update_time
+        id, username, password, avatar, email, role, bio, gender, city, create_time, update_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
         from users
@@ -29,14 +29,13 @@
         DELETE FROM users
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <!-- useGeneratedKeys="true" 获取插入这条记录中的字段keyProperty -->
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User">
         INSERT INTO users (id, username, password,
-                           avatar, phone, role,
+                           avatar, email, role,
                            bio, gender, city,
                            create_time, update_time)
         VALUES (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-                                        #{avatar,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER},
+                                        #{avatar,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER},
                                         #{bio,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
                                         now(), now())
     </insert>
@@ -55,8 +54,8 @@
             <if test="avatar != null">
                 avatar,
             </if>
-            <if test="phone != null">
-                phone,
+            <if test="email != null">
+                email,
             </if>
             <if test="role != null">
                 role,
@@ -90,8 +89,8 @@
             <if test="avatar != null">
                 #{avatar,jdbcType=VARCHAR},
             </if>
-            <if test="phone != null">
-                #{phone,jdbcType=VARCHAR},
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
             </if>
             <if test="role != null">
                 #{role,jdbcType=INTEGER},
@@ -125,8 +124,8 @@
             <if test="avatar != null">
                 avatar = #{avatar,jdbcType=VARCHAR},
             </if>
-            <if test="phone != null">
-                phone = #{phone,jdbcType=VARCHAR},
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
             </if>
             <if test="role != null">
                 role = #{role,jdbcType=INTEGER},
@@ -154,7 +153,7 @@
         SET username    = #{username,jdbcType=VARCHAR},
             password    = #{password,jdbcType=VARCHAR},
             avatar      = #{avatar,jdbcType=VARCHAR},
-            phone       = #{phone,jdbcType=VARCHAR},
+            email       = #{email,jdbcType=VARCHAR},
             role        = #{role,jdbcType=INTEGER},
             bio         = #{bio,jdbcType=VARCHAR},
             gender      = #{gender,jdbcType=VARCHAR},

@@ -11,7 +11,7 @@ public class User {
 
     private String avatar;
 
-    private String phone;
+    private String email;
 
     private Integer role;
 
@@ -25,12 +25,12 @@ public class User {
 
     private Date updateTime;
 
-    public User(Integer id, String username, String password, String avatar, String phone, Integer role, String bio, String gender, String city, Date createTime, Date updateTime) {
+    public User(Integer id, String username, String password, String avatar, String email, Integer role, String bio, String gender, String city, Date createTime, Date updateTime) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.avatar = avatar;
-        this.phone = phone;
+        this.email = email;
         this.role = role;
         this.bio = bio;
         this.gender = gender;
@@ -75,12 +75,12 @@ public class User {
         this.avatar = avatar == null ? null : avatar.trim();
     }
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 
     public Integer getRole() {
