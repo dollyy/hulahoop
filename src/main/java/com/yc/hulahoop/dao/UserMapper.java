@@ -18,11 +18,11 @@ public interface UserMapper {
 
     int verifyUsername(String username);
 
-    int verifyPhone(String phone);
+    int verifyEmail(String email);
 
     User loginByUsername(@Param("username") String username, @Param("password") String password);
 
-    User loginByPhone(@Param("phone") String phone, @Param("password") String password);
+    User loginByEmail(@Param("email") String email, @Param("password") String password);
 
     int verifyPassword(@Param("passwordOld") String passwordOld, @Param("userId") int userId);
 

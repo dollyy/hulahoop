@@ -10,14 +10,14 @@ import java.util.Set;
 public class Const {
 
     public static final int ADMIN_ID=8;
-    public static final String ADMIN_NAME="admin";
     public static final String USERNAME = "username";
+    public static final String EMAIL = "email";
     public static final String PHONE = "phone";
     public static final String CURRENT_USER = "currentUser";
     public static final String STRATEGY="strategy";
     public static final String AVATAR="avatar";
     public static final String HELPINFO="helpInfo";
-    public static final String PHONE_REGEX="^((13[0-9])|(15[^4])|(18[0,2,3,5-9])|(17[0-8])|(147))\\d{8}$";
+    public static final String EMAIL_REGEX = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
 
     public static final int PAGE_SIZE=12;
     public static final int PAGE_SIZE_ADMIN=8;

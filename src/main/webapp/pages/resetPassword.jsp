@@ -43,7 +43,7 @@
     <div class="content">
         <div class="step step1">
             <div>
-                <input type="text" id="phone" placeholder="Phone Number">
+                <input type="text" id="email" placeholder="Email">
                 <input type="button" value="获取验证码" id="queryCode" disabled>
             </div>
             <input type="text" id="code" placeholder="Message Code">

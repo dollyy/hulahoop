@@ -1,5 +1,6 @@
 $(function () {
 
+
     var userId;
     //获取当前用户的信息
     $.ajax({
@@ -110,7 +111,7 @@ $(function () {
 
     /* 注册 */
     //校验注册时所需参数是否符合规范的标记
-    var upNameFlag, upPwdFlag, upPwdReFlag, upPhoneFlag;
+    var upNameFlag, upPwdFlag, upPwdReFlag, upEmailFlag;
     //注册时输入的密码
     var upPwd;
     //校验用户名
@@ -122,10 +123,9 @@ $(function () {
             $("#signWarn").html("");    //清空错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
-            1
         }
         //如果用户名满足手机号的正则表达式则不符合规范
-        if (checkPhoneFormat(upName)) {
+        if (checkEmailFormat(upName)) {
             upNameFlag == false;
             $("#upName").addClass("warnBorder");    //css样式添加警告框
             $("#signWarn").html("用户名不符合格式规范");    //清空错误提示
@@ -150,7 +150,7 @@ $(function () {
                 upNameFlag = true;
                 $("#upName").removeClass("warnBorder");//css样式移除警告框
                 $("#signWarn").html("");//清空错误提示
-                if (upPwdFlag && upPwdReFlag && upPhoneFlag) {    //输入参数均符合规范注册按钮置为有效
+                if (upPwdFlag && upPwdReFlag && upEmailFlag) {    //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
             },
@@ -170,7 +170,7 @@ $(function () {
         }
         upPwdFlag = true;
         $("#upPwd").removeClass("warnBorder");  //css样式移除警告框
-        if (upNameFlag && upPwdReFlag && upPhoneFlag) {   //输入参数均符合规范注册按钮置为有效
+        if (upNameFlag && upPwdReFlag && upEmailFlag) {   //输入参数均符合规范注册按钮置为有效
             $("#upBtn").removeAttr("disabled");
         }
     });
@@ -189,7 +189,7 @@ $(function () {
                 upPwdReFlag = true;
                 $("#upPwdRe").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
-                if (upNameFlag && upPwdFlag && upPhoneFlag) { //输入参数均符合规范注册按钮置为有效
+                if (upNameFlag && upPwdFlag && upEmailFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
                 return;
@@ -202,19 +202,19 @@ $(function () {
         }
     });
     //校验手机号
-    $("#upPhone").focusout(function () {
-        var upPhone = $("#upPhone").val().trim();
-        if (upPhone == null || upPhone == "") {
-            upPhoneFlag == false;
-            $("#upPhone").addClass("warnBorder");   //css样式添加警告框
+    $("#upEmail").focusout(function () {
+        var upEmail = $("#upEmail").val().trim();
+        if (upEmail == null || upEmail == "") {
+            upEmailFlag == false;
+            $("#upEmail").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("");    //清空错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
-        //手机号正则表达式
-        if (!checkPhoneFormat(upPhone)) {
-            upPhoneFlag = false;
-            $("#upPhone").addClass("warnBorder");   //css样式添加警告框
+        //手机号正则表达式 todo
+        if (!checkEmailFormat(upEmail)) {
+            upEmailFlag = false;
+            $("#upEmail").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("手机号码格式错误");    //错误提示
             return;
         }
@@ -222,20 +222,20 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/user/verify.action",
-            data: {"val": upPhone, "type": "phone"},
+            data: {"val": upEmail, "type": "phone"},
             dataType: "json",
             success: function (data) {
                 //手机号校验失败
                 if (data.status == 0) {
-                    upPhoneFlag == false;
-                    $("#upPhone").addClass("warnBorder");   //css样式添加警告框
+                    upEmailFlag == false;
+                    $("#upEmail").addClass("warnBorder");   //css样式添加警告框
                     $("#signWarn").html("手机号已存在");  //错误提示
                     $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
                 //手机号校验成功
-                upPhoneFlag = true;
-                $("#upPhone").removeClass("warnBorder");    //css样式移除警告框
+                upEmailFlag = true;
+                $("#upEmail").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
                 if (upNameFlag && upPwdFlag && upPwdReFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
@@ -307,7 +307,7 @@ $(function () {
     });
     //点击登录
     $("#inBtn").click(function () {
-        type = checkPhoneFormat(inName) ? "phone" : "username";
+        var type = checkEmailFormat(inName) ? "phone" : "username";
         $.ajax({
             type: "post",
             url: "/user/login.action",

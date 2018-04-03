@@ -123,9 +123,9 @@
                             </select>
                         </div>
                         <div>
-                            <div>手机号</div>
-                            <span class="phoneWarn"></span><br>
-                            <input type="text" name="phone" id="phone" value="18366666666">
+                            <div>邮箱</div>
+                            <span class="emailWarn"></span><br>
+                            <input type="text" name="email" id="email" value="yangchen302@163.com">
                             <input type="button" id="updateBtn" value="获取验证码" disabled><br>
                         </div>
                         <div class="codeContainer">

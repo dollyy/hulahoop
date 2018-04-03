@@ -57,7 +57,7 @@
     <!--登录容器-->
     <form id="signinContainer">
         <a id="goUp">去注册</a>
-        <input type="text" id="inName" name="username" placeholder="Username or Telephone"><br>
+        <input type="text" id="inName" name="username" placeholder="Username or email"><br>
         <input type="text" id="inPwd" name="password" placeholder="Password"><br>
         <span id="pwdOperation">
                 <input type="checkbox" id="savePwd">记住密码
@@ -71,7 +71,7 @@
         <input type="text" id="upName" name="username" placeholder="Username"><br>
         <input type="text" id="upPwd" name="password" placeholder="Password"><br>
         <input type="text" id="upPwdRe" name="passwordRe" placeholder="Password again"><br>
-        <input type="text" id="upPhone" name="phone" value="18360868799" placeholder="Phone number"><br>
+        <input type="text" id="upEmail" name="email" value="yangchen302@163.com" placeholder="Email"><br>
         <input type="button" id="upBtn" value="注 册" disabled>
     </form>
 </div>

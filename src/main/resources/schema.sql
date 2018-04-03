@@ -12,7 +12,7 @@ CREATE TABLE `users` (
   `username` varchar(20) NOT NULL,
   `password` varchar(50) NOT NULL COMMENT '密码加密',
   `avatar` varchar(100) DEFAULT NULL COMMENT '用户头像',
-  `phone` varchar(20) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `role` int(1) NOT NULL COMMENT '角色,0:用户,1:管理员',
   `bio` varchar(50) DEFAULT NULL COMMENT '个人简介',
   `gender` varchar(10) DEFAULT NULL COMMENT '性别',
@@ -22,9 +22,13 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE TABLE users;
+INSERT INTO users(username, password, avatar, email, role, bio, gender, city, create_time, update_time)
+    VALUES ('user1','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
+      ('user2','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
+      ('user3','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate()),
+      ('user4','123','avatar','phone',0,'bio','gender','city',sysdate(),sysdate());
 
-SELECT count(*) FROM users WHERE role=1;
+
 
 DROP TABLE IF EXISTS strategies;
 -- ------------------------------------
@@ -49,32 +53,27 @@ TRUNCATE TABLE strategies;
 
 INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
 VALUES
-  (4,'1日游',1,'3天','第一天@#11111ftp://images/a0.jpg#-第二天@#22222#-第三天@#33333ftp://images/a1.jpg#-第四天@#44444','ftp://images/a0.jpg',5,7,sysdate(),sysdate()),
-  (2,'2日游',4,'5天','百度@#baidu#-准备@#zhunbeiftp://images/a1.jpg#-开始@#kaishi#-途中@#tuzhong#-回家@#huijia','ftp://images/a1.jpg',8,5,sysdate(),sysdate()),
-  (2,'3日游',1,'7天','1天@#11111#-2天@#22222#-3天@#33333','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
-  (3,'4五日游',2,'15天','2百度@#2baidu#-2准备@#2zhunbeiftp://images/a2.jpg#-2开始@#2kaishi#-2途中@#2tuzhong#-2回家@#2huijia','ftp://images/a2.jpg',3,15,sysdate(),sysdate()),
-  (2,'5日游',1,'3天','3百度@#3baidu#-3准备@#3zhunbei#-3途中@#3tuzhong#-3回家@#3huijia','ftp://images/default.jpg',5,7,sysdate(),sysdate());
+(4,'1日游',1,'3天','第一天@#11111ftp://images/a0.jpg#-第二天@#22222#-第三天@#33333ftp://images/a1.jpg#-第四天@#44444','ftp://images/a0.jpg',5,7,sysdate(),sysdate()),
+(2,'2日游',4,'5天','百度@#baidu#-准备@#zhunbeiftp://images/a1.jpg#-开始@#kaishi#-途中@#tuzhong#-回家@#huijia','ftp://images/a1.jpg',8,5,sysdate(),sysdate()),
+(2,'3日游',1,'7天','1天@#11111#-2天@#22222#-3天@#33333','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
+(3,'4五日游',2,'15天','2百度@#2baidu#-2准备@#2zhunbeiftp://images/a2.jpg#-2开始@#2kaishi#-2途中@#2tuzhong#-2回家@#2huijia','ftp://images/a2.jpg',3,15,sysdate(),sysdate()),
+(2,'5日游',1,'3天','3百度@#3baidu#-3准备@#3zhunbei#-3途中@#3tuzhong#-3回家@#3huijia','ftp://images/default.jpg',5,7,sysdate(),sysdate());
 
 INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
 VALUES
-  (2,'6日游',4,'5天','5百度@#5baidu#-5准备@#5zhunbeiftp://images/a3.jpg#-5开始@#5kaishi#-5途中@#5tuzhong#-5回家@#5huijia','ftp://images/a3.jpg',8,5,sysdate(),sysdate()),
-  (3,'7日游',5,'7天','6百度@#6baidu#-6准备@#6zhunbei#-6开始@#6kaishi','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
-  (3,'8日游',4,'15天','7百度@#7baidu#-7准备@#7zhunbeiftp://images/a4.jpg#-7开始@#7kaishiftp://images/a5.jpg#-7途中@#7tuzhong#-7回家@#7huijia','ftp://images/a4.jpg',3,15,sysdate(),sysdate()),
-  (4,'9日游',7,'3天','8百度@#8baidu#-8准备@#8zhunbei','ftp://images/default.jpg',5,7,sysdate(),sysdate()),
-  (2,'10日游',4,'5天','9百度@#9baidu#-9准备@#9zhunbeiftp://images/a6.jpg#-9开始@#9kaishi#-9途中@#9tuzhong#-9回家@#2huijia','ftp://images/a6.jpg',8,5,sysdate(),sysdate());
+(2,'6日游',4,'5天','5百度@#5baidu#-5准备@#5zhunbeiftp://images/a3.jpg#-5开始@#5kaishi#-5途中@#5tuzhong#-5回家@#5huijia','ftp://images/a3.jpg',8,5,sysdate(),sysdate()),
+(3,'7日游',5,'7天','6百度@#6baidu#-6准备@#6zhunbei#-6开始@#6kaishi','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
+(3,'8日游',4,'15天','7百度@#7baidu#-7准备@#7zhunbeiftp://images/a4.jpg#-7开始@#7kaishiftp://images/a5.jpg#-7途中@#7tuzhong#-7回家@#7huijia','ftp://images/a4.jpg',3,15,sysdate(),sysdate()),
+(4,'9日游',7,'3天','8百度@#8baidu#-8准备@#8zhunbei','ftp://images/default.jpg',5,7,sysdate(),sysdate()),
+(2,'10日游',4,'5天','9百度@#9baidu#-9准备@#9zhunbeiftp://images/a6.jpg#-9开始@#9kaishi#-9途中@#9tuzhong#-9回家@#2huijia','ftp://images/a6.jpg',8,5,sysdate(),sysdate());
 
 INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, create_time, update_time)
-    VALUES (4,'strategy7',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-
-      (4,'strategy2',8,'31天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-
-      (4,'strategy3',9,'32天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-
-      (4,'strategy10',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-
-      (4,'strategy11',5,'5天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-
-      (4,'strategy12',1,'7天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate());
+VALUES (4,'strategy7',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+(4,'strategy2',8,'31天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+(4,'strategy3',9,'32天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+(4,'strategy10',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+(4,'strategy11',5,'5天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
+(4,'strategy12',1,'7天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate());
 
 
 DROP TABLE IF EXISTS collections;
@@ -92,9 +91,6 @@ TRUNCATE TABLE collections;
 
 INSERT INTO collections(strategy_id, user_id)
 VALUES(1,2),(2,3),(3,4),(4,2),(5,3),(6,2),(7,2),(8,4),(9,2),(10,4),(15,3);
-
-SELECT COUNT(*) FROM collections WHERE user_id=4 AND strategy_id=6;
-
 
 
 
@@ -133,9 +129,10 @@ CREATE TABLE `cities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO cities(name)
-VALUES ('安徽'),('澳门'),('北京'),('重庆'),('福建'),('吉林'),('江苏'),('江西'),('海南'),('河北'),('河南'),('黑龙江'),
-  ('湖北'),('湖南'),('甘肃'),('广东'),('广西'),('贵州'),('辽宁'),('南海诸岛'),('内蒙古'),('宁夏'),('青海'),('山东'),
-  ('山西'),('陕西'),('上海'),('四川'),('台湾'),('天津'),('西藏'),('香港'),('新疆'),('云南'),('浙江');
+VALUES (1,'安徽'),(2,'澳门'),(3,'北京'),(4,'重庆'),(5,'福建'),(6,'吉林'),(7,'江苏'),(8,'江西'),(9,'海南'),(10,'河北'),
+  (11,'河南'),(12,'黑龙江'),(13,'湖北'),(14,'湖南'),(15,'甘肃'),(16,'广东'),(17,'广西'),(18,'贵州'),(19,'辽宁'),
+  (20,'南海诸岛'),(21,'内蒙古'),(22,'宁夏'),(23,'青海'),(24,'山东'),(25,'山西'),(26,'陕西'),(27,'上海'),(28,'四川'),
+  (29,'台湾'),(30,'天津'),(31,'西藏'),(32,'香港'),(33,'新疆'),(34,'云南'),(35,'浙江');
 
 
 DROP TABLE IF EXISTS comments;

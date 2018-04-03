@@ -1,7 +1,5 @@
 package com.yc.hulahoop.vo;
 
-import java.util.Date;
-
 public class CollectionVo {
 
     private int id;
@@ -13,6 +11,7 @@ public class CollectionVo {
     private int forNum;
     private int collectNum;
     private String createTime;
+    private int forStatus;
 
     public int getId() {
         return id;
@@ -84,5 +83,13 @@ public class CollectionVo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public int getForStatus() {
+        return forStatus;
+    }
+
+    public void setForStatus(int forStatus) {
+        this.forStatus = forStatus;
     }
 }

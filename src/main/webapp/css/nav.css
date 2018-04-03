@@ -145,7 +145,7 @@ nav img{
     background: url(../images/sign/signup.jpg);
     text-align: center;
 }
-#upName,#upPwd,#upPwdRe,#upPhone,#upBtn{
+#upName,#upPwd,#upPwdRe,#upEmail,#upBtn{
     position: relative;
     top: 55px;
     margin-bottom: 10px;

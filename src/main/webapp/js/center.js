@@ -1,9 +1,9 @@
 //1.highlight color of province?
 //2.the gradient color of map
-var pieData, myChart, i, userAvatar;
+var pieData, myChart, i, userAvatar, forClass;
 $(function () {
-    var parameter=getQueryStringArgs();
-    if(parameter == "message"){
+    var parameter = getQueryStringArgs();
+    if (parameter == "message") {
         msgClick();
     }
 
@@ -11,7 +11,7 @@ $(function () {
     $("#bg").height($(document).height()).width($(document).width());
     $("#bg").click(function () {
         /*$(this).slideUp();
-        $(".feedbackDetail").slideUp();*/
+         $(".feedbackDetail").slideUp();*/
         history.go(0);
     });
 
@@ -23,7 +23,7 @@ $(function () {
     //获取当前用户信息
     $.ajax({
         type: "get",
-        url: "/user/queryUserInformation.action",
+        url: "/user/isLogin.action",
         dataType: "json",
         success: function (data) {
             if (data.status == -2) {    //用户未登录
@@ -31,7 +31,7 @@ $(function () {
                 return;
             }
             if (data.status == 0) {
-                alert(data.msg);
+                window.location.href = "systemError.jsp";
                 return;
             }
             userAvatar = data.data.avatar;
@@ -63,16 +63,16 @@ $(function () {
             showMap(data.data);
             for (i = 0; i < data.data.length; i++) {
                 $("#strategies").append("<div class='strategy'><div class='province'><span>" + data.data[i].cityName +
-                    "</span><span class='number'> ( <span>" + data.data[i].count + "</span> ) </span>" +
-                    "<span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span>" +
-                    "<span class='operate'>操作</span><span class='deleteAndCancle'>" +
-                    "<span class='delete'>删除</span>&nbsp;<span class='cancle'>取消</span>" +
-                    "</span></div><div class='all' id='all" + i + "'></div></div>");
+                "</span><span class='number'> ( <span>" + data.data[i].count + "</span> ) </span>" +
+                "<span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span>" +
+                "<span class='operate'>操作</span><span class='deleteAndCancle'>" +
+                "<span class='delete'>删除</span>&nbsp;<span class='cancle'>取消</span>" +
+                "</span></div><div class='all' id='all" + i + "'></div></div>");
                 for (j = 0; j < data.data[i].strategyVoList.length; j++) {
                     $("#all" + i).append("<input type='checkbox' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
-                        "<div class='each' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
-                        "<img src='" + data.data[i].strategyVoList[j].mainImg + "'><div class='title'>" +
-                        data.data[i].strategyVoList[j].strategyName + "</div></div>");
+                    "<div class='each' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
+                    "<img src='" + data.data[i].strategyVoList[j].mainImg + "'><div class='title'>" +
+                    data.data[i].strategyVoList[j].strategyName + "</div></div>");
                 }
             }
             var strategyDom = $("#strategies .strategy");
@@ -127,7 +127,7 @@ $(function () {
                     dataType: "json",
                     success: function (data) {
                         if (data.status == 0) {
-                            alert(data.msg);
+                            window.location.href = "systemError.jsp";
                             return;
                         }
                         var deleteId = selectId.split(",");
@@ -189,15 +189,24 @@ $(function () {
                 $(".collectCatalog").show();
                 $(".collectNothing").css("opacity", 0);
                 for (i = 0; i < data.data.list.length; i++) {
+                    forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                        "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                        data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                        "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                        "<span class='iconfont icon-zan1'></span><span class='forNum'>" + data.data.list[i].forNum +
-                        "</span><span class='iconfont icon-collection-b'></span><span>" + data.data.list[i].collectNum +
-                        "</span></span></span></div></div>");
+                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
+                    "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
+                    data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
+                    "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
+                    "<span class='iconfont icon-zan1'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
+                    "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
+                    "</span></span></span></div></div>");
                 }
+                //点赞攻略 todo test
+                $(".icon-zan1").off("click").on("click",function(){
+                    likeStrategy($(this).parent().parent().parent().parent().attr("value"));
+                });
+                //收藏攻略 todo test
+                $(".icon-collection-b").off("click").on("click",function(){
+                    collectStrategy($(this).parent().parent().parent().parent().attr("value"));
+                });
                 //pages
                 $("#page").paging({
                     totalPage: data.data.pages,
@@ -209,16 +218,17 @@ $(function () {
                             dataType: "json",
                             success: function (data) {
                                 for (i = 0; i < data.data.list.length; i++) {
+                                    forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
-                                        "<div class='collectInfo'><span><span class='title'>"
-                                        + data.data.list[i].strategyName + "</span><span class='author'>" +
-                                        data.data.list[i].username + "</span><span class='city'>" +
-                                        data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
-                                        + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +
-                                        "</span><span class='forNum'>" + data.data.list[i].forNum + "</span>" +
-                                        "<span class='iconfont icon-collection-b'></span><span>" +
-                                        data.data.list[i].collectNum + "</span></span></span></div></div>");
+                                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
+                                    "<div class='collectInfo'><span><span class='title'>"
+                                    + data.data.list[i].strategyName + "</span><span class='author'>" +
+                                    data.data.list[i].username + "</span><span class='city'>" +
+                                    data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
+                                    + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +
+                                    "</span><span class='" + forClass + "'>" + data.data.list[i].forNum + "</span>" +
+                                    "<span class='iconfont icon-collection-b collectColor'></span><span>" +
+                                    data.data.list[i].collectNum + "</span></span></span></div></div>");
                                 }
                             }
 
@@ -244,7 +254,7 @@ $(function () {
     });
 
     /* 3.修改资料 */
-    var oldPhone;
+    var oldEmail;
     $("#navEdit").click(function () {
         $.ajax({
             type: "get",
@@ -255,11 +265,11 @@ $(function () {
                     window.location.href = "index.jsp";
                     return;
                 }
-                oldPhone = data.data.phone;
+                oldEmail = data.data.email;
                 $("#centerUsername").val(data.data.username);
                 //todo 性别赋值有问题
                 $("#gender").val(data.data.gender);
-                $("#phone").val(data.data.phone);
+                $("#email").val(data.data.email);
                 $("#city").val(data.data.city);
                 $("#bio").val(data.data.bio);
                 $("#usericon").attr("src", data.data.avatar);
@@ -303,14 +313,14 @@ $(function () {
         $("#editBtn").removeAttr("disabled");
     });
     //校验手机号格式
-    $("#phone").focusout(function () {
-        var newPhone = $(this).val().trim();
-        if (!checkPhoneFormat(newPhone)) {    //手机号格式错误
-            $(".phoneWarn").html("手机号错误");
+    $("#email").focusout(function () {
+        var newEmail = $(this).val().trim();
+        if (!checkEmailFormat(newEmail)) {    //手机号格式错误
+            $(".emailWarn").html("手机号错误");
             return;
         }
-        $(".phoneWarn").html("");
-        if (oldPhone == newPhone) {
+        $(".emailWarn").html("");
+        if (oldEmail == newEmail) {
             $("#updateBtn").attr("disabled", "true");
             $("#editBtn").attr("disabled", "true");
         } else {
@@ -330,7 +340,7 @@ $(function () {
             url: "/user/updateUserInformation.action",
             data: {
                 "username": $("#centerUsername").val(),
-                "phone": $("#phone").val(),
+                "email": $("#email").val(),
                 "bio": $("#bio").val(),
                 "gender": $("#gender").val(),
                 "city": $("#city").val()
@@ -342,7 +352,7 @@ $(function () {
                     return;
                 }
                 if (data.status == 0) { //更新失败
-                    alert(data.msg);
+                    window.location.href = "systemError.jsp";
                     return;
                 }
                 alert("更新成功");
@@ -375,7 +385,6 @@ $(function () {
     //再次输入新密码
     $(".rePwd").focusout(function () {
         if ($(".newPwd").val().trim() != $(this).val().trim()) {
-            //todo 两次密码不一致
             $(".rePwdWarn").html("两次密码不一致");
             return;
         }
@@ -399,7 +408,7 @@ $(function () {
                         $(".oldPwdWarn").html("原始密码错误");
                         return;
                     }
-                    alert(data.msg);
+                    window.location.href = "systemError.jsp";
                 }
                 //重置密码成功
                 alert("重置成功");
@@ -432,13 +441,13 @@ function msgClick() {
                 return;
             }
             if (data.status == 0) {
-                alert(data.msg);
+                window.location.href = "systemError.jsp";
                 return;
             }
             $("#msgs").empty();
             if (data.status == -1) {  //没有匹配信息
                 $(".msgNothing").html("暂无任何信息...").css("opacity", 1);
-                $("#msgDot").css("display","none");
+                $("#msgDot").css("display", "none");
                 return;
             }
             $(".msgNothing").css("opacity", 0);
@@ -446,33 +455,33 @@ function msgClick() {
             for (i = 0; i < data.data.list.length; i++) {
                 readClass = data.data.list[i].status > 0 ? "" : "read";
                 if (data.data.list[i].id != null) {
-                    $("#msgs").append("<div class='msg "+readClass+"' level='" + data.data.list[i].level + "'>" +
-                        "<span class='msgContent'><span class=send>admin</span>" +
-                        "<span class='call'>回复你</span><span class='msgInfo'>" + data.data.list[i].content +
-                        "</span></span><span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                    $("#msgs").append("<div class='msg " + readClass + "' level='" + data.data.list[i].level + "'>" +
+                    "<span class='msgContent'><span class=send>admin</span>" +
+                    "<span class='call'>回复你</span><span class='msgInfo'>" + data.data.list[i].content +
+                    "</span></span><span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
                 } else {
                     $("#msgs").append("<div class='dwr " + readClass + "' id='" + data.data.list[i].dwrId +
-                        "' sequence='" + data.data.list[i].commentSequence + "'><span class='msgContent'>" +
-                        "<span class='send'>" + data.data.list[i].responseName + "</span><span class='call'>@你" +
-                        "</span><span class='msgInfo'>" + data.data.list[i].content + "</span></span>" +
-                        "<span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                    "' sequence='" + data.data.list[i].commentSequence + "'><span class='msgContent'>" +
+                    "<span class='send'>" + data.data.list[i].responseName + "</span><span class='call'>@你" +
+                    "</span><span class='msgInfo'>" + data.data.list[i].content + "</span></span>" +
+                    "<span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
                 }
             }
             $("#msgs .msg").off("click").on("click", detail);
             $("#msgs .dwr").off("click").on("click", function () {
-                var that=$(this);
-                if($(this).attr("class").indexOf("read") == -1){
+                var that = $(this);
+                if ($(this).attr("class").indexOf("read") == -1) {
                     $.ajax({
                         type: "get",
                         url: "/feedback/updateDwr.action",
-                        data: {"dwrId":that.attr("id")},
+                        data: {"dwrId": that.attr("id")},
                         dataType: "json",
                         success: function (data) {
-                            if(data.status == -2){  //用户未登录
-                                window.location.href="index.jsp";
+                            if (data.status == -2) {  //用户未登录
+                                window.location.href = "index.jsp";
                                 return;
                             }
-                            if(data.status == -3){  //参数错误
+                            if (data.status == -3) {  //参数错误
                                 alert(data.msg);
                                 return;
                             }
@@ -583,17 +592,17 @@ function showMap(datas) {
             },
             label: {
                 emphasis: {
-                    show: false,
+                    show: false
                 }
             },
             itemStyle: {
                 normal: {
-                    borderColor: 'transparent',
+                    borderColor: 'transparent'
                 },
                 emphasis: {
                     shadowBlur: 20,
                     shadowColor: 'rgba(0, 0, 0, 0.5)',
-                    color: '#000211', //highlight color
+                    color: '#000211' //highlight color
                 }
             }
         },
@@ -601,7 +610,7 @@ function showMap(datas) {
             {
                 type: 'scatter',
                 coordinateSystem: 'geo',
-                symbolSize: 0,
+                symbolSize: 0
             },
             {
                 name: 'color of each province',
@@ -677,6 +686,7 @@ function getPath(node) {
             reader.readAsDataURL(node.files[0]);
         }
     }
+    //将图片上传到服务器
     $("#usericon").attr("src", path);
     $("#avatarForm").attr("action", "/user/updateAvatar.action").submit();
 }
@@ -705,17 +715,20 @@ function sortCollection(order, parameter) {
             }
             $(".collects").empty();
             if (data.status == -1) {  //没有匹配信息
-                //todo
+                $(".collectNothing").html("暂无收藏，去逛逛吧...").css("opacity", 1);
+                return;
             }
+            $(".collectNothing").css("opacity", 0);
             for (i = 0; i < data.data.list.length; i++) {
+                forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                 $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                    "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                    data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                    "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                    "<span class='iconfont icon-zan1'></span><span class='forNum'>" + data.data.list[i].forNum +
-                    "</span><span class='iconfont icon-collection-b'></span><span>" + data.data.list[i].collectNum +
-                    "</span></span></span></div></div>");
+                "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
+                "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
+                data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
+                "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
+                "<span class='iconfont icon-zan1'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
+                "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
+                "</span></span></span></div></div>");
             }
         }
 
@@ -725,21 +738,21 @@ function sortCollection(order, parameter) {
 var level;
 //查看消息的详情
 function detail() {
-    var that=$(this);
+    var that = $(this);
     level = $(this).attr("level");
     //将feedback的status置为0
-    if($(this).attr("class").indexOf("read") == -1){
+    if ($(this).attr("class").indexOf("read") == -1) {
         $.ajax({
             type: "get",
             url: "/feedback/updateFeedStatus.action",
-            data: {"level":level},
+            data: {"level": level},
             dataType: "json",
             success: function (data) {
-                if(data.status == -2){  //用户未登录
-                    window.location.href="index.jsp";
+                if (data.status == -2) {  //用户未登录
+                    window.location.href = "index.jsp";
                     return;
                 }
-                if(data.status == -3){  //参数错误
+                if (data.status == -3) {  //参数错误
                     alert(data.msg);
                     return;
                 }
@@ -757,19 +770,19 @@ function detail() {
         dataType: "json",
         success: function (data) {
             if (data.status == 0) {
-                alert(data.msg);
+                window.location.href = "systemError.jsp";
                 return;
             }
             $("#bg").slideDown();
             $(".feedbackDetail").empty().append("<div class='sender'>admin</div>" +
-                "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
+            "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
             $(".feedBtn").off("click").on("click", sendFeedback);
             var feedClass;
             for (i = 0; i < data.data.length; i++) {
                 feedClass = data.data[i].username == "admin" ? "" : "class='rightSide'";
                 $(".chats").append("<div parent='" + data.data[i].parent + "' sequence='" + data.data[i].sequence + "' "
-                    + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
-                    data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
+                + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
+                data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
             }
             $(".feedbackDetail").slideDown();
         }
@@ -791,13 +804,13 @@ function sendFeedback() {
         dataType: "json",
         success: function (data) {
             if (data.status == 0) {
-                alert(data.msg);
+                window.location.href = "systemError.jsp";
                 return;
             }
             $(".response").val("");
             $(".chats").append("<div parent='" + parent + "' sequence='" + sequence + "' class='rightSide'>" +
-                "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
-                "<span class='feedContent'>" + response + "</span></div>");
+            "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
+            "<span class='feedContent'>" + response + "</span></div>");
             dwrMessage.publishFeed(8);
         }
     });

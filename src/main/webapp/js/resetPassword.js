@@ -1,14 +1,40 @@
-var phone, value, passwordNew;
+var email, value, passwordNew;
 $(function () {
     //step1
-    $("#phone").focusout(checkAccountValue);
+    $("#email").focusout(checkAccountValue);
+    //发送邮件
+    $("#queryCode").click(function () {
+        $.ajax({
+            type: "post",
+            url: "/mail/sendMail.action",
+            data: {"recipient": email},
+            dataType: "json",
+            success: function () {
+            },
+            error: function () {
+                window.location.href = "systemError.jsp";
+            }
+        });
+    });
     $("#code").keyup(checkAccountValue);
     $("#confirmBtn").click(function () {
-        console.log("phone->" + phone + ",code->" + value);
-        $(".step1").hide();
-        $(".step2").css("display", "flex");
-        $("ul li").eq(1).addClass("success");
-        //todo 短信验证成功以后重置密码
+        console.log("email->" + email + ",code->" + value);
+        $.ajax({
+            type:"post",
+            url:"",
+            data:{},
+            dataTye:"json",
+            success:function(data){
+                if(data.status == 1){
+                    $(".step1").hide();
+                    $(".step2").css("display", "flex");
+                    $("ul li").eq(1).addClass("success");
+                }
+            },
+            error:function(){
+                window.location.href = "systemError.jsp";
+            }
+        });
     });
 
     //step2
@@ -18,7 +44,7 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/user/updatePassword.action",
-            data: {"phone": phone, "passwordNew": passwordNew},
+            data: {"email": email, "passwordNew": passwordNew},
             dataType: "json",
             success: function (data) {
                 if (data.status == 0) {
@@ -38,20 +64,20 @@ $(function () {
                 }, 1000);
             },
             error: function () {
-                console.log("reset password error");
+                window.location.href = "systemError.jsp";
             }
         });
     });
 });
 
 function checkAccountValue() {
-    phone = $("#phone").val();
+    email = $("#email").val();
     value = $("#code").val();
-    if (phone == null || phone == "") {
+    if (email == null || email == "") {
         $("#confirmBtn").attr("disabled", "true");
         return;
     }
-    if (!checkPhoneFormat(phone)) {
+    if (!checkEmailFormat(email)) {
         $(".error").html("手机号错误").show();
         $("#queryCode").attr("disabled", "true");
         return;

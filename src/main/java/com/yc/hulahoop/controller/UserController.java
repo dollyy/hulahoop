@@ -33,10 +33,10 @@ public class UserController {
     FileService fileService;
 
     /**
-     * 验证注册时的参数(username / phone)
+     * 验证注册时的参数(username / email)
      *
      * @param val  验证的值
-     * @param type username / phone
+     * @param type username / email
      * @return 验证成功或失败
      */
     @RequestMapping(value = "verify.action", method = RequestMethod.POST)
@@ -60,7 +60,7 @@ public class UserController {
     /**
      * 登录
      *
-     * @param type     username/phone
+     * @param type     username/email
      * @param val      用户名 / 手机号
      * @param password 密码
      * @param session  存放当前用户
@@ -75,6 +75,7 @@ public class UserController {
         }
         return serverResponse;
     }
+
 
     /**
      * 退出登录
@@ -121,12 +122,12 @@ public class UserController {
      * 忘记密码下的修改密码
      *
      * @param passwordNew 新密码
-     * @param phone       手机号
+     * @param email       邮箱
      * @return 修改成功/失败
      */
     @RequestMapping(value = "updatePassword.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updatePassword(String passwordNew, String phone) {
+    private ServerResponse updatePassword(String passwordNew, String email) {
         return ServerResponse.createBySuccessMessage("重置密码成功");
         //return userService.updatePassword(passwordNew);
     }
@@ -231,14 +232,21 @@ public class UserController {
         return resultMap;
     }
 
-    //检查用户是否登录
-    private ServerResponse<Object> isLogin(HttpSession session) {
+
+    /**
+     * 检查用户是否登录
+     * @param session 当前用户
+     * @return 用户信息/未登录
+     */
+    @RequestMapping(value = "isLogin.action", method = RequestMethod.GET)
+    @ResponseBody
+    private ServerResponse isLogin(HttpSession session) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {     //用户未登录
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
                     Const.ResponseCode.NEED_LOGIN.getDescription());
         }
-        return ServerResponse.createBySuccess();
+        return ServerResponse.createBySuccessData(currentUser);
     }
 }

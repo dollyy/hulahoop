@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
                 count = userMapper.verifyUsername(val);
                 break;
             //校验 手机号
-            case Const.PHONE:
-                count = userMapper.verifyPhone(val);
+            case Const.EMAIL:
+                count = userMapper.verifyEmail(val);
                 break;
             default:
                 return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
@@ -57,18 +57,18 @@ public class UserServiceImpl implements UserService {
         if (!serverResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage("用户名已存在");
         }
-        //校验 手机号
+        //校验 邮箱
         //验证格式
-        String phone=user.getPhone();
-        Pattern pattern=Pattern.compile(Const.PHONE_REGEX);
-        Matcher matcher=pattern.matcher(phone);
+        String phone=user.getPhone();   //todo String email=user.getEmail();
+        Pattern pattern=Pattern.compile(Const.EMAIL_REGEX);
+        Matcher matcher=pattern.matcher(phone); //todo Matcher matcher=pattern.matcher(email);
         if(!matcher.matches()){
-            return ServerResponse.createByErrorMessage("手机号格式错误");
+            return ServerResponse.createByErrorMessage("邮箱格式错误");
         }
         //验证唯一性
-        serverResponse = verify(phone, Const.PHONE);
+        serverResponse = verify(phone, Const.PHONE);    //todo serverResponse = verify(email, Const.EMAIL);
         if (!serverResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage("手机号已存在");
+            return ServerResponse.createByErrorMessage("邮箱已绑定");
         }
         //密码MD5加密
         user.setPassword(MD5Util.MD5Encode(user.getPassword(), "utf-8"));
@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService {
                 user = userMapper.loginByUsername(val, password);
                 break;
             //手机号登录
-            case Const.PHONE:
-                user = userMapper.loginByPhone(val, password);
+            case Const.EMAIL:
+                user = userMapper.loginByEmail(val, password);
                 break;
             default:
                 return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
@@ -216,8 +216,8 @@ public class UserServiceImpl implements UserService {
         admin.setUsername(username);
         admin.setPassword(password);
         admin.setRole(Const.Role.ADMIN);
-        //todo admin phone ???
-        admin.setPhone("");
+        //admin的email为用户名加邮箱后缀,eg:admin@163.com
+        admin.setPhone(""); //todo admin.setEmail(admin.getUsername()+"@163.com");
         count = userMapper.insert(admin);
         //获取user的信息
         user = userMapper.selectByPrimaryKey(admin.getId());

@@ -7,7 +7,7 @@ $(function () {
     //获取当前用户的信息
     $.ajax({
         type: "get",
-        url: "/user/queryUserInformation.action",
+        url: "/user/isLogin.action",
         dataType: "json",
         success: function (data) {
             if (data.status == -2) {    //用户未登录

@@ -237,6 +237,13 @@ input[type="checkbox"] {
     overflow: hidden;
 }
 
+.navColor{
+    color: #3367D6;
+}
+.collectColor{
+    color: #eb4f38;
+}
+
 .rightCollect {
     display: flex;
     flex-direction: column;
@@ -478,7 +485,7 @@ input[type="checkbox"] {
     display: none;
 }
 
-.phoneWarn,.nameWarn,.rePwdWarn,.oldPwdWarn {
+.emailWarn,.nameWarn,.rePwdWarn,.oldPwdWarn {
     font-size: 12px;
     color: red;
 }

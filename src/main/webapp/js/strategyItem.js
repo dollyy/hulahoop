@@ -1,4 +1,3 @@
-//todo 收藏点赞不要重复
 var strategyId, i;
 $(function () {
     var parameter = getQueryStringArgs();
@@ -94,64 +93,10 @@ $(function () {
         });
     });
 
-    //点赞攻略
-    $(".ItemNav .icon-zan1").click(function () {
-        var value = $(this).next().html();
-        if ($(this).attr("class").indexOf("navColor") != -1) {
-            $(this).removeClass("navColor");
-            $(this).next().html(--value).removeClass("navColor");
-        } else {
-            $(this).addClass("navColor");
-            $(this).next().html(++value).addClass("navColor");
-        }
-        $.ajax({
-            type: "post",
-            url: "/strategy/updateForOrCollect.action",
-            data: {"forNum": value, "id": strategyId},
-            success: function () {
-
-            },
-            error: function () {
-
-            }
-        });
-    });
-    //收藏攻略
-    $(".ItemNav .icon-collection-b").click(function () {
-        var status;
-        var value = $(this).next().html();
-        if ($(this).attr("class").indexOf("collectColor") != -1) {
-            $(this).removeClass("collectColor");
-            $(this).next().html(--value).removeClass("collectColor");
-            status = 0;
-        } else {
-            $(this).addClass("collectColor");
-            $(this).next().html(++value).addClass("collectColor");
-            status = 1;
-        }
-        $.ajax({
-            type: "post",
-            url: "/strategy/updateForOrCollect.action",
-            data: {"collectNum": value, "id": strategyId},
-            success: function () {
-
-            },
-            error: function () {
-
-            }
-        });
-        $.ajax({
-            type: "post",
-            url: "/strategy/updateForStatus.action",
-            data: {"status": status, "id": strategyId},
-            success: function () {
-
-            },
-            error: function () {
-
-            }
-        });
-    });
+    //点赞攻略 todo test
+    $(".ItemNav .icon-zan1").click(likeStrategy(strategyId));
+    //收藏攻略 todo test
+    $(".ItemNav .icon-collection-b").click(collectStrategy(strategyId));
 
     //catalog event
     $(window).scroll(function () {

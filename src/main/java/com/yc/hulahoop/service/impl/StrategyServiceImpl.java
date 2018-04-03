@@ -311,6 +311,12 @@ public class StrategyServiceImpl implements StrategyService {
                 return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
                         Const.ResponseCode.NO_INFO.getDescription());
             }
+            //获取用户有没有对攻略点赞
+            for(CollectionVo collectionVo : collectionVoList){
+                //todo
+                //count=isFor(userId, strategyId);SELECT status FROM strategy_for WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+                collectionVo.setForStatus(1);
+            }
             //2.pageHelper--end
             PageInfo pageInfo = new PageInfo(collectionVoList);
             return ServerResponse.createBySuccessData(pageInfo);
