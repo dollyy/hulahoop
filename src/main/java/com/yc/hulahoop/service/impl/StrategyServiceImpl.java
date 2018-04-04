@@ -8,6 +8,7 @@ import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.dao.*;
 import com.yc.hulahoop.pojo.City;
+import com.yc.hulahoop.pojo.Collection;
 import com.yc.hulahoop.pojo.Strategy;
 import com.yc.hulahoop.pojo.StrategyFor;
 import com.yc.hulahoop.service.StrategyService;
@@ -242,10 +243,10 @@ public class StrategyServiceImpl implements StrategyService {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
-        //todo
+        //todo test
         int count=strategyForMapper.existRecord(userId, strategyId);
         if(count > 0){  //更新
-            count=strategyForMapper.updateByUserIdAndStrategyId(userId, strategyId);
+            count=strategyForMapper.updateByUserIdAndStrategyId(userId, strategyId, status);
         }else{  //新增
             StrategyFor strategyFor=new StrategyFor();
             strategyFor.setUserId(userId);
@@ -257,6 +258,28 @@ public class StrategyServiceImpl implements StrategyService {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByErrorMessage("for error");
+    }
+
+    @Override
+    public ServerResponse updateCollectStatus(Integer userId, Integer strategyId, Integer status) {
+        if (userId == null || strategyId == null || status == null) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        //todo test
+        int count;
+        if(status == 0){  //取消收藏
+            count=collectionMapper.deleteByStrategyIdAndUserId(userId, strategyId);
+        }else{  //收藏
+            Collection collection=new Collection();
+            collection.setUserId(userId);
+            collection.setStrategyId(strategyId);
+            count=collectionMapper.insert(collection);
+        }
+        if(count > 0){
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByErrorMessage("collect error");
     }
 
     @Override

@@ -26,5 +26,7 @@ public interface StrategyService {
 
     ServerResponse updateForStatus(Integer userId, Integer strategyId, Integer status);
 
+    ServerResponse updateCollectStatus(Integer userId, Integer strategyId, Integer status);
+
     ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
 }

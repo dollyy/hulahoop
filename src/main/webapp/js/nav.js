@@ -211,7 +211,7 @@ $(function () {
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
-        //手机号正则表达式 todo
+        //邮箱正则表达式 todo
         if (!checkEmailFormat(upEmail)) {
             upEmailFlag = false;
             $("#upEmail").addClass("warnBorder");   //css样式添加警告框

@@ -99,4 +99,8 @@
             #{item}
         </foreach>
     </delete>
+
+    <delete id="deleteByStrategyIdAndUserId" parameterType="map">
+        DELETE FROM collections WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+    </delete>
 </mapper>

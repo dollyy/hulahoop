@@ -29,4 +29,8 @@ public interface UserMapper {
     User adminLogin(@Param("username") String username, @Param("password") String password);
 
     int existAdmin();
+
+    int updatePasswordByToken(@Param("email") String email, @Param("password") String password);
+
+    int updateEmail(@Param("email") String email, @Param("userId") Integer userId);
 }

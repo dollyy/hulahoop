@@ -2,6 +2,7 @@ package com.yc.hulahoop.service.impl;
 
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
+import com.yc.hulahoop.common.TokenCache;
 import com.yc.hulahoop.dao.UserMapper;
 import com.yc.hulahoop.pojo.User;
 import com.yc.hulahoop.service.UserService;
@@ -59,10 +60,10 @@ public class UserServiceImpl implements UserService {
         }
         //校验 邮箱
         //验证格式
-        String email=user.getEmail();
-        Pattern pattern=Pattern.compile(Const.EMAIL_REGEX);
-        Matcher matcher=pattern.matcher(email);
-        if(!matcher.matches()){
+        String email = user.getEmail();
+        Pattern pattern = Pattern.compile(Const.EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        if (!matcher.matches()) {
             return ServerResponse.createByErrorMessage("邮箱格式错误");
         }
         //验证唯一性
@@ -144,10 +145,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse updatePassword(String passwordNew) {
+    public ServerResponse updatePassword(String email, String password, String token) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(password) || StringUtils.isBlank(token)) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        //token校验
+        String resetToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + email);
+        if(StringUtils.isBlank(resetToken)){
+            return ServerResponse.createByErrorMessage("token过期");
+        }
+        if(!resetToken.equals(token)){
+            return ServerResponse.createByErrorMessage("token错误");
+        }
         //新密码MD5加密
-        passwordNew = MD5Util.MD5Encode(passwordNew, "utf-8");
-        return null;
+        password = MD5Util.MD5Encode(password, "utf-8");
+        int count = userMapper.updatePasswordByToken(email, password);
+        if (count > 0) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByErrorMessage("更新密码失败");
     }
 
     @Override
@@ -178,14 +195,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ServerResponse updateEmail(Integer userId, String email) {
+        if (userId == null || StringUtils.isBlank(email)) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        int count = userMapper.updateEmail(email, userId);
+        if (count > 0) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByErrorMessage("更换邮箱失败");
+    }
+
+    @Override
     public ServerResponse updateAvatar(User user) {
-        if(user == null){
+        if (user == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //更新用户头像
         int count = userMapper.updateByPrimaryKeySelective(user);
-        if(count > 0){
+        if (count > 0) {
             return ServerResponse.createBySuccess();
         }
         return ServerResponse.createByErrorMessage("更新头像失败");
@@ -217,7 +247,7 @@ public class UserServiceImpl implements UserService {
         admin.setPassword(password);
         admin.setRole(Const.Role.ADMIN);
         //admin的email为用户名加邮箱后缀,eg:admin@163.com
-        admin.setEmail(admin.getUsername()+"@163.com");
+        admin.setEmail(admin.getUsername() + "@163.com");
         count = userMapper.insert(admin);
         //获取user的信息
         user = userMapper.selectByPrimaryKey(admin.getId());

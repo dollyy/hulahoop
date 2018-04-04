@@ -31,12 +31,15 @@ $(function () {
                 return;
             }
             if (data.status == 0) {
-                window.location.href = "systemError.jsp";
+                alert(data.msg);
                 return;
             }
             userAvatar = data.data.avatar;
             $("#headuser").html(data.data.username);  //用户名
             $("#avatar").attr("src", userAvatar);    //用户头像
+        },
+        error:function(){
+            window.location.href = "systemError.jsp";
         }
     });
 
@@ -127,7 +130,7 @@ $(function () {
                     dataType: "json",
                     success: function (data) {
                         if (data.status == 0) {
-                            window.location.href = "systemError.jsp";
+                            alert(data.msg);
                             return;
                         }
                         var deleteId = selectId.split(",");
@@ -138,13 +141,13 @@ $(function () {
                         parent.find(".number span").html(parseInt(totalNum) - deleteId.length);
                     },
                     error: function () {
-
+                        window.location.href = "systemError.jsp";
                     }
                 });
             });
         },
         error: function () {
-            console.log("init error");
+            window.location.href = "systemError.jsp";
         }
     });
 
@@ -199,68 +202,10 @@ $(function () {
                     "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
                     "</span></span></span></div></div>");
                 }
-                //点赞攻略 todo test
-                $(".icon-zan1").off("click").on("click",function(){
-                    var strategyId=$(this).parent().parent().parent().parent().attr("value");
-                    var value = $(this).next().html();
-                    if ($(this).attr("class").indexOf("navColor") != -1) {
-                        $(this).removeClass("navColor");
-                        $(this).next().html(--value).removeClass("navColor");
-                    } else {
-                        $(this).addClass("navColor");
-                        $(this).next().html(++value).addClass("navColor");
-                    }
-                    $.ajax({
-                        type: "post",
-                        url: "/strategy/updateForOrCollect.action",
-                        data: {"forNum": value, "id": strategyId},
-                        success: function () {
-
-                        },
-                        error: function () {
-
-                        }
-                    });
-                    //todo 更新strategy_for表
-                    $.ajax({
-                        type: "post",
-                        url: "/strategy/updateForStatus.action",
-                        data: {"status": status, "id": strategyId},
-                        success: function () {
-
-                        },
-                        error: function () {
-
-                        }
-                    });
-                });
-                //收藏攻略 todo test
-                $(".icon-collection-b").off("click").on("click",function(){
-                    var strategyId=$(this).parent().parent().parent().parent().attr("value");
-                    var status;
-                    var value = $(this).next().html();
-                    if ($(this).attr("class").indexOf("collectColor") != -1) {
-                        $(this).removeClass("collectColor");
-                        $(this).next().html(--value).removeClass("collectColor");
-                        status = 0;
-                    } else {
-                        $(this).addClass("collectColor");
-                        $(this).next().html(++value).addClass("collectColor");
-                        status = 1;
-                    }
-                    $.ajax({
-                        type: "post",
-                        url: "/strategy/updateForOrCollect.action",
-                        data: {"collectNum": value, "id": strategyId},
-                        success: function () {
-
-                        },
-                        error: function () {
-
-                        }
-                    });
-                    //todo 更新collections表
-                });
+                //点赞攻略
+                $(".icon-zan1").off("click").on("click", likeClick);
+                //收藏攻略
+                $(".icon-collection-b").off("click").on("click", collectClick);
                 //pages
                 $("#page").paging({
                     totalPage: data.data.pages,
@@ -285,6 +230,13 @@ $(function () {
                                     "<span class='iconfont icon-collection-b collectColor'></span><span>" +
                                     data.data.list[i].collectNum + "</span></span></span></div></div>");
                                 }
+                                //点赞攻略
+                                $(".icon-zan1").off("click").on("click", likeClick);
+                                //收藏攻略
+                                $(".icon-collection-b").off("click").on("click", collectClick);
+                            },
+                            error: function () {
+                                window.location.href = "systemError.jsp";
                             }
 
                         });
@@ -292,7 +244,7 @@ $(function () {
                 });
             },
             error: function () {
-
+                window.location.href = "systemError.jsp";
             }
         });
         $(this).find(".icon").addClass("iconClick");
@@ -310,6 +262,7 @@ $(function () {
 
     /* 3.修改资料 */
     var oldEmail;
+    //编辑资料
     $("#navEdit").click(function () {
         $.ajax({
             type: "get",
@@ -330,7 +283,7 @@ $(function () {
                 $("#usericon").attr("src", data.data.avatar);
             },
             error: function () {
-                console.log("info error");
+                window.location.href = "systemError.jsp";
             }
         });
         $(this).find(".icon").addClass("iconClick");
@@ -367,27 +320,6 @@ $(function () {
         $(".nameWarn").html("");
         $("#editBtn").removeAttr("disabled");
     });
-    //校验手机号格式
-    $("#email").focusout(function () {
-        var newEmail = $(this).val().trim();
-        if (!checkEmailFormat(newEmail)) {    //手机号格式错误
-            $(".emailWarn").html("手机号错误");
-            return;
-        }
-        $(".emailWarn").html("");
-        if (oldEmail == newEmail) {
-            $("#updateBtn").attr("disabled", "true");
-            $("#editBtn").attr("disabled", "true");
-        } else {
-            $("#updateBtn").removeAttr("disabled");
-            $("#editBtn").removeAttr("disabled");
-            //todo 获取验证码
-        }
-    });
-    //更换手机号获取验证码
-    $("#updateBtn").click(function () {
-        $(".codeContainer").show();
-    });
     //提交修改
     $("#editBtn").click(function () {
         $.ajax({
@@ -407,13 +339,67 @@ $(function () {
                     return;
                 }
                 if (data.status == 0) { //更新失败
-                    window.location.href = "systemError.jsp";
+                    alert(data.msg);
                     return;
                 }
                 alert("更新成功");
             },
             error: function () {
-                console.log("update error");
+                window.location.href = "systemError.jsp";
+            }
+        });
+    });
+
+    //更换邮箱
+    var newEmail;
+    //校验邮箱格式
+    $("#email").focusout(function () {
+        newEmail = $(this).val().trim();
+        if (!checkEmailFormat(newEmail)) {    //邮箱格式错误
+            $(".emailWarn").html("邮箱错误");
+            return;
+        }
+        $(".emailWarn").html("");
+        if (oldEmail == newEmail) {
+            $("#updateBtn").attr("disabled", "true");
+            $("#editBtn").attr("disabled", "true");
+        } else {
+            $("#updateBtn").removeAttr("disabled");
+            $("#editBtn").removeAttr("disabled");
+        }
+    });
+    //更换邮箱获取验证码
+    $("#updateBtn").click(function () {
+        //todo 获取验证码 test
+        $.ajax({
+            type: "post",
+            url: "/mail/sendMail.action",
+            data: {"recipient": newEmail, "code": 1},
+            dataType: "json",
+            success: function (data) {
+            },
+            error: function () {
+                window.location.href = "systemError.jsp";
+            }
+        });
+        $(".codeContainer").show();
+    });
+    $("#emailBtn").click(function () {
+        $.ajax({
+            type: "post",
+            url: "/mail/confirmCode.action",
+            data: {"recipient": newEmail},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 0) {   //验证码错误
+                    $(".codeWarn").html(data.msg).show();
+                    return;
+                }
+                //验证码正确更新邮箱
+                alert("更新成功");
+            },
+            error: function () {
+                window.location.href = "systemError.jsp";
             }
         });
     });
@@ -463,7 +449,6 @@ $(function () {
                         $(".oldPwdWarn").html("原始密码错误");
                         return;
                     }
-                    window.location.href = "systemError.jsp";
                 }
                 //重置密码成功
                 alert("重置成功");
@@ -473,7 +458,7 @@ $(function () {
                 $(".rePwd").val("").attr("disabled", "true");
             },
             error: function () {
-                console.log("reset error");
+                window.location.href = "systemError.jsp";
             }
         });
     });
@@ -482,6 +467,70 @@ $(function () {
     $("#navMsg").click(msgClick);
 
 });
+
+var status;
+// todo test
+function likeClick() {
+    var strategyId = $(this).parent().parent().parent().parent().attr("value");
+    var value = $(this).next().html();
+    if ($(this).attr("class").indexOf("navColor") != -1) {
+        $(this).removeClass("navColor");
+        $(this).next().html(--value).removeClass("navColor");
+        status = 0;
+    } else {
+        $(this).addClass("navColor");
+        $(this).next().html(++value).addClass("navColor");
+        status = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/strategy/updateForOrCollect.action",
+        data: {"forNum": value, "id": strategyId, "status": status},
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
+    //更新strategy_for表
+    $.ajax({
+        type: "post",
+        url: "/strategy/updateForStatus.action",
+        data: {"status": status, "id": strategyId},
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
+}
+
+// todo test
+function collectClick() {
+    var strategyId = $(this).parent().parent().parent().parent().attr("value");
+    var value = $(this).next().html();
+    if ($(this).attr("class").indexOf("collectColor") != -1) {
+        $(this).removeClass("collectColor");
+        $(this).next().html(--value).removeClass("collectColor");
+        status = 0;
+    } else {
+        $(this).addClass("collectColor");
+        $(this).next().html(++value).addClass("collectColor");
+        status = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/strategy/updateForOrCollect.action",
+        data: {"collectNum": value, "id": strategyId},
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
+    $.ajax({
+        type: "post",
+        url: "/strategy/updateCollectStatus.action",
+        data: {"status": status, "id": strategyId},
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
+}
 
 function msgClick() {
     $(this).find(".icon").addClass("iconClick");
@@ -496,7 +545,7 @@ function msgClick() {
                 return;
             }
             if (data.status == 0) {
-                window.location.href = "systemError.jsp";
+                alert(data.msg);
                 return;
             }
             $("#msgs").empty();
@@ -542,7 +591,7 @@ function msgClick() {
                             }
                         },
                         error: function () {
-                            console.log("update dwr error");
+                            window.location.href = "systemError.jsp";
                         }
                     });
                 }
@@ -550,7 +599,7 @@ function msgClick() {
             });
         },
         error: function () {
-            console.log("msg error");
+            window.location.href = "systemError.jsp";
         }
     });
     $("#msgContainer").show().siblings().hide();
@@ -785,8 +834,10 @@ function sortCollection(order, parameter) {
                 "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
                 "</span></span></span></div></div>");
             }
+        },
+        error:function(){
+            window.location.href = "systemError.jsp";
         }
-
     });
 }
 
@@ -814,7 +865,7 @@ function detail() {
                 that.addClass("read");
             },
             error: function () {
-                console.log("update feed error");
+                window.location.href = "systemError.jsp";
             }
         });
     }
@@ -825,7 +876,7 @@ function detail() {
         dataType: "json",
         success: function (data) {
             if (data.status == 0) {
-                window.location.href = "systemError.jsp";
+                alert(data.msg);
                 return;
             }
             $("#bg").slideDown();
@@ -840,6 +891,9 @@ function detail() {
                 data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
             }
             $(".feedbackDetail").slideDown();
+        },
+        error:function(){
+            window.location.href = "systemError.jsp";
         }
     });
 }
@@ -859,7 +913,7 @@ function sendFeedback() {
         dataType: "json",
         success: function (data) {
             if (data.status == 0) {
-                window.location.href = "systemError.jsp";
+                alert(data.msg);
                 return;
             }
             $(".response").val("");
@@ -867,6 +921,9 @@ function sendFeedback() {
             "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
             "<span class='feedContent'>" + response + "</span></div>");
             dwrMessage.publishFeed(8);
+        },
+        error:function(){
+            window.location.href = "systemError.jsp";
         }
     });
 }

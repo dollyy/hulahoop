@@ -183,6 +183,19 @@ public class StrategyController {
         return serverResponse;
     }
 
+    @RequestMapping(value = "updateCollectStatus.action", method = RequestMethod.POST)
+    @ResponseBody
+    private ServerResponse updateCollectStatus(HttpSession session, Integer strategyId, Integer status){
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            return strategyService.updateCollectStatus(currentUser.getId(), strategyId, status);
+        }
+        //身份校验失败
+        return serverResponse;
+    }
     /**
      * 搜索攻略
      *

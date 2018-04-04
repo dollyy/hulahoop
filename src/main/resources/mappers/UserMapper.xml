@@ -204,4 +204,12 @@
         FROM users
         WHERE role = 1
     </select>
+
+    <update id="updatePasswordByToken" parameterType="map">
+        UPDATE users SET password=#{password} WHERE email=#{email}
+    </update>
+
+    <update id="updateEmail" parameterType="map">
+        UPDATE users SET email=#{email} WHERE id=#{userId}
+    </update>
 </mapper>

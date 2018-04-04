@@ -13,11 +13,13 @@ public interface UserService {
 
     ServerResponse resetPassword(String passwordOld, String passwordNew, User user);
 
-    ServerResponse updatePassword(String passwordNew);
+    ServerResponse updatePassword(String email, String password, String token);
 
     ServerResponse queryUserInformation(Integer userId);
 
     ServerResponse updateUserInformation(User user);
+
+    ServerResponse updateEmail(Integer userId, String email);
 
     ServerResponse updateAvatar(User user);
 

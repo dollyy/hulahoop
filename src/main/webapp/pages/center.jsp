@@ -104,9 +104,11 @@
         <div id="editContainer">
             <ul class="editCatalog">
                 <li id="editUpdate" class="editCilck">编辑资料</li>
+                <li id="editEmail">更换邮箱</li>
                 <li id="editReset">修改密码</li>
             </ul>
             <div class="editInfo">
+                <!-- 编辑资料 -->
                 <form class="edit">
                     <div class="left">
                         <div>
@@ -123,16 +125,6 @@
                             </select>
                         </div>
                         <div>
-                            <div>邮箱</div>
-                            <span class="emailWarn"></span><br>
-                            <input type="text" name="email" id="email" value="yangchen302@163.com">
-                            <input type="button" id="updateBtn" value="获取验证码" disabled><br>
-                        </div>
-                        <div class="codeContainer">
-                            <div>code</div><br>
-                            <input type="text" id="code"><br>
-                        </div>
-                        <div>
                             <div>城市</div><br>
                             <input type="text" name="city" id="city"><br>
                         </div>
@@ -144,6 +136,7 @@
                         <input type="button" id="editBtn" value="保 存" disabled>
                     </div>
                 </form>
+                <!-- 更换头像 -->
                 <form enctype="multipart/form-data" id="avatarForm" method="post">
                     <div class="right">
                         <img id="usericon" src="../images/notfound.jpg"><br>
@@ -151,6 +144,20 @@
                         <input type="submit" id="uploadIcon" value="上传图片" onclick="iconPath.click()"><br>
                     </div>
                 </form>
+                <!-- 更换邮箱 -->
+                <div>
+                    <div>邮箱</div>
+                    <span class="emailWarn"></span><br>
+                    <input type="text" name="email" id="email" value="yangchen302@163.com">
+                    <input type="button" id="updateBtn" value="获取验证码" disabled><br>
+                </div>
+                <div class="codeContainer">
+                    <div>code</div>
+                    <span class="codeWarn"></span><br>
+                    <input type="text" id="code"><br>
+                </div>
+                <input type="button" id="emailBtn" value="更 新" disabled>
+                <!-- 修改密码 -->
                 <form class="reset">
                     <div>
                         <div>旧密码</div><br>

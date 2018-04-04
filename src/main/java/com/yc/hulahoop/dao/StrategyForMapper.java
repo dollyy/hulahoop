@@ -18,5 +18,6 @@ public interface StrategyForMapper {
 
     int existRecord(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
 
-    int updateByUserIdAndStrategyId(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
+    int updateByUserIdAndStrategyId(@Param(value = "userId") Integer userId, @Param(value = "status") Integer status,
+                                    @Param(value = "strategyId") Integer strategyId);
 }

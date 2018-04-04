@@ -28,8 +28,10 @@ public class MailController {
         ServerResponse serverResponse = mailService.sendMail(recipient);
         //邮件发送成功
         if(serverResponse.isSuccess()){
+            //将code存进session
             session.setAttribute(recipient, serverResponse.getData());
-            //todo 设置code的有效期
+            //todo test 设置code的有效期为15min
+            session.setMaxInactiveInterval(900);
             return ServerResponse.createBySuccess();    //不能将验证码返回
         }
         return serverResponse;
@@ -40,6 +42,10 @@ public class MailController {
     @ResponseBody
     private ServerResponse confirmCode(HttpSession session, String recipient, String code){
         String trueCode=(String)session.getAttribute(recipient);
+        //验证码超过15min失效
+        if(trueCode == null){
+            return ServerResponse.createByErrorMessage("验证码失效");
+        }
         return mailService.confirmCode(recipient, code, trueCode);
     }
 

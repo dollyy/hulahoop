@@ -121,15 +121,14 @@ public class UserController {
     /**
      * 忘记密码下的修改密码
      *
-     * @param passwordNew 新密码
+     * @param password 新密码
      * @param email       邮箱
      * @return 修改成功/失败
      */
     @RequestMapping(value = "updatePassword.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updatePassword(String passwordNew, String email) {
-        return ServerResponse.createBySuccessMessage("重置密码成功");
-        //return userService.updatePassword(passwordNew);
+    private ServerResponse updatePassword(String email, String password, String token) {
+        return userService.updatePassword(email, password, token);
     }
 
     /**
@@ -173,7 +172,7 @@ public class UserController {
             user.setPassword(null);
             user.setRole(null);
             user.setCreateTime(null);
-            //todo 更新手机号
+            user.setEmail(null);
 
             serverResponse = userService.updateUserInformation(user);
             //将修改后的信息存进session
@@ -184,6 +183,26 @@ public class UserController {
         //身份校验失败
         return serverResponse;
     }
+
+    @RequestMapping(value = "updateEmail.action", method = RequestMethod.POST)
+    @ResponseBody
+    private ServerResponse updateEmail(HttpSession session,String email) {
+        //身份校验
+        ServerResponse serverResponse = isLogin(session);
+        //身份校验成功
+        if (serverResponse.isSuccess()) {
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+            serverResponse = userService.updateEmail(currentUser.getId(), email);
+            //将修改后的信息存进session
+            if (serverResponse.isSuccess()) {
+                currentUser.setEmail(email);
+                session.setAttribute(Const.CURRENT_USER, currentUser);
+            }
+        }
+        //身份校验失败
+        return serverResponse;
+    }
+
 
     /**
      * 上传头像图片

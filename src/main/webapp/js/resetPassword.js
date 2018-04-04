@@ -16,22 +16,29 @@ $(function () {
             }
         });
     });
+    var token;
     $("#code").keyup(checkAccountValue);
     $("#confirmBtn").click(function () {
         console.log("email->" + email + ",code->" + value);
         $.ajax({
-            type:"post",
-            url:"",
-            data:{},
-            dataTye:"json",
-            success:function(data){
-                if(data.status == 1){
+            type: "post",
+            url: "/mail/confirmCode.action",
+            data: {"recipient": email, "code": value},
+            dataTye: "json",
+            success: function (data) {
+                if (data.status == 0) {   //验证码错误
+                    $(".error").html(data.msg).show();
+                    return;
+                }
+                if (data.status == 1) { //验证码正确
+                    var token = data.msg; //更新密码时的token
+                    $(".error").hide();
                     $(".step1").hide();
                     $(".step2").css("display", "flex");
                     $("ul li").eq(1).addClass("success");
                 }
             },
-            error:function(){
+            error: function () {
                 window.location.href = "systemError.jsp";
             }
         });
@@ -44,13 +51,14 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/user/updatePassword.action",
-            data: {"email": email, "passwordNew": passwordNew},
+            data: {"email": email, "password": passwordNew, "token": token},
             dataType: "json",
             success: function (data) {
                 if (data.status == 0) {
-                    $(".error").html("修改密码失败").show();
+                    $(".error").html(data.msg).show();
                     return;
                 }
+                $(".error").hide();
                 //step3
                 $(".step3").show().siblings().hide();
                 $("ul li").eq(2).addClass("success");
