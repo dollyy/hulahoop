@@ -1,15 +1,72 @@
-.HolyGrail{
+body > div:nth-child(3) {
+    background: #F8FAFC;
+}
+
+.banner {
+    width: 100%;
+    height: 500px;
+    box-shadow: 0 0 15px #999;
+}
+
+.recommendContainer, .newestContainer, .hottestContainer {
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 10px 0 0 0;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 0 15px #ccc inset;
+}
+
+.title {
+    font-size: 30px;
+    color: #E7273C;
+}
+
+.strategy {
+    display: inline-block;
+    width: 240px;
+    height: auto;
+    margin: 20px 20px 0 20px;
+    cursor: pointer;
+}
+
+.strategy > img {
+    width: 240px;
+    height: 120px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px #ccc;
+}
+
+.info {
+    padding: 0 5px;
+}
+
+.strategyTitle, .strategyInfo, .strategyDate {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.strategyTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.strategyInfo, .strategyDate {
     display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+    justify-content: space-between;
+    font-size: 15px;
 }
-header{
-    height: 60px;
+
+.strategyInfo {
+    color: #999;
 }
-footer{
-    height: 65px;
-}
-.HolyGrailBody{
-    display: flex;
-    flex: 1;
+
+.strategyDate {
+    color: #666;
+    font-size: 12px;
+    display: inline-block;
+    text-align: right;
 }

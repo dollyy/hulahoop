@@ -164,6 +164,50 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
+    <select id="recommendStrategies" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT
+            s.id       AS strategyId,
+            s.main_img AS mainImg,
+            u.username,
+            s.name     AS strategyName,
+            c.name     AS cityName,
+            s.duration,
+            DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
+        FROM strategies s
+            JOIN users u ON s.user_id = u.id
+            JOIN cities c ON s.city_id = c.id
+    </select>
+
+    <select id="latestStrategies" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT
+        s.id       AS strategyId,
+        s.main_img AS mainImg,
+        u.username,
+        s.name     AS strategyName,
+        c.name     AS cityName,
+        s.duration,
+        DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
+        FROM strategies s
+        JOIN users u ON s.user_id = u.id
+        JOIN cities c ON s.city_id = c.id
+        ORDER BY s.create_time DESC LIMIT 1,8
+    </select>
+
+    <select id="hottestStrategies" resultType="com.yc.hulahoop.vo.StrategyVo">
+        SELECT
+        s.id       AS strategyId,
+        s.main_img AS mainImg,
+        u.username,
+        s.name     AS strategyName,
+        c.name     AS cityName,
+        s.duration,
+        DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
+        FROM strategies s
+        JOIN users u ON s.user_id = u.id
+        JOIN cities c ON s.city_id = c.id
+        ORDER BY s.collect_num DESC, s.for_num DESC LIMIT 1,8
+    </select>
+
     <select id="list" parameterType="map" resultType="com.yc.hulahoop.vo.StrategyVo">
         SELECT s.id AS strategyId,
         s.main_img AS mainImg,
@@ -215,9 +259,9 @@
     <delete id="deleteByUserIdAndStrategyId" parameterType="map">
         DELETE FROM strategies
         WHERE user_id = #{userId}
-        <if test="strategyIdList != null">
+        <if test="strategyList != null">
             AND id IN
-            <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+            <foreach collection="strategyList" item="item" index="index" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
@@ -226,9 +270,9 @@
     <delete id="deleteByAdmin" parameterType="map">
         DELETE FROM strategies
         <where>
-            <if test="strategyIdList != null">
+            <if test="strategyList != null">
                 id IN
-                <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+                <foreach collection="strategyList" item="item" index="index" open="(" separator="," close=")">
                     #{item}
                 </foreach>
             </if>

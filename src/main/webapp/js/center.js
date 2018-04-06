@@ -38,7 +38,7 @@ $(function () {
             $("#headuser").html(data.data.username);  //用户名
             $("#avatar").attr("src", userAvatar);    //用户头像
         },
-        error:function(){
+        error: function () {
             window.location.href = "systemError.jsp";
         }
     });
@@ -66,16 +66,16 @@ $(function () {
             showMap(data.data);
             for (i = 0; i < data.data.length; i++) {
                 $("#strategies").append("<div class='strategy'><div class='province'><span>" + data.data[i].cityName +
-                "</span><span class='number'> ( <span>" + data.data[i].count + "</span> ) </span>" +
-                "<span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span>" +
-                "<span class='operate'>操作</span><span class='deleteAndCancle'>" +
-                "<span class='delete'>删除</span>&nbsp;<span class='cancle'>取消</span>" +
-                "</span></div><div class='all' id='all" + i + "'></div></div>");
+                    "</span><span class='number'> ( <span>" + data.data[i].count + "</span> ) </span>" +
+                    "<span class='iconfont icon-zhankai'></span><span class='iconfont icon-shouqi'></span>" +
+                    "<span class='operate'>操作</span><span class='deleteAndCancle'>" +
+                    "<span class='delete'>删除</span>&nbsp;<span class='cancle'>取消</span>" +
+                    "</span></div><div class='all' id='all" + i + "'></div></div>");
                 for (j = 0; j < data.data[i].strategyVoList.length; j++) {
                     $("#all" + i).append("<input type='checkbox' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
-                    "<div class='each' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
-                    "<img src='" + data.data[i].strategyVoList[j].mainImg + "'><div class='title'>" +
-                    data.data[i].strategyVoList[j].strategyName + "</div></div>");
+                        "<div class='each' value='" + data.data[i].strategyVoList[j].strategyId + "'>" +
+                        "<img src='" + data.data[i].strategyVoList[j].mainImg + "'><div class='title'>" +
+                        data.data[i].strategyVoList[j].strategyName + "</div></div>");
                 }
             }
             var strategyDom = $("#strategies .strategy");
@@ -192,15 +192,15 @@ $(function () {
                 $(".collectCatalog").show();
                 $(".collectNothing").css("opacity", 0);
                 for (i = 0; i < data.data.list.length; i++) {
-                    forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
+                    forClass = data.data.list[i].forStatus == 1 ? "iconfont icon-zan1 forNum navColor" : "iconfont icon-zan1 forNum";
                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                    "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                    data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                    "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                    "<span class='iconfont icon-zan1 navColor'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
-                    "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
-                    "</span></span></span></div></div>");
+                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
+                        "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
+                        data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
+                        "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
+                        "<span class='" + forClass + "'></span><span>" + data.data.list[i].forNum + "</span>&nbsp;&nbsp;" +
+                        "<span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
+                        "</span></span></span></div></div>");
                 }
                 //点赞攻略
                 $(".icon-zan1").off("click").on("click", likeClick);
@@ -220,15 +220,15 @@ $(function () {
                                 for (i = 0; i < data.data.list.length; i++) {
                                     forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
-                                    "<div class='collectInfo'><span><span class='title'>"
-                                    + data.data.list[i].strategyName + "</span><span class='author'>" +
-                                    data.data.list[i].username + "</span><span class='city'>" +
-                                    data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
-                                    + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +
-                                    "</span><span class='" + forClass + "'>" + data.data.list[i].forNum + "</span>" +
-                                    "<span class='iconfont icon-collection-b collectColor'></span><span>" +
-                                    data.data.list[i].collectNum + "</span></span></span></div></div>");
+                                        "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
+                                        "<div class='collectInfo'><span><span class='title'>"
+                                        + data.data.list[i].strategyName + "</span><span class='author'>" +
+                                        data.data.list[i].username + "</span><span class='city'>" +
+                                        data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
+                                        + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +
+                                        "</span><span class='" + forClass + "'>" + data.data.list[i].forNum + "</span>" +
+                                        "<span class='iconfont icon-collection-b collectColor'></span><span>" +
+                                        data.data.list[i].collectNum + "</span></span></span></div></div>");
                                 }
                                 //点赞攻略
                                 $(".icon-zan1").off("click").on("click", likeClick);
@@ -295,6 +295,7 @@ $(function () {
         $(this).addClass("editCilck").siblings().removeClass("editCilck");
         $(".edit").show();
         $("#avatarForm").show();
+        $(".mailContainer").hide();
         $(".reset").hide();
     });
     //更新头像
@@ -351,6 +352,10 @@ $(function () {
     });
 
     //更换邮箱
+    $("#editEmail").click(function () {
+        $(this).addClass("editCilck").siblings().removeClass("editCilck");
+        $(".mailContainer").show().siblings().hide();
+    });
     var newEmail;
     //校验邮箱格式
     $("#email").focusout(function () {
@@ -370,11 +375,10 @@ $(function () {
     });
     //更换邮箱获取验证码
     $("#updateBtn").click(function () {
-        //todo 获取验证码 test
         $.ajax({
             type: "post",
             url: "/mail/sendMail.action",
-            data: {"recipient": newEmail, "code": 1},
+            data: {"recipient": newEmail},
             dataType: "json",
             success: function (data) {
             },
@@ -385,18 +389,32 @@ $(function () {
         $(".codeContainer").show();
     });
     $("#emailBtn").click(function () {
+        alert(1);
         $.ajax({
             type: "post",
             url: "/mail/confirmCode.action",
-            data: {"recipient": newEmail},
+            data: {"recipient": newEmail, "code": $("#code").val()},
             dataType: "json",
             success: function (data) {
+                console.log(JSON.stringify(data));
                 if (data.status == 0) {   //验证码错误
                     $(".codeWarn").html(data.msg).show();
                     return;
                 }
-                //验证码正确更新邮箱
-                alert("更新成功");
+                $.ajax({
+                    type: "post",
+                    url: "/user/updateEmail.action",
+                    data: {"email": newEmail},
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(JSON.stringify(data));
+                        //验证码正确更新邮箱
+                        alert("更新成功");
+                    },
+                    error: function () {
+                        window.location.href = "systemError.jsp";
+                    }
+                });
             },
             error: function () {
                 window.location.href = "systemError.jsp";
@@ -469,7 +487,8 @@ $(function () {
 });
 
 var status;
-// todo test
+
+//点赞攻略
 function likeClick() {
     var strategyId = $(this).parent().parent().parent().parent().attr("value");
     var value = $(this).next().html();
@@ -485,23 +504,14 @@ function likeClick() {
     $.ajax({
         type: "post",
         url: "/strategy/updateForOrCollect.action",
-        data: {"forNum": value, "id": strategyId, "status": status},
-        error: function () {
-            window.location.href = "systemError.jsp";
-        }
-    });
-    //更新strategy_for表
-    $.ajax({
-        type: "post",
-        url: "/strategy/updateForStatus.action",
-        data: {"status": status, "id": strategyId},
+        data: {"forNum": value, "id": strategyId, "status": status, "type": "for"},
         error: function () {
             window.location.href = "systemError.jsp";
         }
     });
 }
 
-// todo test
+//收藏攻略
 function collectClick() {
     var strategyId = $(this).parent().parent().parent().parent().attr("value");
     var value = $(this).next().html();
@@ -517,15 +527,7 @@ function collectClick() {
     $.ajax({
         type: "post",
         url: "/strategy/updateForOrCollect.action",
-        data: {"collectNum": value, "id": strategyId},
-        error: function () {
-            window.location.href = "systemError.jsp";
-        }
-    });
-    $.ajax({
-        type: "post",
-        url: "/strategy/updateCollectStatus.action",
-        data: {"status": status, "id": strategyId},
+        data: {"collectNum": value, "id": strategyId, "status": status, "type": "collect"},
         error: function () {
             window.location.href = "systemError.jsp";
         }
@@ -560,15 +562,15 @@ function msgClick() {
                 readClass = data.data.list[i].status > 0 ? "" : "read";
                 if (data.data.list[i].id != null) {
                     $("#msgs").append("<div class='msg " + readClass + "' level='" + data.data.list[i].level + "'>" +
-                    "<span class='msgContent'><span class=send>admin</span>" +
-                    "<span class='call'>回复你</span><span class='msgInfo'>" + data.data.list[i].content +
-                    "</span></span><span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                        "<span class='msgContent'><span class=send>admin</span>" +
+                        "<span class='call'>回复你</span><span class='msgInfo'>" + data.data.list[i].content +
+                        "</span></span><span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
                 } else {
                     $("#msgs").append("<div class='dwr " + readClass + "' id='" + data.data.list[i].dwrId +
-                    "' sequence='" + data.data.list[i].commentSequence + "'><span class='msgContent'>" +
-                    "<span class='send'>" + data.data.list[i].responseName + "</span><span class='call'>@你" +
-                    "</span><span class='msgInfo'>" + data.data.list[i].content + "</span></span>" +
-                    "<span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
+                        "' sequence='" + data.data.list[i].commentSequence + "'><span class='msgContent'>" +
+                        "<span class='send'>" + data.data.list[i].responseName + "</span><span class='call'>@你" +
+                        "</span><span class='msgInfo'>" + data.data.list[i].content + "</span></span>" +
+                        "<span class='msgDate'>" + data.data.list[i].createTime + "</span></div>");
                 }
             }
             $("#msgs .msg").off("click").on("click", detail);
@@ -826,22 +828,23 @@ function sortCollection(order, parameter) {
             for (i = 0; i < data.data.list.length; i++) {
                 forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                 $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
-                "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
-                data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
-                "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
-                "<span class='iconfont icon-zan1'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
-                "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
-                "</span></span></span></div></div>");
+                    "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
+                    "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
+                    data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
+                    "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
+                    "<span class='iconfont icon-zan1'></span><span class='" + forClass + "'>" + data.data.list[i].forNum +
+                    "</span><span class='iconfont icon-collection-b collectColor'></span><span>" + data.data.list[i].collectNum +
+                    "</span></span></span></div></div>");
             }
         },
-        error:function(){
+        error: function () {
             window.location.href = "systemError.jsp";
         }
     });
 }
 
 var level;
+
 //查看消息的详情
 function detail() {
     var that = $(this);
@@ -881,18 +884,18 @@ function detail() {
             }
             $("#bg").slideDown();
             $(".feedbackDetail").empty().append("<div class='sender'>admin</div>" +
-            "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
+                "<div class='chats'></div><textarea class='response'></textarea><input type='button' class='feedBtn' value='发送'>");
             $(".feedBtn").off("click").on("click", sendFeedback);
             var feedClass;
             for (i = 0; i < data.data.length; i++) {
                 feedClass = data.data[i].username == "admin" ? "" : "class='rightSide'";
                 $(".chats").append("<div parent='" + data.data[i].parent + "' sequence='" + data.data[i].sequence + "' "
-                + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
-                data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
+                    + feedClass + "><div class='date'>" + data.data[i].createTime + "</div><img src='" +
+                    data.data[i].avatar + "'><span class='feedContent'>" + data.data[i].content + "</span></div>");
             }
             $(".feedbackDetail").slideDown();
         },
-        error:function(){
+        error: function () {
             window.location.href = "systemError.jsp";
         }
     });
@@ -918,11 +921,11 @@ function sendFeedback() {
             }
             $(".response").val("");
             $(".chats").append("<div parent='" + parent + "' sequence='" + sequence + "' class='rightSide'>" +
-            "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
-            "<span class='feedContent'>" + response + "</span></div>");
+                "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
+                "<span class='feedContent'>" + response + "</span></div>");
             dwrMessage.publishFeed(8);
         },
-        error:function(){
+        error: function () {
             window.location.href = "systemError.jsp";
         }
     });

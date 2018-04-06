@@ -17,7 +17,22 @@
 
 <jsp:include page="nav.jsp"/>
 
+<div class="banner"></div>
+<div class="recommendContainer">
+    <span class="title">_为_你_推_荐_</span>
+    <div class="recommends"></div>
+</div>
+<div class="newestContainer">
+    <span class="title">_最_新_攻_略_</span>
+    <div class="news"></div>
+</div>
+<div class="hottestContainer">
+    <span class="title">_最_热_攻_略_</span>
+    <div class="hots"></div>
+</div>
+
 <script src="../js/jquery-3.2.1.min.js"></script>
 <script src="../js/index.js"></script>
+<script src="../js/nav.js"></script>
 </body>
 </html>

@@ -146,19 +146,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse updatePassword(String email, String password, String token) {
-        if (StringUtils.isBlank(email) || StringUtils.isBlank(password) || StringUtils.isBlank(token)) {
+        System.out.println("service token=================");
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //token校验
         String resetToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + email);
+        System.out.println("reset-->"+resetToken+",token->"+token);
         if(StringUtils.isBlank(resetToken)){
+            System.out.println("service token过期=================");
             return ServerResponse.createByErrorMessage("token过期");
         }
         if(!resetToken.equals(token)){
+            System.out.println("service token错误=================");
             return ServerResponse.createByErrorMessage("token错误");
         }
+        System.out.println("4=================");
         //新密码MD5加密
+        System.out.println("service 新密码MD5加密=================");
         password = MD5Util.MD5Encode(password, "utf-8");
         int count = userMapper.updatePasswordByToken(email, password);
         if (count > 0) {

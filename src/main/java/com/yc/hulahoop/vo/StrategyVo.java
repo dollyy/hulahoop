@@ -13,6 +13,7 @@ public class StrategyVo {
     private String content;
     private int forNum;
     private int collectNum;
+    private String createTime;
 
     public int getStrategyId() {
         return strategyId;
@@ -100,5 +101,13 @@ public class StrategyVo {
 
     public void setCollectNum(int collectNum) {
         this.collectNum = collectNum;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

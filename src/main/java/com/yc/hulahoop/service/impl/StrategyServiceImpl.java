@@ -44,6 +44,40 @@ public class StrategyServiceImpl implements StrategyService {
     StrategyForMapper strategyForMapper;
 
     @Override
+    public ServerResponse indexInfo(Integer userId) {
+        Map<String, Object> result=Maps.newHashMap();
+        //推荐列表
+        if(userId != 0){
+            //查询用户的推荐列表
+            //List<Integer> strategyId=Lists.newHashList();
+            //String recommendList = userMapper.queryRecommendList(userId);
+            //if(recommendList.contains(","){
+            //  String[] recommends=recommendList.split(",");
+            //  strategyId.addAll(recommends);
+            //  List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies(recommends);
+            //  if(recommendStrategies.size() > 0){
+            //      result.put("recommend", recommendStrategies);
+            //  }
+            //}
+            List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies();
+            if(recommendStrategies.size() > 0){
+                result.put("recommend", recommendStrategies);
+            }
+        }
+        //最新
+        List<StrategyVo> latestStrategies = strategyMapper.latestStrategies();
+        if(latestStrategies.size() > 0){
+            result.put("latest", latestStrategies);
+        }
+        //最热
+        List<StrategyVo> hottestStrategies = strategyMapper.hottestStrategies();
+        if(hottestStrategies.size() > 0){
+            result.put("hottest", hottestStrategies);
+        }
+        return ServerResponse.createBySuccessData(result);
+    }
+
+    @Override
     public ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
         Map<String, Object> result = Maps.newHashMap();
         //1.startPage--start
@@ -126,7 +160,7 @@ public class StrategyServiceImpl implements StrategyService {
         //是否收藏
         int count = collectionMapper.isCollected(userId, strategyId);
         result.put("collect", count == 1);  //收藏返回true
-        //是否点赞 todo
+        //是否点赞
         count=strategyForMapper.existRecord(userId, strategyId);
         result.put("for", count == 1);  //点赞返回true
         //封装comment对象
@@ -163,7 +197,6 @@ public class StrategyServiceImpl implements StrategyService {
         return ServerResponse.createByErrorMessage("新增失败");
     }
 
-    //todo 删除collections里面的关联
     @Override
     public ServerResponse delete(Integer userId, String strategyId) {
         if (StringUtils.isBlank(strategyId)) {
@@ -183,9 +216,12 @@ public class StrategyServiceImpl implements StrategyService {
         }
         if (userId == Const.ADMIN_ID) { //管理员删除
             strategyMapper.deleteByAdmin(strategyList);
-        } else {
+        } else {    //用户删除
             //删除时添加user_id防止横向越权
             strategyMapper.deleteByUserIdAndStrategyId(userId, strategyList);
+        }
+        for (Integer integer : strategyList){
+            System.out.println("=========="+integer);
         }
         //删除用户收藏
         int count=collectionMapper.deleteByStrategyId(strategyList);
@@ -222,64 +258,42 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public ServerResponse updateForOrCollect(Strategy strategy) {
+    public ServerResponse updateForOrCollect(Integer userId, Strategy strategy, Integer status, String type) {
         if (strategy == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //没有指定禁止修改的字段是因为在updateForOrCollect中只允许修改for或者against
         int count = strategyMapper.updateForOrCollect(strategy);
+        //
+        if("for".equals(type)){
+            count=strategyForMapper.existRecord(userId, strategy.getId());
+            System.out.println("==================="+count);
+            if(count > 0){  //更新
+                count=strategyForMapper.updateByUserIdAndStrategyId(userId, status, strategy.getId());
+            }else{  //新增
+                StrategyFor strategyFor=new StrategyFor();
+                strategyFor.setUserId(userId);
+                strategyFor.setStrategyId(strategy.getId());
+                strategyFor.setStatus(1);
+                count=strategyForMapper.insert(strategyFor);
+            }
+        }else if("collect".equals(type)){
+            if(status == 0){  //取消收藏
+                count=collectionMapper.deleteByStrategyIdAndUserId(userId, strategy.getId());
+            }else{  //收藏
+                Collection collection=new Collection();
+                collection.setUserId(userId);
+                collection.setStrategyId(strategy.getId());
+                count=collectionMapper.insert(collection);
+            }
+        }
         //更新成功
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("更新成功");
         }
         //更新失败
         return ServerResponse.createByErrorMessage("更新失败");
-    }
-
-    @Override
-    public ServerResponse updateForStatus(Integer userId, Integer strategyId, Integer status) {
-        if (userId == null || strategyId == null || status == null) {
-            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
-                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
-        }
-        //todo test
-        int count=strategyForMapper.existRecord(userId, strategyId);
-        if(count > 0){  //更新
-            count=strategyForMapper.updateByUserIdAndStrategyId(userId, strategyId, status);
-        }else{  //新增
-            StrategyFor strategyFor=new StrategyFor();
-            strategyFor.setUserId(userId);
-            strategyFor.setStrategyId(strategyId);
-            strategyFor.setStatus(1);
-            count=strategyForMapper.insert(strategyFor);
-        }
-        if(count > 0){
-            return ServerResponse.createBySuccess();
-        }
-        return ServerResponse.createByErrorMessage("for error");
-    }
-
-    @Override
-    public ServerResponse updateCollectStatus(Integer userId, Integer strategyId, Integer status) {
-        if (userId == null || strategyId == null || status == null) {
-            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
-                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
-        }
-        //todo test
-        int count;
-        if(status == 0){  //取消收藏
-            count=collectionMapper.deleteByStrategyIdAndUserId(userId, strategyId);
-        }else{  //收藏
-            Collection collection=new Collection();
-            collection.setUserId(userId);
-            collection.setStrategyId(strategyId);
-            count=collectionMapper.insert(collection);
-        }
-        if(count > 0){
-            return ServerResponse.createBySuccess();
-        }
-        return ServerResponse.createByErrorMessage("collect error");
     }
 
     @Override
@@ -341,9 +355,8 @@ public class StrategyServiceImpl implements StrategyService {
             //获取用户有没有对攻略点赞
             int count;
             for(CollectionVo collectionVo : collectionVoList){
-                //todo
                 count=strategyForMapper.existRecord(userId, collectionVo.getId());
-                collectionVo.setForStatus(1);
+                collectionVo.setForStatus(count);
             }
             //2.pageHelper--end
             PageInfo pageInfo = new PageInfo(collectionVoList);

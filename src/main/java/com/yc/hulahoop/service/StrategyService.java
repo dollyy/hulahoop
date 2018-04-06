@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StrategyService {
 
+    ServerResponse indexInfo(Integer userId);
+
     ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
 
     ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
@@ -18,15 +20,11 @@ public interface StrategyService {
 
     ServerResponse update(Strategy strategy);
 
-    ServerResponse updateForOrCollect(Strategy strategy);
+    ServerResponse updateForOrCollect(Integer userId, Strategy strategy, Integer status, String type);
 
     ServerResponse search(String content, int pageNum, int pageSize);
 
     ServerResponse queryUserStrategy(Integer userId);
-
-    ServerResponse updateForStatus(Integer userId, Integer strategyId, Integer status);
-
-    ServerResponse updateCollectStatus(Integer userId, Integer strategyId, Integer status);
 
     ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
 }

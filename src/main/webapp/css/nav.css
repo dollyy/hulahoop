@@ -5,7 +5,7 @@ input{
 /*nav*/
 nav{
     padding: 5px 50px;
-    background: #000000;
+    background: #24292e;
     font-size: 14px;
     color: #fff;
 }
@@ -17,7 +17,7 @@ nav{
     align-items: center;
 }
 #strategy{
-    color: #fff;
+    color: #C8C9B4;
     margin-left: 50px;
 }
 nav img{
@@ -25,9 +25,12 @@ nav img{
     vertical-align: middle;
     margin-right: 10px;
 }
-.serach{
-    margin-left: 100px;
+.search{
     display: inline-block;
+    background: #3F4448;
+    line-height: 28px;
+    padding: 0 5px;
+    border-radius: 3px;
 }
 #searchInp{
     width: 170px;
@@ -35,7 +38,6 @@ nav img{
     background: transparent;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #fff;
 }
 #sign,#userIcon{
     position: absolute;
@@ -62,8 +64,8 @@ nav img{
     text-shadow: 0 0 6px #fff;
 }
 #userIcon img{
-    height: 40px;
-    border-radius: 50%;
+    height: 25px;
+    border-radius: 5px;
     cursor: pointer;
 }
 #msgTip{
@@ -126,6 +128,7 @@ nav img{
 #pwdOperation{
     width: 157px;
     font-size: 12px;
+    overflow: hidden;
 }
 #savePwd{
     width: 15px;

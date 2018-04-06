@@ -30,6 +30,15 @@ public class StrategyController {
     @Autowired
     private FileService fileService;
 
+
+    @RequestMapping(value = "indexInfo.action", method = RequestMethod.GET)
+    @ResponseBody
+    private ServerResponse indexInfo(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        Integer userId = currentUser == null ? 0 : currentUser.getId();
+        return strategyService.indexInfo(userId);
+    }
+
     /**
      * 列出所有攻略
      *
@@ -158,44 +167,18 @@ public class StrategyController {
      */
     @RequestMapping(value = "updateForOrCollect.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updateForOrCollect(HttpSession session, Strategy strategy) {
-        //身份校验
-        ServerResponse serverResponse = isLogin(session);
-        //身份校验成功
-        if (serverResponse.isSuccess()) {
-            return strategyService.updateForOrCollect(strategy);
-        }
-        //身份校验失败
-        return serverResponse;
-    }
-
-    @RequestMapping(value = "updateForStatus.action", method = RequestMethod.POST)
-    @ResponseBody
-    private ServerResponse updateForStatus(HttpSession session, Integer strategyId, Integer status){
+    private ServerResponse updateForOrCollect(HttpSession session, Strategy strategy, Integer status, String type) {
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return strategyService.updateForStatus(currentUser.getId(), strategyId, status);
+            return strategyService.updateForOrCollect(currentUser.getId(), strategy, status, type);
         }
         //身份校验失败
         return serverResponse;
     }
 
-    @RequestMapping(value = "updateCollectStatus.action", method = RequestMethod.POST)
-    @ResponseBody
-    private ServerResponse updateCollectStatus(HttpSession session, Integer strategyId, Integer status){
-        //身份校验
-        ServerResponse serverResponse = isLogin(session);
-        //身份校验成功
-        if (serverResponse.isSuccess()) {
-            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return strategyService.updateCollectStatus(currentUser.getId(), strategyId, status);
-        }
-        //身份校验失败
-        return serverResponse;
-    }
     /**
      * 搜索攻略
      *

@@ -1,7 +1,5 @@
+var navUserId;
 $(function () {
-
-
-    var userId;
     //获取当前用户的信息
     $.ajax({
         type: "get",
@@ -11,9 +9,9 @@ $(function () {
             if (data.status != 1) {
                 return;
             }
-            userId = data.data.id;
+            navUserId = data.data.id;
             //dwr页面加载
-            dwrMessage.onPageLoad(userId);
+            dwrMessage.onPageLoad(navUserId);
         },
         error: function () {
             console.log("info error");
@@ -124,7 +122,7 @@ $(function () {
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
-        //如果用户名满足手机号的正则表达式则不符合规范
+        //如果用户名满足邮箱的正则表达式则不符合规范
         if (checkEmailFormat(upName)) {
             upNameFlag == false;
             $("#upName").addClass("warnBorder");    //css样式添加警告框
@@ -201,7 +199,7 @@ $(function () {
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
         }
     });
-    //校验手机号
+    //校验邮箱
     $("#upEmail").focusout(function () {
         var upEmail = $("#upEmail").val().trim();
         if (upEmail == null || upEmail == "") {
@@ -211,29 +209,29 @@ $(function () {
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
-        //邮箱正则表达式 todo
+        //邮箱正则表达式
         if (!checkEmailFormat(upEmail)) {
             upEmailFlag = false;
             $("#upEmail").addClass("warnBorder");   //css样式添加警告框
-            $("#signWarn").html("手机号码格式错误");    //错误提示
+            $("#signWarn").html("邮箱格式错误");    //错误提示
             return;
         }
-        //校验手机号是否重复
+        //校验邮箱是否重复
         $.ajax({
             type: "post",
             url: "/user/verify.action",
             data: {"val": upEmail, "type": "phone"},
             dataType: "json",
             success: function (data) {
-                //手机号校验失败
+                //邮箱校验失败
                 if (data.status == 0) {
                     upEmailFlag == false;
                     $("#upEmail").addClass("warnBorder");   //css样式添加警告框
-                    $("#signWarn").html("手机号已存在");  //错误提示
+                    $("#signWarn").html("邮箱已存在");  //错误提示
                     $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
-                //手机号校验成功
+                //邮箱校验成功
                 upEmailFlag = true;
                 $("#upEmail").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
@@ -346,8 +344,7 @@ $(function () {
             success: function (data) {
                 //退出登录成功
                 if (data.status == 1) {
-                    $("#sign").css("display", "inline-block");   //隐藏用户信息
-                    $("#userIcon").css("display", "none");   //显示"登录 注册"
+                    window.location.href="index.jsp";
                 }
             }
         });

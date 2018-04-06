@@ -1,4 +1,3 @@
-//todo 已收藏的要显示
 var i;
 $(function () {
     //select2

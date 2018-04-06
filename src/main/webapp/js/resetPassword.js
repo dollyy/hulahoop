@@ -19,7 +19,6 @@ $(function () {
     var token;
     $("#code").keyup(checkAccountValue);
     $("#confirmBtn").click(function () {
-        console.log("email->" + email + ",code->" + value);
         $.ajax({
             type: "post",
             url: "/mail/confirmCode.action",
@@ -31,7 +30,7 @@ $(function () {
                     return;
                 }
                 if (data.status == 1) { //验证码正确
-                    var token = data.msg; //更新密码时的token
+                    token = data.data; //更新密码时的token
                     $(".error").hide();
                     $(".step1").hide();
                     $(".step2").css("display", "flex");
@@ -65,7 +64,7 @@ $(function () {
                 var time = $("#counttime").html();
                 setInterval(function () {
                     if (time == 0) {
-                        window.location.href = "signin.html";
+                        window.location.href = "index.jsp";
                         return;
                     }
                     $("#counttime").html(--time);
@@ -86,7 +85,7 @@ function checkAccountValue() {
         return;
     }
     if (!checkEmailFormat(email)) {
-        $(".error").html("手机号错误").show();
+        $(".error").html("邮箱错误").show();
         $("#queryCode").attr("disabled", "true");
         return;
     }

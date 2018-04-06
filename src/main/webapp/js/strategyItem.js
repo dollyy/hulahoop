@@ -33,7 +33,7 @@ $(function () {
             //2.catalog
             for (i = 0; i < data.data.catalog.length; i++) {
                 $(".catalog").append("<li class='mtb10'><a class='cata" + (i + 1) + "' href='#cata" + (i + 1) + "'>" +
-                data.data.catalog[i] + "</a></li>");
+                    data.data.catalog[i] + "</a></li>");
             }
             $(".catalog li a").eq(0).addClass("current");
             $(".commentTitle").attr("id", "cata" + i);
@@ -46,19 +46,19 @@ $(function () {
             $(".content").attr("value", strategyId);
             for (i = 0; i < data.data.content.length; i++) {
                 $(".contentContainer").append("<div id='cata" + (i + 1) + "' class='cata'><div class='dayTitle'>" +
-                data.data.catalog[i] + "</div><div class='dayContent'>" + data.data.content[i] + "</div></div>");
+                    data.data.catalog[i] + "</div><div class='dayContent'>" + data.data.content[i] + "</div></div>");
             }
 
             //4.comment
             for (i = 0; i < data.data.comments.length; i++) {
                 $(".comments").prepend("<div class='comment' value='" + data.data.comments[i].id + "' level='" +
-                data.data.comments[i].level + "'><img src='" + data.data.comments[i].avatar + "'><div class='response'>" +
-                "<div class='commInfo'><span class='mr10'>" + data.data.comments[i].responseName + "</span><span class='mr10'>"
-                + data.data.comments[i].createTime + "</span></div><div class='commContent'>" + data.data.comments[i].content +
-                "</div><div class='commOperation'><span class='iconfont icon-zan11'></span><span class='mr10'>" +
-                data.data.comments[i].againstNum + "</span><span class='iconfont icon-zan1'></span><span class='mr10'>" +
-                data.data.comments[i].forNum + "</span><span>回复 </span><span>" + data.data.comments[i].commentCount +
-                "</span></div></div></div>");
+                    data.data.comments[i].level + "'><img src='" + data.data.comments[i].avatar + "'><div class='response'>" +
+                    "<div class='commInfo'><span class='mr10'>" + data.data.comments[i].responseName + "</span><span class='mr10'>"
+                    + data.data.comments[i].createTime + "</span></div><div class='commContent'>" + data.data.comments[i].content +
+                    "</div><div class='commOperation'><span class='iconfont icon-zan11'></span><span class='mr10'>" +
+                    data.data.comments[i].againstNum + "</span><span class='iconfont icon-zan1'></span><span class='mr10'>" +
+                    data.data.comments[i].forNum + "</span><span>回复 </span><span>" + data.data.comments[i].commentCount +
+                    "</span></div></div></div>");
             }
             //against click
             $(".commOperation .icon-zan1").unbind("click").bind("click", calNumber);
@@ -93,20 +93,23 @@ $(function () {
         });
     });
 
+    var status;
     //点赞攻略
     $(".ItemNav .icon-zan1").click(function () {
         var value = $(this).next().html();
         if ($(this).attr("class").indexOf("navColor") != -1) {
             $(this).removeClass("navColor");
             $(this).next().html(--value).removeClass("navColor");
+            status = 0;
         } else {
             $(this).addClass("navColor");
             $(this).next().html(++value).addClass("navColor");
+            status = 1;
         }
         $.ajax({
             type: "post",
             url: "/strategy/updateForOrCollect.action",
-            data: {"forNum": value, "id": strategyId},
+            data: {"forNum": value, "id": strategyId, "type": "for", "status":status},
             success: function () {
 
             },
@@ -131,18 +134,7 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/strategy/updateForOrCollect.action",
-            data: {"collectNum": value, "id": strategyId},
-            success: function () {
-
-            },
-            error: function () {
-
-            }
-        });
-        $.ajax({
-            type: "post",
-            url: "/strategy/updateForStatus.action",
-            data: {"status": status, "id": strategyId},
+            data: {"collectNum": value, "id": strategyId, "type": "collect", "status":status},
             success: function () {
 
             },

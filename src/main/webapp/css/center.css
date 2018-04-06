@@ -408,18 +408,18 @@ input[type="checkbox"] {
     margin-right: 200px;
 }
 
-.left > div, .reset > div {
+.left > div, .reset > div, .mailContainer > div {
     margin-bottom: 20px;
 }
 
-.left > div > div, .reset > div > div {
+.left > div > div, .reset > div > div, .mailContainer > div > div {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 10px;
     display: inline-block;
 }
 
-.left > div > input, .left > div > textarea, .reset input {
+.left > div > input, .left > div > textarea, .reset input, .mailContainer > div > input {
     border-radius: 5px;
     border: 1px solid #d1d5da;
     background: #fafbfc;
@@ -438,7 +438,7 @@ input[type="checkbox"] {
     outline: none;
 }
 
-.codeContainer {
+.mailContainer,.codeContainer {
     display: none;
 }
 

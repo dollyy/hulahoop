@@ -30,7 +30,6 @@ public class MailController {
         if(serverResponse.isSuccess()){
             //将code存进session
             session.setAttribute(recipient, serverResponse.getData());
-            //todo test 设置code的有效期为15min
             session.setMaxInactiveInterval(900);
             return ServerResponse.createBySuccess();    //不能将验证码返回
         }

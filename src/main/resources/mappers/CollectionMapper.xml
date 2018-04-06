@@ -95,7 +95,7 @@
 
     <delete id="deleteByStrategyId" parameterType="int">
         DELETE FROM collections WHERE strategy_id IN
-        <foreach collection="strategyIdList" item="item" index="index" open="(" separator="," close=")">
+        <foreach collection="strategyList" item="item" index="index" open="(" separator="," close=")">
             #{item}
         </foreach>
     </delete>

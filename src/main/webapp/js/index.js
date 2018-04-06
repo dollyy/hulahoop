@@ -1,19 +1,72 @@
-//todo test
-//7 邮箱正则表达式校验(nav.js)
-//4 点赞收藏更新表 (center.js)
-//5 修改了判断登录的方法 (center.js,nav.js,comment.js)
-//1 session 15min是否有效 (MailController)
-//2 修改密码 (resetPassword.sj)
-//3 修改邮箱 (center.js)
-//6 删除攻略同时删除关联 (center.js)
-
-//todo bug
-//1 删除攻略bug (center.js + admin.js)
-
 //todo
-//3 登录页面删掉免登录 (nav.jsp)
 //4 index页面 (index页面.jsp)
 //5 admin上传一些图片什么的 (StrategyManageController)
-
+var i;
 $(function () {
+    $.ajax({
+        type: "get",
+        url: "/strategy/indexInfo.action",
+        dataType: "json",
+        success: function (data) {
+            //推荐
+            if (data.data.recommend == undefined) {
+                $(".recommendContainer").hide();
+            } else {
+                $(".recommendContainer").show();
+                $(".recommends").empty();
+                for (i = 0; i < data.data.recommend.length; i++) {
+                    $(".recommends").append("<div class='strategy' value='" + data.data.recommend[i].strategyId + "'>" +
+                        "<img class='mainImg' src='" + data.data.recommend[i].mainImg + "'><span class='info'>" +
+                        "<span class=strategyTitle'>" + data.data.recommend[i].strategyName + "</span>" +
+                        "<span class='strategyInfo'><span>" + data.data.recommend[i].username + "</span><span>"
+                        + data.data.recommend[i].cityName + "</span><span>" + data.data.recommend[i].duration + "</span></span>" +
+                        "<span class='strategyDate'>" + data.data.recommend[i].createTime + "</span></span></div>");
+                }
+
+            }
+            //最新
+            if (data.data.latest == undefined) {
+                $(".newestContainer").hide();
+            } else {
+                $(".newestContainer").show();
+                $(".news").empty();
+                for (i = 0; i < data.data.latest.length; i++) {
+                    $(".news").append("<div class='strategy' value='" + data.data.latest[i].strategyId + "'>" +
+                        "<img class='mainImg' src='" + data.data.latest[i].mainImg + "'><span class='info'>" +
+                        "<span class=strategyTitle'>" + data.data.latest[i].strategyName + "</span>" +
+                        "<span class='strategyInfo'><span>" + data.data.latest[i].username + "</span><span>"
+                        + data.data.latest[i].cityName + "</span><span>" + data.data.latest[i].duration + "</span></span>" +
+                        "<span class='strategyDate'>" + data.data.latest[i].createTime + "</span></span></div>");
+                }
+
+            }
+            //最热
+            if (data.data.hottest == undefined) {
+                $(".hottestContainer").hide();
+            } else {
+                $(".hottestContainer").show();
+                $(".hots").empty();
+                for (i = 0; i < data.data.hottest.length; i++) {
+                    $(".hots").append("<div class='strategy' value='" + data.data.hottest[i].strategyId + "'>" +
+                        "<img class='mainImg' src='" + data.data.hottest[i].mainImg + "'><span class='info'>" +
+                        "<span class=strategyTitle'>" + data.data.hottest[i].strategyName + "</span>" +
+                        "<span class='strategyInfo'><span>" + data.data.hottest[i].username + "</span><span>"
+                        + data.data.hottest[i].cityName + "</span><span>" + data.data.hottest[i].duration + "</span></span>" +
+                        "<span class='strategyDate'>" + data.data.hottest[i].createTime + "</span></span></div>");
+                }
+
+            }
+            $(".strategy").off("click").on("click", function () {
+                if(navUserId == undefined){
+                    $("#signinContainer").slideDown();  //显示登录框
+                    $("#bg").slideDown();   //显示背景
+                    return;
+                }
+                window.location.href="strategyItem.jsp?strategyId="+$(this).attr("value");
+            })
+        },
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
 });

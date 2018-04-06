@@ -23,7 +23,7 @@ public interface CollectionMapper {
 
     int isCollected(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
 
-    int deleteByStrategyId(List<Integer> strategyIdList);
+    int deleteByStrategyId(@Param("strategyList") List<Integer> strategyList);
 
     int deleteByStrategyIdAndUserId(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
 }

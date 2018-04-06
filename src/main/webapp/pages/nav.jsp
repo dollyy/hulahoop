@@ -20,11 +20,11 @@
 <nav>
     <div class="nav">
         <a href="index.jsp"><img src="../images/icons/icon1.jpg"></a>
-        <a href="strategy.jsp" id="strategy">攻略</a>
-        <div class="serach">
+        <div class="search">
             <input type="text" id="searchInp">
             <span class="iconfont icon-fangdajing"></span>
         </div>
+        <a href="strategy.jsp" id="strategy">攻略</a>
         <%
             User user = (User) session.getAttribute("currentUser");
             if (user == null) {
@@ -58,9 +58,8 @@
     <form id="signinContainer">
         <a id="goUp">去注册</a>
         <input type="text" id="inName" name="username" placeholder="Username or email"><br>
-        <input type="text" id="inPwd" name="password" placeholder="Password"><br>
+        <input type="password" id="inPwd" name="password" placeholder="Password"><br>
         <span id="pwdOperation">
-                <input type="checkbox" id="savePwd">记住密码
                 <a href="resetPassword.jsp" id="resetPwd">忘记密码 </a>
             </span><br>
         <input type="button" id="inBtn" value="登 录" disabled>
@@ -69,8 +68,8 @@
     <form id="signupContainer">
         <a id="goIn">去登录</a>
         <input type="text" id="upName" name="username" placeholder="Username"><br>
-        <input type="text" id="upPwd" name="password" placeholder="Password"><br>
-        <input type="text" id="upPwdRe" name="passwordRe" placeholder="Password again"><br>
+        <input type="password" id="upPwd" name="password" placeholder="Password"><br>
+        <input type="password" id="upPwdRe" name="passwordRe" placeholder="Password again"><br>
         <input type="text" id="upEmail" name="email" value="yangchen302@163.com" placeholder="Email"><br>
         <input type="button" id="upBtn" value="注 册" disabled>
     </form>

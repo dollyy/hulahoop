@@ -145,18 +145,20 @@
                     </div>
                 </form>
                 <!-- 更换邮箱 -->
-                <div>
-                    <div>邮箱</div>
-                    <span class="emailWarn"></span><br>
-                    <input type="text" name="email" id="email" value="yangchen302@163.com">
-                    <input type="button" id="updateBtn" value="获取验证码" disabled><br>
+                <div class="mailContainer">
+                    <div>
+                        <div>邮箱</div>
+                        <span class="emailWarn"></span><br>
+                        <input type="text" name="email" id="email" value="yangchen302@163.com">
+                        <input type="button" id="updateBtn" value="获取验证码" disabled><br>
+                    </div>
+                    <div class="codeContainer">
+                        <div>code</div>
+                        <span class="codeWarn"></span><br>
+                        <input type="text" id="code"><br>
+                    </div>
+                    <input type="button" id="emailBtn" value="更 新">
                 </div>
-                <div class="codeContainer">
-                    <div>code</div>
-                    <span class="codeWarn"></span><br>
-                    <input type="text" id="code"><br>
-                </div>
-                <input type="button" id="emailBtn" value="更 新" disabled>
                 <!-- 修改密码 -->
                 <form class="reset">
                     <div>
