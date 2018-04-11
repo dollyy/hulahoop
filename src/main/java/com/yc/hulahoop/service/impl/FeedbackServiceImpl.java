@@ -170,6 +170,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         if (dwrRecordVos.size() > 0) {
             results.addAll(dwrRecordVos);
         }
+        if(results.size() == 0){
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
+                    Const.ResponseCode.NO_INFO.getDescription());
+        }
         //2.pageHelper--end
         PageInfo pageInfo = new PageInfo(results);
         //没有匹配信息

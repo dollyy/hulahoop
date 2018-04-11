@@ -30,22 +30,6 @@ INSERT INTO users(username, password, avatar, email, role, bio, gender, city, cr
 
 
 
-SELECT
-  s.id       AS strategyId,
-  s.main_img AS mainImg,
-  u.username,
-  s.name     AS strategyName,
-  c.name     AS cityName,
-  s.duration,
-  s.for_num AS forNum,
-  s.collect_num AS collectNum,
-  s.create_time AS createTime
-FROM strategies s
-  JOIN users u ON s.user_id = u.id
-  JOIN cities c ON s.city_id = c.id
-ORDER BY s.collect_num DESC, s.for_num DESC LIMIT 1,8;
-
-
 DROP TABLE IF EXISTS strategies;
 -- ------------------------------------
 -- Table structure for `strategies`

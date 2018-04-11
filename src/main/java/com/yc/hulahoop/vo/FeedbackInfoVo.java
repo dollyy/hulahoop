@@ -11,7 +11,7 @@ public class FeedbackInfoVo {
     private String username;
     private String avatar;
     private String content;
-    private String updateTime;
+    private String createTime;
     private int status;
 
     public int getId() {
@@ -78,12 +78,12 @@ public class FeedbackInfoVo {
         this.content = content;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public int getStatus() {

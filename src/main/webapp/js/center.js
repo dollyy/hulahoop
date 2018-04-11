@@ -2,7 +2,7 @@
 //2.the gradient color of map
 var pieData, myChart, i, userAvatar, forClass;
 $(function () {
-    var parameter = getQueryStringArgs();
+    var parameter = (location.search.length > 0 ? location.search.substring(1) : "");
     if (parameter == "message") {
         msgClick();
     }
@@ -23,7 +23,7 @@ $(function () {
     //获取当前用户信息
     $.ajax({
         type: "get",
-        url: "/user/isLogin.action",
+        url: "/user/queryUserInformation.action",
         dataType: "json",
         success: function (data) {
             if (data.status == -2) {    //用户未登录
@@ -318,8 +318,26 @@ $(function () {
             $("#editBtn").attr("disabled", "true");
             return;
         }
-        $(".nameWarn").html("");
-        $("#editBtn").removeAttr("disabled");
+        $.ajax({
+            type: "post",
+            url: "/user/verify.action",
+            data: {"val": value, "type": "username"},
+            dataType: "json",
+            success: function (data) {
+                //用户名校验失败
+                if (data.status == 0) {
+                    $(".nameWarn").html("用户名已存在");
+                    $("#editBtn").attr("disabled", "true");    //注册按钮置为无效
+                    return;
+                }
+                //用户名校验成功
+                $(".nameWarn").html("");
+                $("#editBtn").removeAttr("disabled");
+            },
+            error: function () {
+                window.location.href = "systemError.jsp";
+            }
+        });
     });
     //提交修改
     $("#editBtn").click(function () {
@@ -328,7 +346,6 @@ $(function () {
             url: "/user/updateUserInformation.action",
             data: {
                 "username": $("#centerUsername").val(),
-                "email": $("#email").val(),
                 "bio": $("#bio").val(),
                 "gender": $("#gender").val(),
                 "city": $("#city").val()
@@ -343,7 +360,7 @@ $(function () {
                     alert(data.msg);
                     return;
                 }
-                alert("更新成功");
+                history.go(0);
             },
             error: function () {
                 window.location.href = "systemError.jsp";
@@ -388,8 +405,14 @@ $(function () {
         });
         $(".codeContainer").show();
     });
+    $("#code").keyup(function () {
+        var codeVal = $(this).val().trim();
+        if (codeVal == null || codeVal == "") {
+            $("#emailBtn").attr("disabled", "true");
+        }
+        $("#emailBtn").removeAttr("disabled");
+    });
     $("#emailBtn").click(function () {
-        alert(1);
         $.ajax({
             type: "post",
             url: "/mail/confirmCode.action",
@@ -445,6 +468,7 @@ $(function () {
     $(".rePwd").focusout(function () {
         if ($(".newPwd").val().trim() != $(this).val().trim()) {
             $(".rePwdWarn").html("两次密码不一致");
+            $("#resetBtn").attr("disabled", "true");
             return;
         }
         $(".rePwdWarn").html("");
@@ -542,6 +566,7 @@ function msgClick() {
         url: "/feedback/listByUser.action",
         dataType: "json",
         success: function (data) {
+            console.log(JSON.stringify(data));
             if (data.status == -2) {    //用户未登录
                 window.location.href = "index.jsp";
                 return;
@@ -794,6 +819,8 @@ function getPath(node) {
     }
     //将图片上传到服务器
     $("#usericon").attr("src", path);
+    $("#navAvatar").attr("src", path);
+    $("#avatar").attr("src", path);
     $("#avatarForm").attr("action", "/user/updateAvatar.action").submit();
 }
 

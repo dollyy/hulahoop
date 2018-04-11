@@ -202,7 +202,7 @@
     <select id="querySequenceByAdd" resultType="int">
         SELECT count(*)
         FROM comments
-        WHERE level LIKE '_'
+        WHERE parent=0
     </select>
 
     <select id="querySequenceByReply" parameterType="string" resultType="int">

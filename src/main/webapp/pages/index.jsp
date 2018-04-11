@@ -33,6 +33,5 @@
 
 <script src="../js/jquery-3.2.1.min.js"></script>
 <script src="../js/index.js"></script>
-<script src="../js/nav.js"></script>
 </body>
 </html>

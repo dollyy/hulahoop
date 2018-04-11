@@ -50,8 +50,8 @@
             <input type="button" id="confirmBtn" value="确 认" disabled>
         </div>
         <div class="step step2">
-            <input type="text" id="password" placeholder="Password">
-            <input type="text" id="passwordRe" placeholder="Password Again">
+            <input type="password" id="password" placeholder="Password">
+            <input type="password" id="passwordRe" placeholder="Password Again">
             <input type="button" id="resetBtn" value="确 认" disabled>
         </div>
         <div class="step step3">重置密码成功，<span id="counttime">5</span>s后返回首页</div>

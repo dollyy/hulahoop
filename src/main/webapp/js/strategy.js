@@ -5,6 +5,7 @@ $(function () {
         $('.js-example-basic-single').select2();
     });
 
+    //获取攻略信息
     $.ajax({
         type: "get",
         url: "/strategy/list.action",
@@ -19,7 +20,7 @@ $(function () {
             packageData(data.data);
         },
         error: function () {
-            console.log("query resource error");
+            window.location.href = "systemError.jsp";
         }
     });
 
@@ -65,33 +66,14 @@ function packageData(data) {
     }
     for (i = 0; i < data.strategies.list.length; i++) {
         $(".content").append("<div value='" + data.strategies.list[i].strategyId + "' class='strategy'>" +
-        "<img id='strategyBg' src='" + data.strategies.list[i].mainImg + "'>" +
-        "<img id='avatar' src='" + data.strategies.list[i].avatar + "'><div class='s_msg'>" +
-        "<span class='title'>标题: " + data.strategies.list[i].strategyName + "</span><span class='user'>作者 : " +
-        data.strategies.list[i].username + "</span><span class='tags'>标签 : " +
-        data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "</span></div></div>");
+            "<img id='strategyBg' src='" + data.strategies.list[i].mainImg + "'>" +
+            "<img id='avatar' src='" + data.strategies.list[i].avatar + "'><div class='s_msg'>" +
+            "<span class='title'>标题: " + data.strategies.list[i].strategyName + "</span><span class='user'>作者 : " +
+            data.strategies.list[i].username + "</span><span class='tags'>标签 : " +
+            data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "</span></div></div>");
     }
     //strategies click
-    $(".content .strategy").off("click").on("click", function () {
-        var that = $(this);
-        //获取当前用户的信息
-        $.ajax({
-            type: "get",
-            url: "/user/queryUserInformation.action",
-            dataType: "json",
-            success: function (data) {
-                if (data.status == -2) {    //用户未登录
-                    $("#signinContainer").slideDown();  //显示登录框
-                    $("#bg").slideDown();   //显示背景
-                    return;
-                }
-                window.location.href = "strategyItem.jsp?strategyId=" + that.attr("value");
-            },
-            error: function () {
-                console.log("info error");
-            }
-        });
-    });
+    $(".content .strategy").off("click").on("click", isLogin);
     $("#pageNum").show();
     //4.pages
     $("#page").paging({
@@ -100,15 +82,40 @@ function packageData(data) {
             $.ajax({
                 type: "get",
                 url: "/strategy/updateList.action",
-                data: {"pageNum": num},
+                data: {
+                    "pageNum": num,
+                    "cityId": $(".province").val(),
+                    "duration": $(".duration").find(":selected").val()
+                },
                 dataType: "json",
                 success: function (data) {
                     packUpdateList(data.data);
                 },
                 error: function () {
-                    console.log("page error");
+                    window.location.href = "systemError.jsp";
                 }
             });
+        }
+    });
+}
+
+function isLogin() {
+    var that = $(this);
+    //获取当前用户的信息
+    $.ajax({
+        type: "get",
+        url: "/user/queryUserInformation.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                $("#signinContainer").slideDown();  //显示登录框
+                $("#bg").slideDown();   //显示背景
+                return;
+            }
+            window.location.href = "strategyItem.jsp?strategyId=" + that.attr("value");
+        },
+        error: function () {
+            window.location.href = "systemError.jsp";
         }
     });
 }
@@ -125,36 +132,43 @@ function packUpdateList(data) {
     $("#pageNum").show();
     for (i = 0; i < data.list.length; i++) {
         $(".content").append("<div value='" + data.list[i].strategyId + "' class='strategy'>" +
-        "<img id='strategyBg' src='" + data.list[i].mainImg + "'>" +
-        "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
-        "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
-        data.list[i].username + "</span><span class='tags'>标签 : " +
-        data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
+            "<img id='strategyBg' src='" + data.list[i].mainImg + "'>" +
+            "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
+            "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
+            data.list[i].username + "</span><span class='tags'>标签 : " +
+            data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
     }
     //strategies click
-    $(".content .strategy").off("click").on("click", function () {
-        window.location.href = "strategyItem.jsp?strategyId=" + $(this).attr("value");
+    $(".content .strategy").off("click").on("click", isLogin);
+    //4.pages
+    $("#page").paging({
+        totalPage: data.pages,
+        callback: function (num) {
+            $.ajax({
+                type: "get",
+                url: "/strategy/updateList.action",
+                data: {
+                    "pageNum": num,
+                    "cityId": $(".province").val(),
+                    "duration": $(".duration").find(":selected").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    packUpdateList(data.data);
+                },
+                error: function () {
+                    window.location.href = "systemError.jsp";
+                }
+            });
+        }
     });
 }
 
 function updateStrategies() {
-    var sendData = {};
-    var city = $(".province").val();
-    var duration = $(".duration").find(":selected").val();
-    if (city == 0) {
-        if (duration != "全部") {
-            sendData = {"duration": duration};
-        }
-    } else {
-        sendData = {"cityId": city};
-        if (duration != "全部") {
-            sendData = {"cityId": city, "duration": duration};
-        }
-    }
     $.ajax({
         type: "get",
         url: "/strategy/updateList.action",
-        data: sendData,
+        data: {"cityId": $(".province").val(), "duration": $(".duration").find(":selected").val()},
         dataType: "json",
         success: function (data) {
             $(".content").empty();
@@ -167,7 +181,7 @@ function updateStrategies() {
             packUpdateList(data.data);
         },
         error: function () {
-            console.log("updateStrategies error");
+            window.location.href = "systemError.jsp";
         }
     });
 }

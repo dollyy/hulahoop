@@ -1,5 +1,13 @@
 var navUserId;
 $(function () {
+
+    //回车事件
+/*    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            userLogin();
+        }
+    });*/
+
     //获取当前用户的信息
     $.ajax({
         type: "get",
@@ -14,7 +22,7 @@ $(function () {
             dwrMessage.onPageLoad(navUserId);
         },
         error: function () {
-            console.log("info error");
+            window.location.href="systemError.jsp";
         }
     });
 
@@ -31,13 +39,13 @@ $(function () {
             $("#msgDot").css("display", "inline-block");
         },
         error: function () {
-            console.log("get notice error");
+            window.location.href="systemError.jsp";
         }
     });
 
     //查看消息
     $(".icon-lingdang").click(function () {
-        window.location.href = "center.jsp?query=message";
+        window.location.href = "center.jsp?message";
     });
 
     /* 为背景的宽高赋值 */
@@ -53,13 +61,6 @@ $(function () {
         $("#signupContainer").slideUp();    //隐藏注册框
         $("#signupContainer")[0].reset();   //清空注册框
         $("#signWarn").html("");    //清空错误提示
-        //移除css样式
-        $("#signinContainer input").each(function (i, item) {
-            $(item).removeClass("warnBorder");
-        });
-        $("#signupContainer input").each(function (i, item) {
-            $(item).removeClass("warnBorder");
-        });
     });
 
     /* 点击搜索 */
@@ -89,10 +90,6 @@ $(function () {
         $("#signinContainer").css("display", "none");    //隐藏登录框
         $("#signupContainer")[0].reset();   //清空注册框
         $("#signWarn").html("");    //清空错误提示
-        //移除css样式
-        $("#signupContainer input").each(function (i, item) {
-            $(item).removeClass("warnBorder");
-        });
     });
 
     /* "去登陆" */
@@ -101,10 +98,6 @@ $(function () {
         $("#signupContainer").css("display", "none");    //隐藏注册框
         $("#signinForm")[0].reset();    //清空登陆框
         $("#signWarn").html("");    //清空错误提示
-        //移除css样式
-        $("#signinForm input").each(function (i, item) {
-            $(item).removeClass("warnBorder");
-        });
     });
 
     /* 注册 */
@@ -117,7 +110,6 @@ $(function () {
         var upName = $("#upName").val().trim();
         if (upName == null || upName == "") {
             upNameFlag == false;
-            $("#upName").addClass("warnBorder");    //css样式添加警告框
             $("#signWarn").html("");    //清空错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
@@ -125,7 +117,6 @@ $(function () {
         //如果用户名满足邮箱的正则表达式则不符合规范
         if (checkEmailFormat(upName)) {
             upNameFlag == false;
-            $("#upName").addClass("warnBorder");    //css样式添加警告框
             $("#signWarn").html("用户名不符合格式规范");    //清空错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
@@ -139,21 +130,19 @@ $(function () {
                 //用户名校验失败
                 if (data.status == 0) {
                     upNameFlag == false;
-                    $("#upName").addClass("warnBorder");    //css样式添加警告框
                     $("#signWarn").html("用户名已存在");  //错误提示
                     $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
                 //用户名校验成功
                 upNameFlag = true;
-                $("#upName").removeClass("warnBorder");//css样式移除警告框
                 $("#signWarn").html("");//清空错误提示
                 if (upPwdFlag && upPwdReFlag && upEmailFlag) {    //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
             },
             error: function () {
-                console.log("nameValid error");
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -162,12 +151,10 @@ $(function () {
         upPwd = $("#upPwd").val().trim();
         if (upPwd == null || upPwd == "") {
             upPwdFlag == false;
-            $("#upPwd").addClass("warnBorder");//css样式添加警告框
             $("#upBtn").attr("disabled", "true");//注册按钮置为无效
             return;
         }
         upPwdFlag = true;
-        $("#upPwd").removeClass("warnBorder");  //css样式移除警告框
         if (upNameFlag && upPwdReFlag && upEmailFlag) {   //输入参数均符合规范注册按钮置为有效
             $("#upBtn").removeAttr("disabled");
         }
@@ -177,7 +164,6 @@ $(function () {
         var upPwdRe = $("#upPwdRe").val().trim();
         if (upPwdRe == null || upPwdRe == "") {
             upPwdReFlag == false;
-            $("#upPwdRe").addClass("warnBorder");   //css样式添加警告框
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
         }
@@ -185,7 +171,6 @@ $(function () {
             //两次输入的密码相同
             if (upPwd == upPwdRe) {
                 upPwdReFlag = true;
-                $("#upPwdRe").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
                 if (upNameFlag && upPwdFlag && upEmailFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
@@ -194,7 +179,6 @@ $(function () {
             }
             //两次输入的密码不同
             upPwdReFlag == false;
-            $("#upPwdRe").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("两次密码不一致"); //错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
         }
@@ -204,7 +188,6 @@ $(function () {
         var upEmail = $("#upEmail").val().trim();
         if (upEmail == null || upEmail == "") {
             upEmailFlag == false;
-            $("#upEmail").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("");    //清空错误提示
             $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             return;
@@ -212,7 +195,6 @@ $(function () {
         //邮箱正则表达式
         if (!checkEmailFormat(upEmail)) {
             upEmailFlag = false;
-            $("#upEmail").addClass("warnBorder");   //css样式添加警告框
             $("#signWarn").html("邮箱格式错误");    //错误提示
             return;
         }
@@ -220,27 +202,29 @@ $(function () {
         $.ajax({
             type: "post",
             url: "/user/verify.action",
-            data: {"val": upEmail, "type": "phone"},
+            data: {"val": upEmail, "type": "email"},
+            beforeSend:function () {
+                alert(3);
+            },
             dataType: "json",
             success: function (data) {
+                console.log(JSON.stringify(data));
                 //邮箱校验失败
                 if (data.status == 0) {
                     upEmailFlag == false;
-                    $("#upEmail").addClass("warnBorder");   //css样式添加警告框
                     $("#signWarn").html("邮箱已存在");  //错误提示
                     $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
                     return;
                 }
                 //邮箱校验成功
                 upEmailFlag = true;
-                $("#upEmail").removeClass("warnBorder");    //css样式移除警告框
                 $("#signWarn").html("");    //清空错误提示
                 if (upNameFlag && upPwdFlag && upPwdReFlag) { //输入参数均符合规范注册按钮置为有效
                     $("#upBtn").removeAttr("disabled");
                 }
             },
             error: function () {
-                console.log("verify phone error");
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -264,7 +248,7 @@ $(function () {
                 $("#upBtn").attr("disabled", "true");    //注册按钮置为无效
             },
             error: function () {
-                console.log("signup error");
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -278,12 +262,10 @@ $(function () {
         inName = $("#inName").val().trim();
         if (inName == null || inName == "") {
             inNameFlag = false;
-            $("#inName").addClass("warnBorder");    //css样式添加警告框
             $("#inBtn").attr("disabled", "true");    //登录按钮置为无效
             return;
         }
         inNameFlag = true;
-        $("#inName").removeClass("warnBorder"); //css样式移除警告框
         if (inPwdFlag) {
             $("#inBtn").removeAttr("disabled"); //输入参数均符合规范登录按钮置为有效
         }
@@ -293,19 +275,17 @@ $(function () {
         inPwd = $("#inPwd").val().trim();
         if (inPwd == null || inPwd == "") {
             inPwdFlag = false;
-            $("#inPwd").addClass("warnBorder"); //css样式添加警告框
             $("#inBtn").attr("disabled", "true");    //登录按钮置为无效
             return;
         }
         inPwdFlag = true;
-        $("#inPwd").removeClass("warnBorder");  //css样式移除警告框
         if (inNameFlag) { //输入参数均符合规范登录按钮置为有效
             $("#inBtn").removeAttr("disabled");
         }
     });
     //点击登录
     $("#inBtn").click(function () {
-        var type = checkEmailFormat(inName) ? "phone" : "username";
+        var type = checkEmailFormat(inName) ? "email" : "username";
         $.ajax({
             type: "post",
             url: "/user/login.action",
@@ -319,18 +299,9 @@ $(function () {
                 }
                 //登陆成功
                 history.go(0);
-                /*                $("#bg").slideUp(); //隐藏bg
-                 $("#signinContainer").slideUp();    //隐藏登录框
-                 $("#signinContainer")[0].reset();   //清空输入框
-                 $("#inBtn").attr("disabled","true");    //登录按钮置为无效
-                 $("#sign").css("display","none");   //隐藏"登录 注册"
-                 $("#username").html(data.data.username); //为用户名赋值
-                 $("#userIcon img").attr("src",data.data.avatar); //为用户头像赋值
-                 $("#userIcon").css("display","inline-block");   //显示用户信息
-                 $("#signWarn").html("");    //清空错误提示*/
             },
             error: function () {
-                console.log("signin error");
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -351,6 +322,7 @@ $(function () {
     });
 
 });
+
 
 //推送信息处理
 function showMessage(data) {

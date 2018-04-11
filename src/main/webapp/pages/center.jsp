@@ -51,10 +51,12 @@
             <span>修改资料</span>
         </li>
         <li id="navMsg">
-            <svg class="icon" aria-hidden="true" style="font-size: 60px">
-                <use xlink:href="#icon-xiaoxizhongxin"></use>
-            </svg>
-            <span>消息中心</span>
+            <a href="?message">
+                <svg class="icon" aria-hidden="true" style="font-size: 60px">
+                    <use xlink:href="#icon-xiaoxizhongxin"></use>
+                </svg>
+                <span>消息中心</span>
+            </a>
         </li>
     </ul>
     <div class="content">
@@ -117,7 +119,8 @@
                             <input type="text" name="username" id="centerUsername">
                         </div>
                         <div>
-                            <div>性别</div><br>
+                            <div>性别</div>
+                            <br>
                             <select class="js-example-basic-single" name="gender" id="gender">
                                 <option value="unknown">未知</option>
                                 <option value="female">女</option>
@@ -125,15 +128,17 @@
                             </select>
                         </div>
                         <div>
-                            <div>城市</div><br>
+                            <div>城市</div>
+                            <br>
                             <input type="text" name="city" id="city"><br>
                         </div>
                         <div>
-                            <div>个人简介</div><br>
+                            <div>个人简介</div>
+                            <br>
                             <textarea type="text" name="bio" id="bio"
                                       placeholder="Tell us a little bit about yourself"></textarea><br>
                         </div>
-                        <input type="button" id="editBtn" value="保 存" disabled>
+                        <input type="button" id="editBtn" value="保 存">
                     </div>
                 </form>
                 <!-- 更换头像 -->
@@ -157,22 +162,25 @@
                         <span class="codeWarn"></span><br>
                         <input type="text" id="code"><br>
                     </div>
-                    <input type="button" id="emailBtn" value="更 新">
+                    <input type="button" id="emailBtn" value="更 新" disabled>
                 </div>
                 <!-- 修改密码 -->
                 <form class="reset">
                     <div>
-                        <div>旧密码</div><br>
-                        <input type="text" class="oldPwd"><br>
+                        <div>旧密码</div>
+                        <br>
+                        <input type="password" class="oldPwd"><br>
                         <span class="oldPwdWarn"></span><br>
                     </div>
                     <div>
-                        <div>新密码</div><br>
-                        <input type="text" class="newPwd" disabled><br><br>
+                        <div>新密码</div>
+                        <br>
+                        <input type="password" class="newPwd" disabled><br><br>
                     </div>
                     <div>
-                        <div>再次输入</div><br>
-                        <input type="text" class="rePwd" disabled><br>
+                        <div>再次输入</div>
+                        <br>
+                        <input type="password" class="rePwd" disabled><br>
                         <span class="rePwdWarn"></span><br>
                     </div>
                     <input type="button" value="重置密码" id="resetBtn" disabled>

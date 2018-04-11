@@ -64,9 +64,13 @@ $(function () {
             $(".commOperation .icon-zan1").unbind("click").bind("click", calNumber);
             //for click
             $(".commOperation .icon-zan11").unbind("click").bind("click", calNumber);
+            //点击查看评论
+            $(".comments .comment").off("click").on("click", function () {
+                window.location.href="comment.jsp?level="+$(this).attr("level");
+            });
         },
         error: function () {
-            alert("strategyItem error");
+            window.location.href="systemError.jsp";
         }
     });
 
@@ -88,7 +92,7 @@ $(function () {
                 history.go(0);
             },
             error: function () {
-                console.log("add comment error");
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -114,7 +118,7 @@ $(function () {
 
             },
             error: function () {
-
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -139,7 +143,7 @@ $(function () {
 
             },
             error: function () {
-
+                window.location.href="systemError.jsp";
             }
         });
     });
@@ -183,7 +187,7 @@ function calNumber() {
         success: function () {
         },
         error: function () {
-            console.log("number error");
+            window.location.href="systemError.jsp";
         }
     });
 }

@@ -7,16 +7,6 @@ input{
     margin: 0;
     font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
 }
-/*header{
-    height: 55px;
-}
-footer{
-    background: #000000;
-}
-.HolyGrailBody{
-    height: auto;
-    overflow: hidden;
-}*/
 html,body{
     height: 100%;
     background: #f2f2f2;

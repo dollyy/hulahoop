@@ -57,12 +57,12 @@ $(function () {
 
             }
             $(".strategy").off("click").on("click", function () {
-                if(navUserId == undefined){
+                if (navUserId == undefined) {
                     $("#signinContainer").slideDown();  //显示登录框
                     $("#bg").slideDown();   //显示背景
                     return;
                 }
-                window.location.href="strategyItem.jsp?strategyId="+$(this).attr("value");
+                window.location.href = "strategyItem.jsp?strategyId=" + $(this).attr("value");
             })
         },
         error: function () {

@@ -37,7 +37,7 @@
         } else {
         %>
         <span id="userIcon">
-            <a href="center.jsp"><img src='<%=user.getAvatar()%>'></a>
+            <a href="center.jsp"><img id="navAvatar" src='<%=user.getAvatar()%>'></a>
             <span id="username"><%=user.getUsername()%></span>
             <span id="msgTip">
                 <span class="iconfont icon-lingdang"></span>

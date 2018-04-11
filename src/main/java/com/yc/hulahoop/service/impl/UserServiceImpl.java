@@ -192,10 +192,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse updateUserInformation(User user) {
+    public ServerResponse updateUserInformation(Integer userId, String username, String bio, String gender, String city) {
+        User user=new User();
+        user.setId(userId);
+        user.setUsername(username);
+        user.setBio(bio);
+        user.setGender(gender);
+        user.setCity(city);
+        user.setPassword(null); //禁止修改密码
         int count = userMapper.updateByPrimaryKeySelective(user);
         if (count > 0) {
-            return ServerResponse.createBySuccessMessage("更新用户信息成功");
+            return ServerResponse.createBySuccessData(user);
         }
         return ServerResponse.createByErrorMessage("更新用户信息失败");
     }

@@ -45,9 +45,9 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse indexInfo(Integer userId) {
-        Map<String, Object> result=Maps.newHashMap();
+        Map<String, Object> result = Maps.newHashMap();
         //推荐列表
-        if(userId != 0){
+        if (userId != 0) {
             //查询用户的推荐列表
             //List<Integer> strategyId=Lists.newHashList();
             //String recommendList = userMapper.queryRecommendList(userId);
@@ -60,18 +60,18 @@ public class StrategyServiceImpl implements StrategyService {
             //  }
             //}
             List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies();
-            if(recommendStrategies.size() > 0){
+            if (recommendStrategies.size() > 0) {
                 result.put("recommend", recommendStrategies);
             }
         }
         //最新
         List<StrategyVo> latestStrategies = strategyMapper.latestStrategies();
-        if(latestStrategies.size() > 0){
+        if (latestStrategies.size() > 0) {
             result.put("latest", latestStrategies);
         }
         //最热
         List<StrategyVo> hottestStrategies = strategyMapper.hottestStrategies();
-        if(hottestStrategies.size() > 0){
+        if (hottestStrategies.size() > 0) {
             result.put("hottest", hottestStrategies);
         }
         return ServerResponse.createBySuccessData(result);
@@ -108,6 +108,8 @@ public class StrategyServiceImpl implements StrategyService {
     public ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
         //1.startPage--start
         PageHelper.startPage(pageNum, pageSize);
+        cityId = cityId == 0 ? null : cityId;
+        duration = "全部".equals(duration) ? null : duration;
         List<StrategyVo> strategyList = strategyMapper.list(cityId, duration);
         //没有信息
         if (strategyList.size() == 0) {
@@ -161,7 +163,7 @@ public class StrategyServiceImpl implements StrategyService {
         int count = collectionMapper.isCollected(userId, strategyId);
         result.put("collect", count == 1);  //收藏返回true
         //是否点赞
-        count=strategyForMapper.existRecord(userId, strategyId);
+        count = strategyForMapper.existRecord(userId, strategyId);
         result.put("for", count == 1);  //点赞返回true
         //封装comment对象
         List<CommentVo> commentVos = commentMapper.listByStrategy(strategyVo.getStrategyId());
@@ -204,7 +206,7 @@ public class StrategyServiceImpl implements StrategyService {
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         List<Integer> strategyList = Lists.newArrayList();
-        System.out.println("================"+strategyId);
+        System.out.println("================" + strategyId);
         //删除一/多个攻略
         if (strategyId.contains(",")) {   //删除多个
             String[] strategyIds = strategyId.split(",");
@@ -220,11 +222,11 @@ public class StrategyServiceImpl implements StrategyService {
             //删除时添加user_id防止横向越权
             strategyMapper.deleteByUserIdAndStrategyId(userId, strategyList);
         }
-        for (Integer integer : strategyList){
-            System.out.println("=========="+integer);
+        for (Integer integer : strategyList) {
+            System.out.println("==========" + integer);
         }
         //删除用户收藏
-        int count=collectionMapper.deleteByStrategyId(strategyList);
+        int count = collectionMapper.deleteByStrategyId(strategyList);
         //删除成功
         if (count > 0) {
             return ServerResponse.createBySuccessMessage("删除成功");
@@ -266,26 +268,26 @@ public class StrategyServiceImpl implements StrategyService {
         //没有指定禁止修改的字段是因为在updateForOrCollect中只允许修改for或者against
         int count = strategyMapper.updateForOrCollect(strategy);
         //
-        if("for".equals(type)){
-            count=strategyForMapper.existRecord(userId, strategy.getId());
-            System.out.println("==================="+count);
-            if(count > 0){  //更新
-                count=strategyForMapper.updateByUserIdAndStrategyId(userId, status, strategy.getId());
-            }else{  //新增
-                StrategyFor strategyFor=new StrategyFor();
+        if ("for".equals(type)) {
+            count = strategyForMapper.existRecord(userId, strategy.getId());
+            System.out.println("===================" + count);
+            if (count > 0) {  //更新
+                count = strategyForMapper.updateByUserIdAndStrategyId(userId, status, strategy.getId());
+            } else {  //新增
+                StrategyFor strategyFor = new StrategyFor();
                 strategyFor.setUserId(userId);
                 strategyFor.setStrategyId(strategy.getId());
                 strategyFor.setStatus(1);
-                count=strategyForMapper.insert(strategyFor);
+                count = strategyForMapper.insert(strategyFor);
             }
-        }else if("collect".equals(type)){
-            if(status == 0){  //取消收藏
-                count=collectionMapper.deleteByStrategyIdAndUserId(userId, strategy.getId());
-            }else{  //收藏
-                Collection collection=new Collection();
+        } else if ("collect".equals(type)) {
+            if (status == 0) {  //取消收藏
+                count = collectionMapper.deleteByStrategyIdAndUserId(userId, strategy.getId());
+            } else {  //收藏
+                Collection collection = new Collection();
                 collection.setUserId(userId);
                 collection.setStrategyId(strategy.getId());
-                count=collectionMapper.insert(collection);
+                count = collectionMapper.insert(collection);
             }
         }
         //更新成功
@@ -354,8 +356,8 @@ public class StrategyServiceImpl implements StrategyService {
             }
             //获取用户有没有对攻略点赞
             int count;
-            for(CollectionVo collectionVo : collectionVoList){
-                count=strategyForMapper.existRecord(userId, collectionVo.getId());
+            for (CollectionVo collectionVo : collectionVoList) {
+                count = strategyForMapper.existRecord(userId, collectionVo.getId());
                 collectionVo.setForStatus(count);
             }
             //2.pageHelper--end

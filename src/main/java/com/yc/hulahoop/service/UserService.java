@@ -17,7 +17,7 @@ public interface UserService {
 
     ServerResponse queryUserInformation(Integer userId);
 
-    ServerResponse updateUserInformation(User user);
+    ServerResponse updateUserInformation(Integer userId, String username, String bio, String gender, String city);
 
     ServerResponse updateEmail(Integer userId, String email);
 

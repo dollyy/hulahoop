@@ -452,15 +452,10 @@ input[type="checkbox"] {
     height: 25px;
     width: 100px;
     border-radius: 5px;
-    border: 1px solid #1E82CF;
+    border: 2px solid #333;
     cursor: pointer;
-    background: linear-gradient(to bottom, #0495C7, #0487B4);
-    color: #fff;
     font-size: 12px;
-}
-
-#editBtn:hover {
-    text-shadow: 0 0 10px #fff;
+    background: #cccccc;
 }
 
 #usericon {

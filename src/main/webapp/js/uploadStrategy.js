@@ -80,7 +80,7 @@ $(function () {
             }
         },
         error: function () {
-            console.log("listByUpload error");
+            window.location.href="systemError.jsp";
         }
     });
 
@@ -107,22 +107,22 @@ $(function () {
         var subTitle = $("#subTitle").val();
         var text = editor.txt.text();
         //输入框中内容不为空
-        if (text != "" && text != null) {
-            //alert(editor.txt.html());
-            var day = ($(".strategyContainer").find(".day").length + 1);
-            $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' " +
+        if (text == "" || text == null) {
+            return;
+        }
+        var day = ($(".strategyContainer").find(".day").length + 1);
+        $(".strategyContainer").append("<div class='day' ondrop='drop(event,this)' ondragover='allowDrop(event)' " +
             "draggable='true' ondragstart='drag(event, this)'><div class='dayTitle mb10'><input id='daySub' type='text' " +
             "value=" + subTitle + " readonly><span class='iconfont icon-delete' title='删除'></span>" +
             "<span class='iconfont icon-bianji' title='编辑'></span><span class='iconfont icon-baocun' title='保存'>" +
             "</span></div><div class='content' id='day" + day + "'>" + editor.txt.html() + "</div></div>");
-            //clean content
-            $(".w-e-text").html("");
-            $("#subTitle").val("");
-            //click event
-            $(".strategyContainer .day .icon-bianji").off("click").on("click", editDay);
-            $(".strategyContainer .day .icon-baocun").off("click").on("click", saveDay);
-            $(".strategyContainer .day .icon-delete").off("click").on("click", deleteDay);
-        }
+        //clean content
+        $(".w-e-text").html("<p><br></p>");
+        $("#subTitle").val("");
+        //click event
+        $(".strategyContainer .day .icon-bianji").off("click").on("click", editDay);
+        $(".strategyContainer .day .icon-baocun").off("click").on("click", saveDay);
+        $(".strategyContainer .day .icon-delete").off("click").on("click", deleteDay);
     });
 
     /* submit strategy */
@@ -161,11 +161,11 @@ $(function () {
             type: "post",
             url: "/strategy/add.action",
             data: strategy,
-            beforeSend: function () {
-                alert(strategy);
-            },
             success: function (data) {
                 alert(data.msg);
+            },
+            error:function () {
+                window.location.href="systemError.jsp";
             }
         })
     });

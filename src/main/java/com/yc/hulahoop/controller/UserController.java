@@ -122,7 +122,7 @@ public class UserController {
      * 忘记密码下的修改密码
      *
      * @param password 新密码
-     * @param email       邮箱
+     * @param email    邮箱
      * @return 修改成功/失败
      */
     @RequestMapping(value = "updatePassword.action", method = RequestMethod.POST)
@@ -155,29 +155,21 @@ public class UserController {
      * 更新个人信息
      *
      * @param session 当前用户
-     * @param user    当前用户更新的用户信息
      * @return 更新成功/失败
      */
     @RequestMapping(value = "updateUserInformation.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updateUserInformation(HttpSession session, User user) {
+    private ServerResponse updateUserInformation(HttpSession session, String username, String bio, String gender,
+                                                 String city) {
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            //防止横向越权
-            user.setId(currentUser.getId());
-            //禁止修改的字段
-            user.setPassword(null);
-            user.setRole(null);
-            user.setCreateTime(null);
-            user.setEmail(null);
-
-            serverResponse = userService.updateUserInformation(user);
+            serverResponse = userService.updateUserInformation(currentUser.getId(), username, bio, gender, city);
             //将修改后的信息存进session
             if (serverResponse.isSuccess()) {
-                session.setAttribute(Const.CURRENT_USER, user);
+                session.setAttribute(Const.CURRENT_USER, queryUserInformation(session).getData());
             }
         }
         //身份校验失败
@@ -186,7 +178,7 @@ public class UserController {
 
     @RequestMapping(value = "updateEmail.action", method = RequestMethod.POST)
     @ResponseBody
-    private ServerResponse updateEmail(HttpSession session,String email) {
+    private ServerResponse updateEmail(HttpSession session, String email) {
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功
@@ -214,7 +206,6 @@ public class UserController {
     @RequestMapping(value = "updateAvatar.action", method = RequestMethod.POST)
     @ResponseBody
     private Map updateAvatar(HttpSession session, MultipartFile file) {
-        System.out.println("======"+file);
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //返回的结果集
@@ -232,10 +223,11 @@ public class UserController {
             //上传成功
             String path = PropertiesUtil.getProperty("ftp.server.http.prefix") + PropertiesUtil.getProperty("ftp.avatar")
                     + uploadFileName;
-            User currentUser=(User)session.getAttribute(Const.CURRENT_USER);
+            User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
             currentUser.setAvatar(path);
-            serverResponse= userService.updateAvatar(currentUser);
-            if(serverResponse.isSuccess()){
+            currentUser.setPassword(null);  //禁止修改password
+            serverResponse = userService.updateAvatar(currentUser);
+            if (serverResponse.isSuccess()) {
                 resultMap.put("status", 1);
                 resultMap.put("msg", "上传文件成功");
                 resultMap.put("file_path", path);
@@ -254,6 +246,7 @@ public class UserController {
 
     /**
      * 检查用户是否登录
+     *
      * @param session 当前用户
      * @return 用户信息/未登录
      */
