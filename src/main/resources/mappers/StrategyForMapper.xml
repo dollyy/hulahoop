@@ -6,11 +6,10 @@
             <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="strategy_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, user_id, strategy_id, status
+        id, user_id, strategy_id
     </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -23,10 +22,10 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="com.yc.hulahoop.pojo.StrategyFor">
-        INSERT INTO strategy_for (id, user_id, strategy_id,
-                                  status)
-        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{strategyId,jdbcType=INTEGER},
-                #{status,jdbcType=INTEGER})
+        INSERT INTO strategy_for (id, user_id, strategy_id
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{strategyId,jdbcType=INTEGER}
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.StrategyFor">
         insert into strategy_for
@@ -40,9 +39,6 @@
             <if test="strategyId != null">
                 strategy_id,
             </if>
-            <if test="status != null">
-                status,
-            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -53,9 +49,6 @@
             </if>
             <if test="strategyId != null">
                 #{strategyId,jdbcType=INTEGER},
-            </if>
-            <if test="status != null">
-                #{status,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -68,29 +61,24 @@
             <if test="strategyId != null">
                 strategy_id = #{strategyId,jdbcType=INTEGER},
             </if>
-            <if test="status != null">
-                status = #{status,jdbcType=INTEGER},
-            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.StrategyFor">
         UPDATE strategy_for
         SET user_id     = #{userId,jdbcType=INTEGER},
-            strategy_id = #{strategyId,jdbcType=INTEGER},
-            status      = #{status,jdbcType=INTEGER}
+            strategy_id = #{strategyId,jdbcType=INTEGER}
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="existRecord" resultType="int">
+    <select id="isFor" resultType="int">
         SELECT COUNT(*)
         FROM strategy_for
         WHERE user_id = #{userId} AND strategy_id = #{strategyId}
     </select>
 
-    <update id="updateByUserIdAndStrategyId" parameterType="map">
-        UPDATE strategy_for
-        SET status = #{status}
+    <update id="deleteByUserIdAndStrategyId" parameterType="map">
+        DELETE FROM strategy_for
         WHERE user_id = #{userId} AND strategy_id = #{strategyId}
     </update>
 </mapper>

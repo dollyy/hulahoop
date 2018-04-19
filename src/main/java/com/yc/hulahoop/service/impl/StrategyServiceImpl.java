@@ -6,11 +6,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
+import com.yc.hulahoop.controller.RecommendController;
 import com.yc.hulahoop.dao.*;
-import com.yc.hulahoop.pojo.City;
-import com.yc.hulahoop.pojo.Collection;
-import com.yc.hulahoop.pojo.Strategy;
-import com.yc.hulahoop.pojo.StrategyFor;
+import com.yc.hulahoop.pojo.*;
 import com.yc.hulahoop.service.StrategyService;
 import com.yc.hulahoop.util.PropertiesUtil;
 import com.yc.hulahoop.vo.CollectionVo;
@@ -18,12 +16,27 @@ import com.yc.hulahoop.vo.CommentVo;
 import com.yc.hulahoop.vo.StrategyVo;
 import com.yc.hulahoop.vo.UserStrategyVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
+import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 
 @Service("strategyService")
 public class StrategyServiceImpl implements StrategyService {
@@ -42,6 +55,15 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Autowired
     StrategyForMapper strategyForMapper;
+
+    @Autowired
+    UserBehaviourMapper userBehaviourMapper;
+
+    @Autowired
+    StrategyItemMapper strategyItemMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public ServerResponse indexInfo(Integer userId) {
@@ -121,13 +143,49 @@ public class StrategyServiceImpl implements StrategyService {
         return ServerResponse.createBySuccessData(pageInfo);
     }
 
+    private void recordBehaviours(Integer userId, Integer strategyId, BigDecimal preference, String type) {
+        int count;
+        BigDecimal oldPreference = userBehaviourMapper.existBehaviour(userId, strategyId);   //这条记录是否存在
+        if (oldPreference == null) {    //添加新纪录
+            //封装UserBehaviour对象
+            UserBehaviour userBehaviour = new UserBehaviour();
+            userBehaviour.setUserId(userId);
+            userBehaviour.setStrategyId(strategyId);
+            userBehaviour.setPreference(preference);
+            count = userBehaviourMapper.insert(userBehaviour);
+        } else {                    //更新记录
+            BigDecimal newPreference;
+            //计算新分数
+            if (Const.UserBehaviour.OPERATION_ADD.equals(type)) {
+                newPreference = oldPreference.add(preference);
+            } else {
+                newPreference = oldPreference.subtract(preference);
+            }
+            count = userBehaviourMapper.updateByUserIdAndStrategyId(userId, strategyId, newPreference);
+        }
+        //重新生成用户行为文件
+        if (count > 0) {
+            File file = new File(Const.BEHAVIOUR_FILE);
+            if (file.exists()) {
+                file.delete();
+            }
+            //将路径中的'\'变成'/'
+            String filePath = file.getAbsolutePath().replaceAll("\\\\", "/");
+            userBehaviourMapper.generateCSVFile(filePath);
+        }
+        //重新计算用户推荐列表
+        RecommendController.recommend(userId);
+    }
     @Override
-    public ServerResponse detail(Integer userId, Integer strategyId) {
-        Map<String, Object> result = Maps.newHashMap();
+    public ServerResponse detail(HttpServletRequest request, Integer userId, Integer strategyId) {
         if (strategyId == null) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
+        //浏览一次加0.5分
+        recordBehaviours(userId, strategyId, Const.UserBehaviour.BROWSE_SCORE, Const.UserBehaviour.OPERATION_ADD);
+
+        Map<String, Object> result = Maps.newHashMap();
         //获取该攻略的详细信息
         StrategyVo strategyVo = strategyMapper.detail(strategyId);
         //攻略不存在
@@ -163,7 +221,7 @@ public class StrategyServiceImpl implements StrategyService {
         int count = collectionMapper.isCollected(userId, strategyId);
         result.put("collect", count == 1);  //收藏返回true
         //是否点赞
-        count = strategyForMapper.existRecord(userId, strategyId);
+        count = strategyForMapper.isFor(userId, strategyId);
         result.put("for", count == 1);  //点赞返回true
         //封装comment对象
         List<CommentVo> commentVos = commentMapper.listByStrategy(strategyVo.getStrategyId());
@@ -173,6 +231,49 @@ public class StrategyServiceImpl implements StrategyService {
         }
         result.put("comments", commentVos);
         return ServerResponse.createBySuccessData(result);
+    }
+
+    private int addStrategyItem(Integer strategyId, Integer cityId) {
+        StrategyItem strategyItem = new StrategyItem();
+        strategyItem.setStrategyId(strategyId);
+        strategyItem.setAreaHd(0);
+        strategyItem.setAreaHn(0);
+        strategyItem.setAreaHz(0);
+        strategyItem.setAreaHb(0);
+        strategyItem.setAreaXb(0);
+        strategyItem.setAreaXn(0);
+        strategyItem.setAreaDb(0);
+        strategyItem.setAreaOther(0);
+        City city = cityMapper.selectByPrimaryKey(cityId);
+        if (city != null) {
+            switch (city.getAreaId()) {
+                case 1:
+                    strategyItem.setAreaHd(1);
+                    break;
+                case 2:
+                    strategyItem.setAreaHn(1);
+                    break;
+                case 3:
+                    strategyItem.setAreaHz(1);
+                    break;
+                case 4:
+                    strategyItem.setAreaHb(1);
+                    break;
+                case 5:
+                    strategyItem.setAreaXb(1);
+                    break;
+                case 6:
+                    strategyItem.setAreaXn(1);
+                    break;
+                case 7:
+                    strategyItem.setAreaDb(1);
+                    break;
+                case 8:
+                    strategyItem.setAreaOther(1);
+                    break;
+            }
+        }
+        return strategyItemMapper.insert(strategyItem);
     }
 
     @Override
@@ -193,7 +294,12 @@ public class StrategyServiceImpl implements StrategyService {
         int count = strategyMapper.insert(strategy);
         //新增成功
         if (count > 0) {
-            return ServerResponse.createBySuccessMessage("新增成功");
+            //todo 添加到strategy_item中
+            count = addStrategyItem(strategy.getId(), strategy.getCityId());
+            if (count > 0) {
+                return ServerResponse.createBySuccessMessage("新增成功");
+            }
+            return ServerResponse.createByErrorMessage("新增失败");
         }
         //新增失败
         return ServerResponse.createByErrorMessage("新增失败");
@@ -206,25 +312,25 @@ public class StrategyServiceImpl implements StrategyService {
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         List<Integer> strategyList = Lists.newArrayList();
-        System.out.println("================" + strategyId);
+
         //删除一/多个攻略
-        if (strategyId.contains(",")) {   //删除多个
+        if (strategyId.contains(",")) {   //有多个攻略
             String[] strategyIds = strategyId.split(",");
             for (String str : strategyIds) {
                 strategyList.add(Integer.parseInt(str));
             }
-        } else { //删除一个
+        } else { //只有一个攻略
             strategyList.add(Integer.parseInt(strategyId));
         }
+
         if (userId == Const.ADMIN_ID) { //管理员删除
             strategyMapper.deleteByAdmin(strategyList);
         } else {    //用户删除
             //删除时添加user_id防止横向越权
             strategyMapper.deleteByUserIdAndStrategyId(userId, strategyList);
         }
-        for (Integer integer : strategyList) {
-            System.out.println("==========" + integer);
-        }
+        //todo 从strategy_item中删除
+        strategyItemMapper.deleteItem(strategyList);
         //删除用户收藏
         int count = collectionMapper.deleteByStrategyId(strategyList);
         //删除成功
@@ -267,23 +373,29 @@ public class StrategyServiceImpl implements StrategyService {
         }
         //没有指定禁止修改的字段是因为在updateForOrCollect中只允许修改for或者against
         int count = strategyMapper.updateForOrCollect(strategy);
-        //
         if ("for".equals(type)) {
-            count = strategyForMapper.existRecord(userId, strategy.getId());
-            System.out.println("===================" + count);
-            if (count > 0) {  //更新
-                count = strategyForMapper.updateByUserIdAndStrategyId(userId, status, strategy.getId());
-            } else {  //新增
+            if (status == 0) {   //取消点赞
+                //取消点赞减1分
+                recordBehaviours(userId, strategy.getId(), Const.UserBehaviour.LIKE_SCORE, Const.UserBehaviour.OPERATION_SUBTRACT);
+                count = strategyForMapper.deleteByUserIdAndStrategyId(userId, strategy.getId());
+            } else if (status == 1) {  //点赞
+                //点赞加1分
+                recordBehaviours(userId, strategy.getId(), Const.UserBehaviour.LIKE_SCORE, Const.UserBehaviour.OPERATION_ADD);
+                //记录点赞
                 StrategyFor strategyFor = new StrategyFor();
                 strategyFor.setUserId(userId);
                 strategyFor.setStrategyId(strategy.getId());
-                strategyFor.setStatus(1);
                 count = strategyForMapper.insert(strategyFor);
             }
         } else if ("collect".equals(type)) {
             if (status == 0) {  //取消收藏
+                //取消收藏减1.5分
+                recordBehaviours(userId, strategy.getId(), Const.UserBehaviour.COLLECT_SCORE, Const.UserBehaviour.OPERATION_SUBTRACT);
                 count = collectionMapper.deleteByStrategyIdAndUserId(userId, strategy.getId());
             } else {  //收藏
+                //收藏加1.5分
+                recordBehaviours(userId, strategy.getId(), Const.UserBehaviour.COLLECT_SCORE, Const.UserBehaviour.OPERATION_ADD);
+                //记录收藏
                 Collection collection = new Collection();
                 collection.setUserId(userId);
                 collection.setStrategyId(strategy.getId());
@@ -357,13 +469,18 @@ public class StrategyServiceImpl implements StrategyService {
             //获取用户有没有对攻略点赞
             int count;
             for (CollectionVo collectionVo : collectionVoList) {
-                count = strategyForMapper.existRecord(userId, collectionVo.getId());
+                count = strategyForMapper.isFor(userId, collectionVo.getId());
                 collectionVo.setForStatus(count);
             }
             //2.pageHelper--end
             PageInfo pageInfo = new PageInfo(collectionVoList);
             return ServerResponse.createBySuccessData(pageInfo);
         }
+    }
+
+    @Override
+    public ServerResponse<Integer> queryStrategyCount() {
+        return ServerResponse.createBySuccessData(strategyMapper.queryStrategyCount());
     }
 
     //操作攻略主图

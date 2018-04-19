@@ -45,4 +45,6 @@ public interface StrategyMapper {
     List<String> selectAllDurations();
 
     List<StrategyVo> searchByAdmin(String content);
+
+    int queryStrategyCount();
 }

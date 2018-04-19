@@ -54,12 +54,12 @@ public class StrategyManageController {
      */
     @RequestMapping(value = "detail.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse detail(HttpSession session, Integer strategyId) {
+    private ServerResponse detail(HttpSession session, HttpServletRequest request, Integer strategyId) {
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return strategyService.detail(currentUser.getId(), strategyId);
+            return strategyService.detail(request, currentUser.getId(), strategyId);
         }
         return serverResponse;
     }

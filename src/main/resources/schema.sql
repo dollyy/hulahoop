@@ -22,13 +22,6 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO users(username, password, avatar, email, role, bio, gender, city, create_time, update_time)
-    VALUES ('user1','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen302@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
-      ('user2','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen301@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
-      ('user3','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen303@163.com',0,'bio','unknown','city',sysdate(),sysdate()),
-      ('user4','29A0A7EF6D5D2067B092F2BC24FA656D','http://image.rookieit.com/hulahoop/avatar/38e6fbc9-6296-41bc-8bdf-bab9ce74447e.jpg','yangchen304@163.com',0,'bio','unknown','city',sysdate(),sysdate());
-
-
 
 DROP TABLE IF EXISTS strategies;
 -- ------------------------------------
@@ -49,32 +42,6 @@ CREATE TABLE `strategies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE TABLE strategies;
-
-INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
-VALUES
-(4,'1日游',1,'3天','第一天@#11111ftp://images/a0.jpg#-第二天@#22222#-第三天@#33333ftp://images/a1.jpg#-第四天@#44444','ftp://images/a0.jpg',5,7,sysdate(),sysdate()),
-(2,'2日游',4,'5天','百度@#baidu#-准备@#zhunbeiftp://images/a1.jpg#-开始@#kaishi#-途中@#tuzhong#-回家@#huijia','ftp://images/a1.jpg',8,5,sysdate(),sysdate()),
-(2,'3日游',1,'7天','1天@#11111#-2天@#22222#-3天@#33333','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
-(3,'4五日游',2,'15天','2百度@#2baidu#-2准备@#2zhunbeiftp://images/a2.jpg#-2开始@#2kaishi#-2途中@#2tuzhong#-2回家@#2huijia','ftp://images/a2.jpg',3,15,sysdate(),sysdate()),
-(2,'5日游',1,'3天','3百度@#3baidu#-3准备@#3zhunbei#-3途中@#3tuzhong#-3回家@#3huijia','ftp://images/default.jpg',5,7,sysdate(),sysdate());
-
-INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, for_num, collect_num, create_time, update_time)
-VALUES
-(2,'6日游',4,'5天','5百度@#5baidu#-5准备@#5zhunbeiftp://images/a3.jpg#-5开始@#5kaishi#-5途中@#5tuzhong#-5回家@#5huijia','ftp://images/a3.jpg',8,5,sysdate(),sysdate()),
-(3,'7日游',5,'7天','6百度@#6baidu#-6准备@#6zhunbei#-6开始@#6kaishi','ftp://images/default.jpg',15,1,sysdate(),sysdate()),
-(3,'8日游',4,'15天','7百度@#7baidu#-7准备@#7zhunbeiftp://images/a4.jpg#-7开始@#7kaishiftp://images/a5.jpg#-7途中@#7tuzhong#-7回家@#7huijia','ftp://images/a4.jpg',3,15,sysdate(),sysdate()),
-(4,'9日游',7,'3天','8百度@#8baidu#-8准备@#8zhunbei','ftp://images/default.jpg',5,7,sysdate(),sysdate()),
-(2,'10日游',4,'5天','9百度@#9baidu#-9准备@#9zhunbeiftp://images/a6.jpg#-9开始@#9kaishi#-9途中@#9tuzhong#-9回家@#2huijia','ftp://images/a6.jpg',8,5,sysdate(),sysdate());
-
-INSERT INTO strategies(user_id, name, city_id, duration, content, main_img, create_time, update_time)
-VALUES (4,'strategy7',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-(4,'strategy2',8,'31天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-(4,'strategy3',9,'32天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-(4,'strategy10',4,'3天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-(4,'strategy11',5,'5天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate()),
-(4,'strategy12',1,'7天','1111@#<p><strike style="background-color: rgb(28, 72, 127);">111111</strike></p><p><img src="http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg" style="max-width:100%;"><strike style="background-color: rgb(28, 72, 127);"><br></strike></p>','http://image.rookieit.com/hulahoop/strategy/8e909bbd-94e6-4698-a6af-5eaf8cc4c1ba.jpg',sysdate(),sysdate());
-
 
 DROP TABLE IF EXISTS collections;
 -- ------------------------------------
@@ -87,12 +54,11 @@ CREATE TABLE `collections` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE TABLE collections;
-
-INSERT INTO collections(strategy_id, user_id)
-VALUES(1,2),(2,3),(3,4),(4,2),(5,3),(6,2),(7,2),(8,4),(9,2),(10,4),(15,3);
 
 
+Select id,(@rowNum:=@rowNum+1) as rowNo
+From strategies,
+  (Select (@rowNum :=0) ) b;
 
 DROP TABLE IF EXISTS strategy_for;
 -- ------------------------------------
@@ -102,21 +68,8 @@ CREATE TABLE `strategy_for` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT 'users.id',
   `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
-  `status` int(11) NOT NULL COMMENT '0:未点赞,1:已点赞',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO strategy_for(user_id, strategy_id, status)
-VALUES(4,2,1),(4,3,1),(4,4,0),(4,5,1),(10,3,0),(4,6,0),(4,7,0),(10,4,0),(4,8,0),(10,4,0);
-
-
-
-SELECT ifnull(0,status) FROM strategy_for WHERE user_id=4 AND strategy_id=16;
-
-SELECT COUNT(*) FROM strategy_for WHERE user_id=4 AND strategy_id=5;
-
-UPDATE strategy_for SET status=1 WHERE user_id=4 AND strategy_id=5;
-
 
 
 DROP TABLE IF EXISTS cities;
@@ -126,15 +79,16 @@ DROP TABLE IF EXISTS cities;
 CREATE TABLE `cities` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
+  `area_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO cities(id, name)
-VALUES (1,'安徽'),(2,'澳门'),(3,'北京'),(4,'重庆'),(5,'福建'),(6,'吉林'),(7,'江苏'),(8,'江西'),(9,'海南'),(10,'河北'),
-  (11,'河南'),(12,'黑龙江'),(13,'湖北'),(14,'湖南'),(15,'甘肃'),(16,'广东'),(17,'广西'),(18,'贵州'),(19,'辽宁'),
-  (20,'南海诸岛'),(21,'内蒙古'),(22,'宁夏'),(23,'青海'),(24,'山东'),(25,'山西'),(26,'陕西'),(27,'上海'),(28,'四川'),
-  (29,'台湾'),(30,'天津'),(31,'西藏'),(32,'香港'),(33,'新疆'),(34,'云南'),(35,'浙江');
+INSERT INTO cities(id, name, area_id)
+VALUES (1,'安徽',1),(2,'澳门',8),(3,'北京',4),(4,'重庆',6),(5,'福建',1),(6,'吉林',7),(7,'江苏',1),(8,'江西',3),(9,'海南',2),(10,'河北',4),
+  (11,'河南',3),(12,'黑龙江',7),(13,'湖北',3),(14,'湖南',3),(15,'甘肃',5),(16,'广东',2),(17,'广西',2),(18,'贵州',6),(19,'辽宁',7),
+  (20,'南海诸岛',8),(21,'内蒙古',4),(22,'宁夏',5),(23,'青海',5),(24,'山东',1),(25,'山西',4),(26,'陕西',5),(27,'上海',1),(28,'四川',6),
+  (29,'台湾',8),(30,'天津',4),(31,'西藏',6),(32,'香港',8),(33,'新疆',5),(34,'云南',6),(35,'浙江',1);
 
 
 DROP TABLE IF EXISTS comments;
@@ -156,36 +110,6 @@ CREATE TABLE `comments` (
   UNIQUE KEY `level` (`level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO comments(user_id, strategy_id, content, level, parent, sequence, create_time)
-VALUES
-  (1, 1, '今天是几号呀', '1', '0', 1, '2017-12-15 11:11:11'),
-  (3, 1, '16号', '2.2', '2', 2, '2017-12-15 11:11:13'),
-  (3, 1, '嘿嘿', '2.1.1', '2.1', 1, '2017-12-15 11:11:13'),
-  (3, 1, '哈哈', '1.1.1', '1.1', 1, '2017-12-15 11:11:13'),
-  (1, 1, '造了', '2.1.2', '2.1', 2, '2017-12-15 11:11:12'),
-  (1, 1, '好嘞', '1.1.2', '1.1', 2, '2017-12-15 11:11:12'),
-  (3, 1, '12.15', '1.2', '1', 2, '2017-12-15 11:11:13'),
-  (1, 1, '明天是几号啊', '2', '0', 2, '2017-12-15 11:11:11'),
-  (2, 1, '12.16', '2.1', '2', 1, '2017-12-15 11:11:12'),
-  (4, 1, '不造啊', '1.3', '1', 3, '2017-12-15 11:11:14'),
-  (2, 1, '15号', '1.1', '1', 1, '2017-12-15 11:11:12'),
-  (4, 1, 'emmmm', '2.3', '2', 3, '2017-12-15 11:11:14'),
-  (5, 1, 'hhhh不告诉你', '1.4', '1', 4, '2017-12-15 14:50:02'),
-
-  (1, 5, '2今天是几号呀', '3', '0', 3, '2017-12-15 11:11:11'),
-  (3, 5, '216号', '4.2', '4', 2, '2017-12-15 11:11:13'),
-  (3, 5, '2嘿嘿', '4.1.1', '4.1', 1, '2017-12-15 11:11:13'),
-  (3, 5, '2哈哈', '3.1.1', '3.1', 1, '2017-12-15 11:11:13'),
-  (1, 5, '2造了', '4.1.2', '4.1', 2, '2017-12-15 11:11:12'),
-  (1, 5, '2好嘞', '3.1.2', '3.1', 2, '2017-12-15 11:11:12'),
-  (3, 5, '212.15', '3.2', '3', 2, '2017-12-15 11:11:13'),
-  (1, 5, '2明天是几号啊', '4', '0', 4, '2017-12-15 11:11:11'),
-  (2, 5, '212.16', '4.1', '4', 1, '2017-12-15 11:11:12'),
-  (4, 5, '2不造啊', '3.3', '3', 3, '2017-12-15 11:11:14'),
-  (2, 5, '215号', '3.1', '3', 1, '2017-12-15 11:11:12'),
-  (4, 5, '2emmmm', '4.3', '4', 3, '2017-12-15 11:11:14'),
-  (5, 5, '2hhhh不告诉你', '3.4', '3', 4, '2017-12-15 14:50:02');
-
 
 DROP TABLE IF EXISTS help_info;
 -- ------------------------------------
@@ -200,12 +124,6 @@ CREATE TABLE `help_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO help_info(title, content, create_time, update_time)
-VALUES ('攻略标签是什么?','<div style=''text-align: center;''>从下拉框中为这篇攻略打上关于地点、时长的tag吧！</div>',
-'2018-01-22 12:12:12','2018-01-26 16:16:16'),
-('交换Days','<div><div style=''text-align: center;''>•step1:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy1.png''></div></div><div><div style=''text-align: center;''>•step2:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy2.png''></div></div><div><div style=''text-align: center;''>•step3:</div><div style=''text-align: center;''><img src=''../images/help/uploadStrategy3.png''></div></div>',
-'2018-01-28 19:34:26','2018-01-28 22:02:45');
 
 
 DROP TABLE IF EXISTS resource_info;
@@ -241,18 +159,6 @@ CREATE TABLE `feedback_info` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
-INSERT INTO feedback_info(send_id, receive_id, content, level, parent, sequence, status, create_time, update_time)
-VALUES (8,4,'你好呀2',2.2,2,2,1,'2018-02-27 12:23:45','2018-02-27 12:26:45'),
-  (8,4,'你好呀2',2.3,2,3,1,'2018-02-27 12:23:45','2018-02-27 12:26:45');
-
-SELECT level FROM feedback_info WHERE user_id=4 AND parent=0;
-
-SELECT COUNT(*)
-FROM feedback_info
-WHERE status = 1;
-
-SELECT * FROM feedback_info WHERE receive_id=8 AND status=1 AND level like '2%';
-
 
 DROP TABLE IF EXISTS dwr_record;
 -- ------------------------------------
@@ -270,10 +176,6 @@ CREATE TABLE dwr_record(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-SELECT comment_sequence,username,content,d.create_time FROM dwr_record d JOIN users u ON d.response_id=u.id WHERE request_id=4;
-
-
-
 DROP TABLE IF EXISTS user_behaviours;
 -- ------------------------------------
 -- Table structure for `user_behaviours`
@@ -282,15 +184,50 @@ CREATE TABLE `user_behaviours` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT 'users.id',
   `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
-  `perference` decimal(2,1) NOT NULL COMMENT '用户对资源的操作记录评分',
+  `preference` decimal(5,1) NOT NULL COMMENT '用户对资源的操作记录评分',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE user_behaviours;
 
-SELECT count(*) from user_behaviours;
+DROP TABLE IF EXISTS strategy_item;
+-- ------------------------------------
+-- Table structure for `strategy_item`
+-- ------------------------------------
+CREATE TABLE `strategy_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
+  `area_HD` int(11) DEFAULT 0 COMMENT '华东(山东、江苏、安徽、浙江、福建、上海)',
+  `area_HN` int(11) DEFAULT 0 COMMENT '华南(广东、广西、海南)',
+  `area_HZ` int(11) DEFAULT 0 COMMENT '华中(湖北、湖南、河南、江西)',
+  `area_HB` int(11) DEFAULT 0 COMMENT '华北(北京、天津、河北、山西、内蒙古)',
+  `area_XB` int(11) DEFAULT 0 COMMENT '西北(宁夏、新疆、青海、陕西、甘肃)',
+  `area_XN` int(11) DEFAULT 0 COMMENT '西南(四川、云南、贵州、西藏、重庆)',
+  `area_DB` int(11) DEFAULT 0 COMMENT '东北(辽宁、吉林、黑龙江)',
+  `area_other` int(11) DEFAULT 0 COMMENT '港澳台南海诸岛(台湾、香港、澳门、南海诸岛)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+SELECT id,city_id FROM strategies;
+
+INSERT INTO strategy_item(strategy_id, area_HD, area_HN, area_HZ, area_HB, area_XB, area_XN, area_DB, area_other)
+VALUES
+(10,1,0,0,0,0,0,0,0),(15,1,0,0,0,0,0,0,0),
+(27,1,0,0,0,0,0,0,0),(36,1,0,0,0,0,0,0,0),
+(37,1,0,0,0,0,0,0,0),(38,1,0,0,0,0,0,0,0),
+(39,1,0,0,0,0,0,0,0),(40,1,0,0,0,0,0,0,0),
+(41,1,0,0,0,0,0,0,0),(42,1,0,0,0,0,0,0,0),
+(43,1,0,0,0,0,0,0,0),(44,1,0,0,0,0,0,0,0),
+(51,0,0,0,0,0,1,0,0),(52,1,0,0,0,0,0,0,0),
+(53,1,0,0,0,0,0,0,0),(54,1,0,0,0,0,0,0,0),
+(55,1,0,0,0,0,0,0,0),(56,1,0,0,0,0,0,0,0);
+
+
+
+
+
 
 insert into user_behaviours(user_id, strategy_id, perference, create_time, update_time) VALUES
   (1,30,2.5,now(),now()),(1,68,1.5,now(),now()),(1,26,3.0,now(),now()),(6,15,1.0,now(),now()),(6,59,1.0,now(),now()),(7,68,1.0,now(),now()),(7,13,5.0,now(),now()),(7,59,3.5,now(),now()),(7,83,1.0,now(),now()),(7,66,1.5,now(),now()),(2,72,1.0,now(),now()),(2,20,3.5,now(),now()),(2,91,2.0,now(),now()),(2,7,4.5,now(),now()),(2,50,4.0,now(),now()),(2,82,2.5,now(),now()),(2,44,2.5,now(),now()),(1,63,4.5,now(),now()),(1,95,2.5,now(),now()),(1,2,4.5,now(),now()),(1,37,0.5,now(),now()),(1,42,3.5,now(),now()),(1,77,1.5,now(),now()),(1,8,5.0,now(),now()),(1,51,2.0,now(),now()),(1,44,3.0,now(),now()),(1,21,1.0,now(),now()),(1,29,2.0,now(),now()),(1,53,4.5,now(),now()),(1,86,3.0,now(),now()),(1,27,3.5,now(),now()),(4,33,2.5,now(),now()),(4,48,0.5,now(),now()),(4,40,5.0,now(),now()),(4,58,4.0,now(),now()),(4,96,1.5,now(),now()),(4,43,5.0,now(),now()),(4,79,1.5,now(),now()),(1,96,0.5,now(),now()),(1,97,2.5,now(),now()),(1,73,2.5,now(),now()),(2,60,2.5,now(),now()),(2,68,5.0,now(),now()),(2,8,5.0,now(),now()),(6,74,2.5,now(),now()),(6,83,2.0,now(),now()),(6,69,1.0,now(),now()),(6,33,4.5,now(),now()),(6,98,3.5,now(),now()),(6,82,2.0,now(),now()),(6,42,1.0,now(),now()),(2,73,3.5,now(),now()),(2,14,2.5,now(),now()),(2,19,3.5,now(),now()),(2,69,4.0,now(),now()),(2,86,4.5,now(),now()),(2,70,5.0,now(),now()),(2,16,3.0,now(),now()),(2,81,2.0,now(),now()),(3,19,4.5,now(),now()),(3,9,4.5,now(),now()),(3,87,5.0,now(),now()),(3,29,1.0,now(),now()),(3,88,2.0,now(),now()),(3,73,2.5,now(),now()),(3,62,3.5,now(),now()),(3,80,2.0,now(),now()),(3,17,1.5,now(),now()),(3,54,4.5,now(),now()),(3,60,3.5,now(),now()),(3,46,4.0,now(),now()),(3,33,2.5,now(),now()),(3,91,3.0,now(),now()),(3,10,5.0,now(),now()),(3,20,3.0,now(),now()),(3,71,0.5,now(),now()),(3,22,0.5,now(),now()),(4,27,2.0,now(),now()),(4,9,1.5,now(),now()),(4,34,1.5,now(),now()),(2,66,4.5,now(),now()),(2,92,2.0,now(),now()),(2,89,3.0,now(),now()),(2,95,0.5,now(),now()),(2,77,0.5,now(),now()),(2,79,0.5,now(),now()),(3,63,0.5,now(),now()),(4,8,3.5,now(),now()),(4,82,5.0,now(),now()),(4,50,5.0,now(),now()),(4,99,4.5,now(),now()),(4,60,0.5,now(),now()),(4,52,0.5,now(),now()),(4,67,2.0,now(),now()),(4,77,1.0,now(),now()),(4,64,4.5,now(),now()),(5,60,3.5,now(),now()),(5,76,2.5,now(),now()),(5,72,3.0,now(),now()),(5,40,1.5,now(),now()),(5,95,4.0,now(),now()),(5,58,3.5,now(),now()),(5,83,3.5,now(),now()),(5,93,4.5,now(),now()),(5,97,5.0,now(),now()),(5,38,1.0,now(),now()),(5,98,3.0,now(),now()),(5,42,1.5,now(),now()),(6,60,4.0,now(),now()),(4,88,3.5,now(),now()),(4,97,1.5,now(),now()),(4,57,4.0,now(),now()),(4,56,3.0,now(),now()),(4,61,4.5,now(),now()),(4,39,2.0,now(),now()),(4,25,3.0,now(),now()),(6,89,1.0,now(),now()),(6,56,1.5,now(),now()),(6,68,5.0,now(),now()),(6,91,1.5,now(),now()),(6,5,0.5,now(),now()),(6,10,5.0,now(),now()),(6,20,0.5,now(),now()),(6,41,3.5,now(),now()),(6,85,1.0,now(),now()),(6,96,4.5,now(),now()),(6,13,5.0,now(),now()),(6,30,4.5,now(),now()),(6,35,4.0,now(),now()),(5,32,5.0,now(),now()),(5,84,2.5,now(),now()),(5,10,3.0,now(),now()),(5,46,3.5,now(),now()),(5,13,0.5,now(),now()),(5,100,1.5,now(),now()),(5,61,2.5,now(),now()),(7,99,5.0,now(),now()),(7,21,2.0,now(),now()),(7,100,2.5,now(),now()),(7,10,4.5,now(),now()),(7,1,2.5,now(),now()),(7,45,3.0,now(),now()),(7,18,2.5,now(),now()),(7,14,4.5,now(),now()),(7,54,4.0,now(),now()),(7,42,1.5,now(),now()),(7,16,1.5,now(),now()),(7,6,3.0,now(),now()),(7,20,1.0,now(),now()),(7,38,4.5,now(),now()),(6,55,4.5,now(),now()),(6,18,3.0,now(),now()),(6,94,3.0,now(),now()),(6,49,3.5,now(),now()),(6,47,5.0,now(),now()),(6,90,2.0,now(),now()),(6,17,5.0,now(),now()),(8,33,1.5,now(),now()),(8,93,1.5,now(),now()),(8,17,4.5,now(),now()),(8,81,5.0,now(),now()),(8,95,3.5,now(),now()),(8,23,0.5,now(),now()),(9,72,1.5,now(),now()),(7,25,3.5,now(),now()),(7,50,4.0,now(),now()),(7,26,0.5,now(),now()),(7,89,2.0,now(),now()),

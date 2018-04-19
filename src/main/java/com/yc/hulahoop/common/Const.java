@@ -2,6 +2,7 @@ package com.yc.hulahoop.common;
 
 import com.google.common.collect.Sets;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /**
@@ -12,13 +13,15 @@ public class Const {
     public static final int ADMIN_ID=8;
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
-    public static final String PHONE = "phone";
     public static final String CURRENT_USER = "currentUser";
     public static final String STRATEGY="strategy";
     public static final String AVATAR="avatar";
     public static final String HELPINFO="helpInfo";
     public static final String EMAIL_REGEX = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-
+    public static final String BEHAVIOUR_FILE="behaviours.csv";	//用户行为文件
+    public static final int USER_NUM=5;			//邻居数
+    public static final int ITEM_FEATURE = 8;	//物品的特征数
+    public static final int HOW_MANY=10;			//推荐的列表个数
     public static final int PAGE_SIZE=12;
     public static final int PAGE_SIZE_ADMIN=8;
     public static final int ADMIN_HELPINFO_PAGESIZE=10;
@@ -26,6 +29,14 @@ public class Const {
     public interface Role {
         int ADMIN = 1;
         int USER = 0;
+    }
+
+    public interface UserBehaviour{
+        BigDecimal BROWSE_SCORE=new BigDecimal(0.5);
+        BigDecimal LIKE_SCORE=new BigDecimal(1);
+        BigDecimal COLLECT_SCORE=new BigDecimal(1.5);
+        String OPERATION_ADD="add";
+        String OPERATION_SUBTRACT="subtract";
     }
 
     public interface CommentType{

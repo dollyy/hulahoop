@@ -206,10 +206,19 @@
     </select>
 
     <update id="updatePasswordByToken" parameterType="map">
-        UPDATE users SET password=#{password} WHERE email=#{email}
+        UPDATE users
+        SET password = #{password}
+        WHERE email = #{email}
     </update>
 
     <update id="updateEmail" parameterType="map">
-        UPDATE users SET email=#{email} WHERE id=#{userId}
+        UPDATE users
+        SET email = #{email}
+        WHERE id = #{userId}
     </update>
+
+    <select id="queryUserCount" resultType="int">
+        SELECT count(*)
+        FROM users
+    </select>
 </mapper>

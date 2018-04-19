@@ -16,8 +16,8 @@ public interface StrategyForMapper {
 
     int updateByPrimaryKey(StrategyFor record);
 
-    int existRecord(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
+    int isFor(@Param(value = "userId") Integer userId, @Param(value = "strategyId") Integer strategyId);
 
-    int updateByUserIdAndStrategyId(@Param(value = "userId") Integer userId, @Param(value = "status") Integer status,
+    int deleteByUserIdAndStrategyId(@Param(value = "userId") Integer userId,
                                     @Param(value = "strategyId") Integer strategyId);
 }

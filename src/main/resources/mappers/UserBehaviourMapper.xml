@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yc.hulahoop.dao.UserBehaviourMapper">
+    <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.UserBehaviour">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="strategy_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="preference" jdbcType="DECIMAL" javaType="java.math.BigDecimal"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, strategy_id, preference, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user_behaviours
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM user_behaviours
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.UserBehaviour">
+        INSERT INTO user_behaviours (id, user_id, strategy_id,
+                                     preference, create_time, update_time
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{strategyId,jdbcType=INTEGER},
+                #{preference,jdbcType=DECIMAL}, now(), now()
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.UserBehaviour">
+        insert into user_behaviours
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="strategyId != null">
+                strategy_id,
+            </if>
+            <if test="preference != null">
+                preference,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="strategyId != null">
+                #{strategyId,jdbcType=INTEGER},
+            </if>
+            <if test="preference != null">
+                #{preference,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="updateTime != null">
+                now(),
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yc.hulahoop.pojo.UserBehaviour">
+        update user_behaviours
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="strategyId != null">
+                strategy_id = #{strategyId,jdbcType=INTEGER},
+            </if>
+            <if test="preference != null">
+                preference = #{preference,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = now(),
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yc.hulahoop.pojo.UserBehaviour">
+        UPDATE user_behaviours
+        SET user_id     = #{userId,jdbcType=INTEGER},
+            strategy_id = #{strategyId,jdbcType=INTEGER},
+            preference  = #{preference,jdbcType=DECIMAL},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = now()
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="existBehaviour" resultType="bigdecimal">
+        SELECT preference
+        FROM user_behaviours
+        WHERE user_id = #{userId} AND strategy_id = #{strategyId}
+    </select>
+
+    <update id="updateByUserIdAndStrategyId" parameterType="map">
+        UPDATE user_behaviours
+        SET preference = #{preference}
+        WHERE user_id = #{userId} AND strategy_id = #{strategyId}
+    </update>
+
+    <select id="generateCSVFile" parameterType="string">
+        SELECT
+            user_id,
+            strategy_id,
+            preference
+        FROM user_behaviours
+        INTO OUTFILE #{filePath} FIELDS TERMINATED BY ','
+    </select>
+
+    <select id="queryBehaviourByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_behaviours
+        WHERE user_id = #{userId}
+        ORDER BY user_id, strategy_id
+    </select>
+
+    <select id="queryStrategyIdByUserId" resultType="int">
+        SELECT strategy_id
+        FROM user_behaviours
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

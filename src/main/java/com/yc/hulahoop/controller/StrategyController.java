@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -80,13 +81,13 @@ public class StrategyController {
      */
     @RequestMapping(value = "detail.action", method = RequestMethod.GET)
     @ResponseBody
-    private ServerResponse detail(HttpSession session, Integer strategyId) {
+    private ServerResponse detail(HttpSession session, HttpServletRequest request, Integer strategyId) {
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功
         if (serverResponse.isSuccess()) {
             User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-            return strategyService.detail(currentUser.getId(), strategyId);
+            return strategyService.detail(request, currentUser.getId(), strategyId);
         }
         //身份校验失败
         return serverResponse;

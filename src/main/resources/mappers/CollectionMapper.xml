@@ -90,7 +90,9 @@
     </select>
 
     <select id="isCollected" resultType="int">
-        SELECT COUNT(*) FROM collections WHERE user_id=#{userId} AND strategy_id=#{strategyId}
+        SELECT COUNT(*)
+        FROM collections
+        WHERE user_id = #{userId} AND strategy_id = #{strategyId}
     </select>
 
     <delete id="deleteByStrategyId" parameterType="int">

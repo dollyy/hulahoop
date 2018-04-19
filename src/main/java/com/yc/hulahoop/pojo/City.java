@@ -5,9 +5,12 @@ public class City {
 
     private String name;
 
-    public City(Integer id, String name) {
+    private Integer areaId;
+
+    public City(Integer id, String name, Integer areaId) {
         this.id = id;
         this.name = name;
+        this.areaId = areaId;
     }
 
     public City() {
@@ -28,5 +31,13 @@ public class City {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
     }
 }

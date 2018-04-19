@@ -4,6 +4,8 @@ import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.Strategy;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface StrategyService {
 
     ServerResponse indexInfo(Integer userId);
@@ -12,7 +14,7 @@ public interface StrategyService {
 
     ServerResponse updateStrategyList(int pageNum, int pageSize, Integer cityId, String duration);
 
-    ServerResponse detail(Integer userId, Integer strategyId);
+    ServerResponse detail(HttpServletRequest request, Integer userId, Integer strategyId);
 
     ServerResponse add(Strategy strategy);
 
@@ -27,4 +29,6 @@ public interface StrategyService {
     ServerResponse queryUserStrategy(Integer userId);
 
     ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
+
+    ServerResponse<Integer> queryStrategyCount();
 }

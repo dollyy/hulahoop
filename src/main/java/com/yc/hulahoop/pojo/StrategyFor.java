@@ -7,13 +7,10 @@ public class StrategyFor {
 
     private Integer strategyId;
 
-    private Integer status;
-
-    public StrategyFor(Integer id, Integer userId, Integer strategyId, Integer status) {
+    public StrategyFor(Integer id, Integer userId, Integer strategyId) {
         this.id = id;
         this.userId = userId;
         this.strategyId = strategyId;
-        this.status = status;
     }
 
     public StrategyFor() {
@@ -42,13 +39,5 @@ public class StrategyFor {
 
     public void setStrategyId(Integer strategyId) {
         this.strategyId = strategyId;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 }

@@ -94,11 +94,13 @@
             <version>5.1.6</version>
         </dependency>
 
-        <dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+<!--        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>20.0</version>
-        </dependency>
+        </dependency>-->
+
 
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -177,6 +179,26 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-integration</artifactId>
+            <version>0.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-core -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-core</artifactId>
+            <version>0.6</version>
+        </dependency>
+
 
     </dependencies>
     <build>

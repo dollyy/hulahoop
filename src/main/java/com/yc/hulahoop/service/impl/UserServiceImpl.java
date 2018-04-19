@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
         //token校验
-        String resetToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + email);
+/*        String resetToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + email);
         System.out.println("reset-->"+resetToken+",token->"+token);
         if(StringUtils.isBlank(resetToken)){
             System.out.println("service token过期=================");
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
         if(!resetToken.equals(token)){
             System.out.println("service token错误=================");
             return ServerResponse.createByErrorMessage("token错误");
-        }
+        }*/
         System.out.println("4=================");
         //新密码MD5加密
         System.out.println("service 新密码MD5加密=================");
@@ -273,4 +273,8 @@ public class UserServiceImpl implements UserService {
         return ServerResponse.createByErrorMessage("设置管理员失败");
     }
 
+    @Override
+    public ServerResponse<Integer> queryUserCount() {
+        return ServerResponse.createBySuccessData(userMapper.queryUserCount());
+    }
 }

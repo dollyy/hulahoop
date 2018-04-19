@@ -74,6 +74,8 @@ $(function () {
         }
     });
 
+    //todo 隐式评分：页面停留达到30s加0.5分
+
     $("#addCommentBtn").click(function () {
         var comment = $("#addComment").val().trim();
         if (comment == "" || comment == null) {
