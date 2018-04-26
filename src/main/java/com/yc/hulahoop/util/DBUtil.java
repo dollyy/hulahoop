@@ -1,7 +1,5 @@
 package com.yc.hulahoop.util;
 
-import com.google.common.collect.Maps;
-import com.yc.hulahoop.controller.RecommendController;
 import com.yc.hulahoop.pojo.StrategyItem;
 import com.yc.hulahoop.pojo.UserBehaviour;
 import com.yc.hulahoop.vo.UserBehaviourVo;
@@ -9,7 +7,6 @@ import com.yc.hulahoop.vo.UserBehaviourVo;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DBUtil {
 
@@ -27,6 +24,7 @@ public class DBUtil {
     }
 
 
+    //根据userId查找用户的行为记录
     public static List<UserBehaviourVo> queryBehaviourVoByUserId(Integer userId) {
         List<UserBehaviourVo> behaviours = new ArrayList<>();
         UserBehaviourVo userBehaviour;
@@ -51,6 +49,7 @@ public class DBUtil {
         return behaviours;
     }
 
+    //获取攻略的实际顺序 因为用户会删除攻略 id不一定是连续的
     private static int queryOrder(Integer id) {
         try {
             PreparedStatement ps = conn.prepareStatement("SELECT id,(@rowNum:=@rowNum+1) AS rowNo FROM strategies, (SELECT (@rowNum :=0) ) b");
@@ -159,9 +158,19 @@ public class DBUtil {
         return strategyIdList;
     }
 
-
-    public static void main(String[] args) {
-        queryBehaviourByUserId(4);
+    //查询所有攻略
+    public static List<Integer> queryStrategy() {
+        List<Integer> strategyIdList = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement("SELECT id FROM strategies");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                strategyIdList.add(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return strategyIdList;
     }
 
 }

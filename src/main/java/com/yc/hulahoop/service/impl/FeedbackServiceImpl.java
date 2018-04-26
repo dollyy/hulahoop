@@ -182,9 +182,9 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public ServerResponse queryNotice(Integer userId) {
-        int feedCount = feedbackInfoMapper.queryNotice(userId);
-        int dwrCount = dwrRecordMapper.queryNotice(userId);
-        if (feedCount == 0 && dwrCount == 0) {
+        int feedCount = feedbackInfoMapper.queryNotice(userId); //查看反馈信息
+        int dwrCount = dwrRecordMapper.queryNotice(userId);     //查看评论的推送
+        if (feedCount == 0 && dwrCount == 0) {  //没有未查看信息
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
                     Const.ResponseCode.NO_INFO.getDescription());
         }

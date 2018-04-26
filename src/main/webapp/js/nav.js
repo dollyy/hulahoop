@@ -203,9 +203,6 @@ $(function () {
             type: "post",
             url: "/user/verify.action",
             data: {"val": upEmail, "type": "email"},
-            beforeSend:function () {
-                alert(3);
-            },
             dataType: "json",
             success: function (data) {
                 console.log(JSON.stringify(data));

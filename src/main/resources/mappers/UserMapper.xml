@@ -1,25 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yc.hulahoop.dao.UserMapper">
     <resultMap id="BaseResultMap" type="com.yc.hulahoop.pojo.User">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="avatar" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="bio" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="gender" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="city" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="username" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="role" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="bio" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="gender" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="city" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="recommend" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, avatar, email, role, bio, gender, city, create_time, update_time
+        id, username, password, avatar, email, role, bio, gender, city, recommend, create_time,
+        update_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from users
@@ -29,15 +31,17 @@
         DELETE FROM users
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User">
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (id, username, password,
                            avatar, email, role,
                            bio, gender, city,
-                           create_time, update_time)
+                           recommend, create_time, update_time
+        )
         VALUES (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
                                         #{avatar,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER},
                                         #{bio,jdbcType=VARCHAR}, #{gender,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
-                                        now(), now())
+                                        #{recommend,jdbcType=VARCHAR}, now(), now()
+        )
     </insert>
     <insert id="insertSelective" parameterType="com.yc.hulahoop.pojo.User">
         insert into users
@@ -68,6 +72,9 @@
             </if>
             <if test="city != null">
                 city,
+            </if>
+            <if test="recommend != null">
+                recommend,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -104,6 +111,9 @@
             <if test="city != null">
                 #{city,jdbcType=VARCHAR},
             </if>
+            <if test="recommend != null">
+                #{recommend,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
                 now(),
             </if>
@@ -139,6 +149,9 @@
             <if test="city != null">
                 city = #{city,jdbcType=VARCHAR},
             </if>
+            <if test="recommend != null">
+                recommend = #{recommend,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -158,6 +171,7 @@
             bio         = #{bio,jdbcType=VARCHAR},
             gender      = #{gender,jdbcType=VARCHAR},
             city        = #{city,jdbcType=VARCHAR},
+            recommend   = #{recommend,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
             update_time = now()
         WHERE id = #{id,jdbcType=INTEGER}
@@ -217,8 +231,16 @@
         WHERE id = #{userId}
     </update>
 
-    <select id="queryUserCount" resultType="int">
-        SELECT count(*)
+    <update id="updateRecommend" parameterType="map">
+        UPDATE users
+        SET recommend = #{recommend}
+        WHERE id = #{userId}
+    </update>
+
+    <select id="queryRecommendByUerId" resultType="string">
+        SELECT recommend
         FROM users
+        WHERE id = #{userId}
     </select>
+
 </mapper>

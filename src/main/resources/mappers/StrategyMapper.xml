@@ -166,16 +166,24 @@
 
     <select id="recommendStrategies" resultType="com.yc.hulahoop.vo.StrategyVo">
         SELECT
-            s.id                                      AS strategyId,
-            s.main_img                                AS mainImg,
-            u.username,
-            s.name                                    AS strategyName,
-            c.name                                    AS cityName,
-            s.duration,
-            DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
+        s.id AS strategyId,
+        s.main_img AS mainImg,
+        u.username,
+        s.name AS strategyName,
+        c.name AS cityName,
+        s.duration,
+        DATE_FORMAT(s.create_time, '%Y-%m-%d %T') AS createTime
         FROM strategies s
-            JOIN users u ON s.user_id = u.id
-            JOIN cities c ON s.city_id = c.id
+        JOIN users u ON s.user_id = u.id
+        JOIN cities c ON s.city_id = c.id
+        <where>
+            <if test="strategyId != null">
+                AND s.id IN
+                <foreach collection="strategyId" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
     </select>
 
     <select id="latestStrategies" resultType="com.yc.hulahoop.vo.StrategyVo">

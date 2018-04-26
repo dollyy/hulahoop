@@ -1,7 +1,5 @@
 package com.yc.hulahoop.service.impl;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.dao.CommentMapper;
@@ -13,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,14 +35,14 @@ public class CommentServiceImpl implements CommentService {
                     Const.ResponseCode.NO_INFO.getDescription());
         }
         //封装评论信息
-        List<List<CommentVo>> comments = Lists.newArrayList();
+        List<List<CommentVo>> comments = new ArrayList<>();
         List<CommentVo> comment = null;
         for (CommentVo vo : commentList) {
             if (!vo.getLevel().contains(".")) {
                 if (comment != null) {
                     comments.add(comment);
                 }
-                comment = Lists.newArrayList();
+                comment = new ArrayList<>();
                 comment.add(vo);
             } else {
                 User user = commentMapper.queryRequestUser(vo.getParent());
@@ -93,7 +93,7 @@ public class CommentServiceImpl implements CommentService {
         int count = commentMapper.insert(comment);
         //添加成功
         if (count > 0) {
-            Map<String, Object> result = Maps.newHashMap();
+            Map<String, Object> result = new HashMap<>();
             //返回这条评论的id和level
             result.put("level", comment.getLevel());
             result.put("id", comment.getId());

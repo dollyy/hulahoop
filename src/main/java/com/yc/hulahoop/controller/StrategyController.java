@@ -1,6 +1,5 @@
 package com.yc.hulahoop.controller;
 
-import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.Strategy;
@@ -19,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -247,7 +247,7 @@ public class StrategyController {
     @ResponseBody
     public Map<String, Object> richtextImgUpload(HttpSession session, MultipartFile file) {
         //返回的结果集
-        Map<String, Object> resultMap = Maps.newHashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         //身份校验
         ServerResponse serverResponse = isLogin(session);
         //身份校验成功

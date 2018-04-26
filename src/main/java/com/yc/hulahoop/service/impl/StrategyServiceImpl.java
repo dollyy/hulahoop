@@ -3,38 +3,26 @@ package com.yc.hulahoop.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
-import com.yc.hulahoop.controller.RecommendController;
 import com.yc.hulahoop.dao.*;
 import com.yc.hulahoop.pojo.*;
 import com.yc.hulahoop.service.StrategyService;
 import com.yc.hulahoop.util.PropertiesUtil;
+import com.yc.hulahoop.util.RecommendUtil;
 import com.yc.hulahoop.vo.CollectionVo;
 import com.yc.hulahoop.vo.CommentVo;
 import com.yc.hulahoop.vo.StrategyVo;
 import com.yc.hulahoop.vo.UserStrategyVo;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.mahout.cf.taste.common.TasteException;
-import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
-import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
-import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
-import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
-import org.apache.mahout.cf.taste.model.DataModel;
-import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
-import org.apache.mahout.cf.taste.recommender.RecommendedItem;
-import org.apache.mahout.cf.taste.recommender.Recommender;
-import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,23 +55,21 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse indexInfo(Integer userId) {
-        Map<String, Object> result = Maps.newHashMap();
+        Map<String, Object> result = new HashMap<>();
         //推荐列表
         if (userId != 0) {
             //查询用户的推荐列表
-            //List<Integer> strategyId=Lists.newHashList();
-            //String recommendList = userMapper.queryRecommendList(userId);
-            //if(recommendList.contains(","){
-            //  String[] recommends=recommendList.split(",");
-            //  strategyId.addAll(recommends);
-            //  List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies(recommends);
-            //  if(recommendStrategies.size() > 0){
-            //      result.put("recommend", recommendStrategies);
-            //  }
-            //}
-            List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies();
-            if (recommendStrategies.size() > 0) {
-                result.put("recommend", recommendStrategies);
+            String recommendList = userMapper.queryRecommendByUerId(userId);    //获取用户的推荐列表
+            if (recommendList != null && recommendList.contains(",")) {  //有推荐列表
+                List<Integer> strategyId = Lists.newArrayList();    //推荐的攻略id的list
+                String[] recommends = recommendList.split(",");
+                for (String str : recommends) {
+                    strategyId.add(Integer.parseInt(str));
+                }
+                List<StrategyVo> recommendStrategies = strategyMapper.recommendStrategies(strategyId);
+                if (recommendStrategies.size() > 0) {
+                    result.put("recommend", recommendStrategies);
+                }
             }
         }
         //最新
@@ -101,7 +87,7 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ServerResponse queryStrategyList(int pageNum, int pageSize, Integer cityId, String duration) {
-        Map<String, Object> result = Maps.newHashMap();
+        Map<String, Object> result = new HashMap<>();
         //1.startPage--start
         PageHelper.startPage(pageNum, pageSize);
         //获取所有的攻略
@@ -165,17 +151,23 @@ public class StrategyServiceImpl implements StrategyService {
         }
         //重新生成用户行为文件
         if (count > 0) {
-            File file = new File(Const.BEHAVIOUR_FILE);
+            File file = new File("D:/" + Const.BEHAVIOUR_FILE);
             if (file.exists()) {
+                System.out.println("---------delete---------");
                 file.delete();
             }
             //将路径中的'\'变成'/'
-            String filePath = file.getAbsolutePath().replaceAll("\\\\", "/");
-            userBehaviourMapper.generateCSVFile(filePath);
+            //String filePath = file.getAbsolutePath().replaceAll("\\\\", "/");
+            userBehaviourMapper.generateCSVFile("D:/" + Const.BEHAVIOUR_FILE);
         }
         //重新计算用户推荐列表
-        RecommendController.recommend(userId);
+        StringBuilder recommend = RecommendUtil.recommend(userId);
+        if (StringUtils.isNotBlank(recommend)) {
+            userMapper.updateRecommend(userId, recommend);
+        }
+        System.out.println("recommend------------------>" + recommend);
     }
+
     @Override
     public ServerResponse detail(HttpServletRequest request, Integer userId, Integer strategyId) {
         if (strategyId == null) {
@@ -185,7 +177,7 @@ public class StrategyServiceImpl implements StrategyService {
         //浏览一次加0.5分
         recordBehaviours(userId, strategyId, Const.UserBehaviour.BROWSE_SCORE, Const.UserBehaviour.OPERATION_ADD);
 
-        Map<String, Object> result = Maps.newHashMap();
+        Map<String, Object> result = new HashMap<>();
         //获取该攻略的详细信息
         StrategyVo strategyVo = strategyMapper.detail(strategyId);
         //攻略不存在
@@ -196,8 +188,8 @@ public class StrategyServiceImpl implements StrategyService {
         //封装strategy对象
         String content = strategyVo.getContent();
         String[] item;
-        List<String> catalog = Lists.newArrayList();
-        List<String> strategyContent = Lists.newArrayList();
+        List<String> catalog = new ArrayList<>();
+        List<String> strategyContent = new ArrayList<>();
         if (content.contains("#-")) {
             String[] contents = content.split("#-");
             for (String str : contents) {
@@ -311,7 +303,7 @@ public class StrategyServiceImpl implements StrategyService {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
-        List<Integer> strategyList = Lists.newArrayList();
+        List<Integer> strategyList = new ArrayList<>();
 
         //删除一/多个攻略
         if (strategyId.contains(",")) {   //有多个攻略

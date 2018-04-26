@@ -9,6 +9,7 @@
     <url>http://maven.apache.org</url>
     <dependencies>
 
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -94,14 +95,6 @@
             <version>5.1.6</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-<!--        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>20.0</version>
-        </dependency>-->
-
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -113,6 +106,14 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.1</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>24.1-jre</version>
+        </dependency>
+
 
         <dependency>
             <groupId>joda-time</groupId>
@@ -180,23 +181,26 @@
             <version>1.4.7</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.0</version>
+            <version>3.6.1</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-integration -->
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-integration</artifactId>
-            <version>0.6</version>
+            <version>0.13.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.mahout/mahout-core -->
         <dependency>
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-core</artifactId>
-            <version>0.6</version>
+            <version>0.9</version>
         </dependency>
 
 

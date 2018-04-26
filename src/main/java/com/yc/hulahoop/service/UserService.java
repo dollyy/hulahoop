@@ -25,6 +25,4 @@ public interface UserService {
 
     ServerResponse adminLogin(String username, String password);
 
-    ServerResponse<Integer> queryUserCount();
-
 }

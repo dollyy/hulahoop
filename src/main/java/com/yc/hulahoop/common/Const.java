@@ -21,7 +21,7 @@ public class Const {
     public static final String BEHAVIOUR_FILE="behaviours.csv";	//用户行为文件
     public static final int USER_NUM=5;			//邻居数
     public static final int ITEM_FEATURE = 8;	//物品的特征数
-    public static final int HOW_MANY=10;			//推荐的列表个数
+    public static final int HOW_MANY=8;			//推荐的列表个数
     public static final int PAGE_SIZE=12;
     public static final int PAGE_SIZE_ADMIN=8;
     public static final int ADMIN_HELPINFO_PAGESIZE=10;

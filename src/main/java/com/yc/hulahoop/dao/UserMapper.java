@@ -34,5 +34,8 @@ public interface UserMapper {
 
     int updateEmail(@Param("email") String email, @Param("userId") Integer userId);
 
-    int queryUserCount();
+    int updateRecommend(@Param("userId") Integer userId, @Param("email") StringBuilder email);
+
+    String queryRecommendByUerId(@Param("userId") Integer userId);
+
 }

@@ -70,7 +70,7 @@
         <input type="text" id="upName" name="username" placeholder="Username"><br>
         <input type="password" id="upPwd" name="password" placeholder="Password"><br>
         <input type="password" id="upPwdRe" name="passwordRe" placeholder="Password again"><br>
-        <input type="text" id="upEmail" name="email" value="yangchen302@163.com" placeholder="Email"><br>
+        <input type="text" id="upEmail" name="email" placeholder="Email"><br>
         <input type="button" id="upBtn" value="注 册" disabled>
     </form>
 </div>

@@ -21,11 +21,13 @@ public class User {
 
     private String city;
 
+    private String recommend;
+
     private Date createTime;
 
     private Date updateTime;
 
-    public User(Integer id, String username, String password, String avatar, String email, Integer role, String bio, String gender, String city, Date createTime, Date updateTime) {
+    public User(Integer id, String username, String password, String avatar, String email, Integer role, String bio, String gender, String city, String recommend, Date createTime, Date updateTime) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -35,6 +37,7 @@ public class User {
         this.bio = bio;
         this.gender = gender;
         this.city = city;
+        this.recommend = recommend;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -113,6 +116,14 @@ public class User {
 
     public void setCity(String city) {
         this.city = city == null ? null : city.trim();
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend == null ? null : recommend.trim();
     }
 
     public Date getCreateTime() {

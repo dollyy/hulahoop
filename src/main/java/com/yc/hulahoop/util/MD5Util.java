@@ -39,7 +39,7 @@ public class MD5Util {
         try {
             resultString = new String(origin);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            if (charsetName == null || "".equals(charsetName)) {
+            if (charsetName == null || "".equals(charsetName)) {    //使用默认字符集
                 resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
             } else {
                 resultString = byteArrayToHexString(md.digest(resultString.getBytes(charsetName)));

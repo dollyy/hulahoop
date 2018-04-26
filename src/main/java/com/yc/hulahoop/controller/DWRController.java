@@ -20,14 +20,13 @@ public class DWRController {
 
     public void onPageLoad(int userId) {
         ScriptSession scriptSession = WebContextFactory.get().getScriptSession();
-        scriptSession.setAttribute("userId", userId);
+        scriptSession.setAttribute("userId", userId);   //将标识唯一用户的userId存进scriptSession
         DwrScriptSessionManagerUtil dwrScriptSessionManagerUtil = new DwrScriptSessionManagerUtil();
         dwrScriptSessionManagerUtil.init();
     }
 
     //推送评论
     public void publishComment(final String message, final Integer userId) {
-        System.out.println("========DWRController" + message + "," + userId);
         //存入数据库
         if(!dwrRecordService.insertComment(message, userId)){
             return;
@@ -69,7 +68,6 @@ public class DWRController {
             @Override
             public void run() {
                 scriptBuffer.appendCall("showMessage", "message");
-                System.out.println("---------------------------");
                 Collection<ScriptSession> sessions = Browser.getTargetSessions();
                 for (ScriptSession scriptSession : sessions) {
                     scriptSession.addScript(scriptBuffer);

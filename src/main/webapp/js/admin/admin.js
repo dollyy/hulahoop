@@ -87,25 +87,24 @@ $(function () {
     //搜索
     $(".icon-fangdajing").click(function () {
         var searchIndex = 0;
-        $('.catalog li').each(function (index) {
-            if ($(this).hasClass("clicked")) {
+        $('.catalog li').each(function (index) {    //获取搜索的种类
+            if
+            ($(this).hasClass("clicked")) {
                 searchIndex = index;
             }
         });
-        searchInp = search();
+        searchInp = search();   //对输入值进行判断
         switch (searchIndex) {
-            case 0:
-                break;
             case 1: //搜索帮助信息
                 helpSearch(searchInp);
-                break;
-            case 2:
                 break;
             case 3: //搜索反馈信息
                 feedSearch(searchInp);
                 break;
             case 4: //搜索攻略信息
                 strategySearch(searchInp);
+                break;
+            default:
                 break;
         }
     });

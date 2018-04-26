@@ -20,7 +20,7 @@ public interface StrategyMapper {
 
     int updateByPrimaryKey(Strategy record);
 
-    List<StrategyVo> recommendStrategies();
+    List<StrategyVo> recommendStrategies(@Param("strategyId") List<Integer> strategyId);
 
     List<StrategyVo> latestStrategies();
 

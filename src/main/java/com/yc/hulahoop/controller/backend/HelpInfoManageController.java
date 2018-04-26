@@ -1,6 +1,5 @@
 package com.yc.hulahoop.controller.backend;
 
-import com.google.common.collect.Maps;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.common.ServerResponse;
 import com.yc.hulahoop.pojo.HelpInfo;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -125,7 +125,7 @@ public class HelpInfoManageController {
     @ResponseBody
     public Map<String, Object> richtextImgUpload(HttpSession session, MultipartFile file) {
         //返回的结果集
-        Map<String, Object> resultMap = Maps.newHashMap();
+        Map<String, Object> resultMap = new HashMap();
         //身份校验
         ServerResponse serverResponse = isAdmin(session);
         if (serverResponse.isSuccess()) {   //身份校验成功//上传文件
