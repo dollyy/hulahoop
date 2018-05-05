@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>resetPassword</title>
+    <title>重置密码</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/resetPassword.css">
     <link rel="stylesheet" href="../font/iconfont.css">

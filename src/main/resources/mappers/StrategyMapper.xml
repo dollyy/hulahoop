@@ -30,7 +30,7 @@
         DELETE FROM strategies
         WHERE id = #{id,jdbcType=INTEGER}
     </delete>
-    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Strategy">
+    <insert id="insert" parameterType="com.yc.hulahoop.pojo.Strategy" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO strategies (id, user_id, name,
                                 city_id, duration, content,
                                 main_img, for_num, collect_num,
@@ -237,29 +237,20 @@
                 AND duration=#{duration}
             </if>
         </where>
+        order by s.id
     </select>
 
-    <resultMap id="strategyResultMap" type="com.yc.hulahoop.vo.StrategyVo">
-        <id column="strategyId" property="strategyId"/>
-        <result column="username" property="username"/>
-        <result column="strategyName" property="strategyName"/>
-        <result column="cityName" property="cityName"/>
-        <result column="duration" property="duration"/>
-        <result column="content" property="content"/>
-        <result column="for_num" property="forNum"/>
-        <result column="collect_num" property="collectNum"/>
-    </resultMap>
-
-    <select id="detail" parameterType="int" resultMap="strategyResultMap">
+    <select id="detail" parameterType="int" resultType="com.yc.hulahoop.vo.StrategyVo">
         SELECT
             s.id   AS strategyId,
             s.content,
             c.name AS cityName,
             s.duration,
             s.name AS strategyName,
+            u.id AS userId,
             u.username,
-            s.for_num,
-            s.collect_num
+            s.for_num AS forNum,
+            s.collect_num AS collectNum
         FROM strategies s
             JOIN cities c ON s.city_id = c.id
             JOIN users u ON s.user_id = u.id
@@ -323,38 +314,6 @@
         </set>
         WHERE id=#{id}
     </update>
-
-    <select id="searchByUsername" parameterType="string" resultType="com.yc.hulahoop.vo.StrategyVo">
-        SELECT
-            s.id       AS strategyId,
-            s.main_img AS mainImg,
-            u.avatar,
-            u.username,
-            s.name     AS strategyName,
-            c.name     AS cityName,
-            s.duration
-        FROM strategies s
-            JOIN users u ON s.user_id = u.id
-            JOIN cities c ON s.city_id = c.id
-        WHERE user_id IN (SELECT users.id
-                          FROM users
-                          WHERE username LIKE #{username})
-    </select>
-
-    <select id="searchByStrategyName" parameterType="string" resultType="com.yc.hulahoop.vo.StrategyVo">
-        SELECT
-            s.id       AS strategyId,
-            s.main_img AS mainImg,
-            u.avatar,
-            u.username,
-            s.name     AS strategyName,
-            c.name     AS cityName,
-            s.duration
-        FROM strategies s
-            JOIN users u ON s.user_id = u.id
-            JOIN cities c ON s.city_id = c.id
-        WHERE s.name LIKE #{strategyName}
-    </select>
 
     <resultMap id="userStrategy" type="com.yc.hulahoop.vo.UserStrategyVo">
         <id column="city_id" property="cityId"/>

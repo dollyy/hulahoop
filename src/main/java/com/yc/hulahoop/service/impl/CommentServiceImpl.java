@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
                     Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
         }
-        List<CommentVo> commentList = commentMapper.listByLevel(level + "%");
+        List<CommentVo> commentList = commentMapper.listByLevel(level, level + ".%");
         //攻略没有评论
         if (commentList.size() == 0) {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NO_INFO.getCode(),
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         int count = commentMapper.insert(comment);
         //添加成功
         if (count > 0) {
-            return ServerResponse.createBySuccessMessage("添加评论成功");
+            return ServerResponse.createBySuccessData(comment.getSequence());
         }
         //添加失败
         return ServerResponse.createByErrorMessage("添加评论失败");

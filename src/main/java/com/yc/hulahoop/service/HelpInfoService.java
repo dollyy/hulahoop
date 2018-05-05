@@ -17,4 +17,6 @@ public interface HelpInfoService {
 
     ServerResponse search(Integer pageNum, String content);
 
+    ServerResponse verify(String title);
+
 }

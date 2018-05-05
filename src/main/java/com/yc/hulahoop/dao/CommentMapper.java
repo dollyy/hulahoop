@@ -20,7 +20,7 @@ public interface CommentMapper {
 
     int updateByPrimaryKey(Comment record);
 
-    List<CommentVo> listByLevel(String level);
+    List<CommentVo> listByLevel(@Param("level") Integer level, @Param("levelStr") String levelStr);
 
     List<CommentVo> listByStrategy(Integer strategyId);
 

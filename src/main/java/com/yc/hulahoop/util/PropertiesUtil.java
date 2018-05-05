@@ -35,7 +35,7 @@ public class PropertiesUtil {
     public static Integer getIntProperty(String key){
         String value = properties.getProperty(key.trim());
         if (StringUtils.isBlank(value)) {
-            return null;
+            return 0;
         }
         return Integer.parseInt(value.trim());
     }

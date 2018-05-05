@@ -1,3 +1,4 @@
+//支持/反对的操作
 function operateNumber(that){
     var clickClass=$(that).parent().find(".colorBlack").attr("class");
     var thisClass=$(that).attr("class");
@@ -37,6 +38,7 @@ function getQueryStringArgs() {
     return args[name];
 }
 
+//格式化日期
 function formatDate(time){
     var date=new Date(time);
     var year=date.getFullYear();
@@ -48,6 +50,7 @@ function formatDate(time){
     return year+"-"+month+"-"+day+" "+hour+":"+min+":"+sec
 }
 
+//获取格式化的当前日期
 function getformatDate(){
     var date=new Date();
     var year=date.getFullYear();
@@ -59,18 +62,23 @@ function getformatDate(){
     return year+"-"+month+"-"+day+" "+hour+":"+min+":"+sec
 }
 
+//数字处理
 function formatNumber(number){
     return (number < 10) ? "0"+number : number;
-}
-
-//手机号码正则表达式
-function checkPhoneFormat(phone){
-    return /^1[3|4|5|8][0-9]\d{8}$/.test(phone);
 }
 
 //邮箱正则表达式
 function checkEmailFormat(email){
     return /^([a-z0-9A-Z]+[-|\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$/.test(email);
+}
+
+//搜索
+function search(){
+    var search=$("#searchInp").val();
+    if(search == "" || search == null){
+        return;
+    }
+    return search;
 }
 
 $(function(){
@@ -88,12 +96,9 @@ $(function(){
     $(".icon-fanhuidingbu").click(function(){
         $("body,html").animate({scrollTop:0},500);
     });
-});
 
-function search(){
-    var search=$("#searchInp").val();
-    if(search == "" || search == null){
-        return;
-    }
-    return search;
-}
+    //反馈
+    $(".icon-fankui").click(function () {
+        window.location.href="feedback.jsp";
+    });
+});

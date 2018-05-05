@@ -1,17 +1,13 @@
-//1.highlight color of province?
-//2.the gradient color of map
 var pieData, myChart, i, userAvatar, forClass;
 $(function () {
     var parameter = (location.search.length > 0 ? location.search.substring(1) : "");
-    if (parameter == "message") {
+    if ("message" == parameter) {
         msgClick();
     }
 
     //click bg
     $("#bg").height($(document).height()).width($(document).width());
     $("#bg").click(function () {
-        /*$(this).slideUp();
-         $(".feedbackDetail").slideUp();*/
         history.go(0);
     });
 
@@ -275,7 +271,6 @@ $(function () {
                 }
                 oldEmail = data.data.email;
                 $("#centerUsername").val(data.data.username);
-                //todo 性别赋值有问题
                 $("#gender").val(data.data.gender);
                 $("#email").val(data.data.email);
                 $("#city").val(data.data.city);
@@ -419,7 +414,6 @@ $(function () {
             data: {"recipient": newEmail, "code": $("#code").val()},
             dataType: "json",
             success: function (data) {
-                console.log(JSON.stringify(data));
                 if (data.status == 0) {   //验证码错误
                     $(".codeWarn").html(data.msg).show();
                     return;
@@ -430,9 +424,9 @@ $(function () {
                     data: {"email": newEmail},
                     dataType: "json",
                     success: function (data) {
-                        console.log(JSON.stringify(data));
                         //验证码正确更新邮箱
                         alert("更新成功");
+                        history.go(0);
                     },
                     error: function () {
                         window.location.href = "systemError.jsp";
@@ -558,15 +552,15 @@ function collectClick() {
     });
 }
 
+//查看消息中心
 function msgClick() {
-    $(this).find(".icon").addClass("iconClick");
-    $(this).siblings().find(".icon").removeClass("iconClick");
+    $("#navMsg").find(".icon").addClass("iconClick");
+    $("#navMsg").siblings().find(".icon").removeClass("iconClick");
     $.ajax({
         type: "get",
         url: "/feedback/listByUser.action",
         dataType: "json",
         success: function (data) {
-            console.log(JSON.stringify(data));
             if (data.status == -2) {    //用户未登录
                 window.location.href = "index.jsp";
                 return;

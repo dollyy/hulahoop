@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>center</title>
+    <title>个人中心</title>
     <link href="../vendors/select2-4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/center.css">
@@ -51,12 +51,10 @@
             <span>修改资料</span>
         </li>
         <li id="navMsg">
-            <a href="?message">
-                <svg class="icon" aria-hidden="true" style="font-size: 60px">
-                    <use xlink:href="#icon-xiaoxizhongxin"></use>
-                </svg>
-                <span>消息中心</span>
-            </a>
+            <svg class="icon" aria-hidden="true" style="font-size: 60px">
+                <use xlink:href="#icon-xiaoxizhongxin"></use>
+            </svg>
+            <span>消息中心</span>
         </li>
     </ul>
     <div class="content">
@@ -121,7 +119,7 @@
                         <div>
                             <div>性别</div>
                             <br>
-                            <select class="js-example-basic-single" name="gender" id="gender">
+                            <select id="gender">
                                 <option value="unknown">未知</option>
                                 <option value="female">女</option>
                                 <option value="male">男</option>

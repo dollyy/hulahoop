@@ -70,7 +70,7 @@ function packageData(data) {
             "<img id='avatar' src='" + data.strategies.list[i].avatar + "'><div class='s_msg'>" +
             "<span class='title'>标题: " + data.strategies.list[i].strategyName + "</span><span class='user'>作者 : " +
             data.strategies.list[i].username + "</span><span class='tags'>标签 : " +
-            data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "</span></div></div>");
+            data.strategies.list[i].cityName + " " + data.strategies.list[i].duration + "天</span></div></div>");
     }
     //strategies click
     $(".content .strategy").off("click").on("click", isLogin);
@@ -89,7 +89,7 @@ function packageData(data) {
                 },
                 dataType: "json",
                 success: function (data) {
-                    packUpdateList(data.data);
+                    updateList(data.data);
                 },
                 error: function () {
                     window.location.href = "systemError.jsp";
@@ -120,6 +120,28 @@ function isLogin() {
     });
 }
 
+function updateList(data) {
+    $(".content").show();
+    $("#pageNum").show();
+    $(".nothing").html("").hide();
+    $(".content").empty();
+    if (data.list.length == 0) {
+        $("#pageNum").hide();
+        return;
+    }
+    $("#pageNum").show();
+    for (i = 0; i < data.list.length; i++) {
+        $(".content").append("<div value='" + data.list[i].strategyId + "' class='strategy'>" +
+            "<img id='strategyBg' src='" + data.list[i].mainImg + "'>" +
+            "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
+            "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
+            data.list[i].username + "</span><span class='tags'>标签 : " +
+            data.list[i].cityName + " " + data.list[i].duration + "天</span></div></div>");
+    }
+    //strategies click
+    $(".content .strategy").off("click").on("click", isLogin);
+}
+
 function packUpdateList(data) {
     $(".content").show();
     $("#pageNum").show();
@@ -136,7 +158,7 @@ function packUpdateList(data) {
             "<img id='avatar' src='" + data.list[i].avatar + "'><div class='s_msg'>" +
             "<span class='title'>标题: " + data.list[i].strategyName + "</span><span class='user'>作者 : " +
             data.list[i].username + "</span><span class='tags'>标签 : " +
-            data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
+            data.list[i].cityName + " " + data.list[i].duration + "天</span></div></div>");
     }
     //strategies click
     $(".content .strategy").off("click").on("click", isLogin);

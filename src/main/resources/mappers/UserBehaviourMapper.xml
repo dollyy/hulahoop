@@ -106,7 +106,7 @@
         WHERE id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="existBehaviour" resultType="bigdecimal">
+    <select id="existBehaviour" resultType="decimal">
         SELECT preference
         FROM user_behaviours
         WHERE user_id = #{userId} AND strategy_id = #{strategyId}
@@ -117,15 +117,6 @@
         SET preference = #{preference}
         WHERE user_id = #{userId} AND strategy_id = #{strategyId}
     </update>
-
-    <select id="generateCSVFile" parameterType="string">
-        SELECT
-            user_id,
-            strategy_id,
-            preference
-        FROM user_behaviours
-        INTO OUTFILE #{filePath} FIELDS TERMINATED BY ','
-    </select>
 
     <select id="queryBehaviourByUserId" resultMap="BaseResultMap">
         SELECT

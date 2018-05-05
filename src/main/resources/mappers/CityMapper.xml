@@ -74,6 +74,6 @@
     <select id="selectCities" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM cities ORDER BY id
+        FROM cities
     </select>
 </mapper>

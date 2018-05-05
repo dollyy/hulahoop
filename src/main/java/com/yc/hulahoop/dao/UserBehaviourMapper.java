@@ -24,8 +24,6 @@ public interface UserBehaviourMapper {
     int updateByUserIdAndStrategyId(@Param("userId") Integer userId, @Param("strategyId") Integer strategyId,
                                     @Param("preference") BigDecimal preference);
 
-    void generateCSVFile(String filePath);
-
     List<UserBehaviour> queryBehaviourByUserId(Integer userId);
 
     List<Integer> queryStrategyIdByUserId(Integer userId);

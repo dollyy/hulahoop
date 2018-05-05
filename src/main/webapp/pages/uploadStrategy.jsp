@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>uploadStrategy</title>
+    <title>上传攻略</title>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
     <link href="../vendors/select2-4.0.6-rc.1/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../css/common.css">
@@ -46,7 +46,7 @@
 </div>
 <input type="text" id="subTitle" placeholder="子标题，不超过10字">
 <!-- wangEditor -->
-<div id="editor" style="height:700px"></div>
+<div id="editor"></div>
 <div class="addContainer">
     <input type="button" value="添 加" id="addBtn">
 </div>

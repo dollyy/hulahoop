@@ -3,9 +3,9 @@
 -- ------------------------------------
 CREATE DATABASE IF NOT EXISTS `hulahoop` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
+
 DROP TABLE IF EXISTS users;
 -- ------------------------------------
--- Table structure for `users`
 -- ------------------------------------
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -43,7 +43,6 @@ CREATE TABLE `strategies` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 DROP TABLE IF EXISTS collections;
 -- ------------------------------------
 -- Table structure for `collections`
@@ -56,7 +55,10 @@ CREATE TABLE `collections` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-show CREATE TABLE user_behaviours;
+DROP TABLE IF EXISTS user_behaviours;
+-- ------------------------------------
+-- Table structure for `user_behaviours`
+-- ------------------------------------
 CREATE TABLE `user_behaviours` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT 'users.id',
@@ -67,12 +69,6 @@ CREATE TABLE `user_behaviours` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
-
-
-
-Select id,(@rowNum:=@rowNum+1) as rowNo
-From strategies,
-  (Select (@rowNum :=0) ) b;
 
 DROP TABLE IF EXISTS strategy_for;
 -- ------------------------------------
@@ -140,20 +136,7 @@ CREATE TABLE `help_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS resource_info;
--- ------------------------------------
--- Table structure for `resource_info`
--- ------------------------------------
-CREATE TABLE `resource_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) NOT NULL COMMENT '资源的名称',
-  `path` varchar(50) NOT NULL COMMENT '资源在服务器上的路径',
-  `status` int(1) DEFAULT '1' COMMENT '资源的状态,0:弃用,1:使用',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `path` (`path`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+TRUNCATE TABLE help_info;
 
 DROP TABLE IF EXISTS feedback_info;
 -- ------------------------------------
@@ -189,6 +172,10 @@ CREATE TABLE dwr_record(
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+TRUNCATE TABLE dwr_record;
+
+SELECT c.id, c.strategy_id AS strategyId, c.level, c.parent, u.avatar, u.id AS responseId, u.username AS responseName, c.content, DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime, c.for_num AS forNum, c.against_num AS againstNum FROM comments c JOIN users u ON c.user_id = u.id WHERE c.level LIKE '2.%' OR level = '2' ORDER BY level;
+
 
 DROP TABLE IF EXISTS user_behaviours;
 -- ------------------------------------
@@ -212,41 +199,24 @@ DROP TABLE IF EXISTS strategy_item;
 CREATE TABLE `strategy_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `strategy_id` int(11) NOT NULL COMMENT 'strategies.id',
-  `area_HD` int(11) DEFAULT 0 COMMENT '华东(山东、江苏、安徽、浙江、福建、上海)',
-  `area_HN` int(11) DEFAULT 0 COMMENT '华南(广东、广西、海南)',
-  `area_HZ` int(11) DEFAULT 0 COMMENT '华中(湖北、湖南、河南、江西)',
-  `area_HB` int(11) DEFAULT 0 COMMENT '华北(北京、天津、河北、山西、内蒙古)',
-  `area_XB` int(11) DEFAULT 0 COMMENT '西北(宁夏、新疆、青海、陕西、甘肃)',
-  `area_XN` int(11) DEFAULT 0 COMMENT '西南(四川、云南、贵州、西藏、重庆)',
-  `area_DB` int(11) DEFAULT 0 COMMENT '东北(辽宁、吉林、黑龙江)',
-  `area_other` int(11) DEFAULT 0 COMMENT '港澳台南海诸岛(台湾、香港、澳门、南海诸岛)',
+  `area_HD` int(11) DEFAULT 0 COMMENT '华东(山东24、江苏7-2、安徽1-3、浙江35-8、福建5-1、上海27-2)   16',
+  `area_HN` int(11) DEFAULT 0 COMMENT '华南(广东16-2、广西17-2、海南9-2)                            6',
+  `area_HZ` int(11) DEFAULT 0 COMMENT '华中(湖北13-1、湖南14-6、河南11-1、江西8)                     8',
+  `area_HB` int(11) DEFAULT 0 COMMENT '华北(北京3-1、天津30、河北10-1、山西25-2、内蒙古21-4)         8',
+  `area_XB` int(11) DEFAULT 0 COMMENT '西北(宁夏22-2、新疆33-1、青海23、陕西26-1、甘肃15-2)          6',
+  `area_XN` int(11) DEFAULT 0 COMMENT '西南(四川28-5、云南34-1、贵州18-1、西藏31-1、重庆4-2)         10',
+  `area_DB` int(11) DEFAULT 0 COMMENT '东北(辽宁19-1、吉林6、黑龙江12)                               1',
+  `area_other` int(11) DEFAULT 0 COMMENT '港澳台南海诸岛(台湾29-1、香港32-1、澳门2-3、南海诸岛20)     5',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+select * from strategies where city_id=19;
 
-SELECT id,city_id FROM strategies;
+SELECT city_id, count(city_id) FROM strategies GROUP BY city_id;
 
-INSERT INTO strategy_item(strategy_id, area_HD, area_HN, area_HZ, area_HB, area_XB, area_XN, area_DB, area_other)
-VALUES
-(10,1,0,0,0,0,0,0,0),(15,1,0,0,0,0,0,0,0),
-(27,1,0,0,0,0,0,0,0),(36,1,0,0,0,0,0,0,0),
-(37,1,0,0,0,0,0,0,0),(38,1,0,0,0,0,0,0,0),
-(39,1,0,0,0,0,0,0,0),(40,1,0,0,0,0,0,0,0),
-(41,1,0,0,0,0,0,0,0),(42,1,0,0,0,0,0,0,0),
-(43,1,0,0,0,0,0,0,0),(44,1,0,0,0,0,0,0,0),
-(51,0,0,0,0,0,1,0,0),(52,1,0,0,0,0,0,0,0),
-(53,1,0,0,0,0,0,0,0),(54,1,0,0,0,0,0,0,0),
-(55,1,0,0,0,0,0,0,0),(56,1,0,0,0,0,0,0,0);
+SELECT duration, count(duration) FROM strategies GROUP BY duration;
 
-SELECT
-  user_id,
-  strategy_id,
-  preference
-FROM user_behaviours
-INTO OUTFILE 'D:/Peach/20170710s/apache-tomcat-7.0.42/bin/behaviours.csv' FIELDS TERMINATED BY ',';
-
-
-TRUNCATE TABLE user_behaviours;
+SELECT user_id,count(user_id) FROM user_behaviours GROUP BY user_id;
 
 
 insert into user_behaviours(user_id, strategy_id, preference, create_time, update_time) VALUES

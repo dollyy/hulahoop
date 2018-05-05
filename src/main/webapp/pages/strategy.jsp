@@ -9,8 +9,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>strategy</title>
-    <link rel="stylesheet" href="../vendors/select2-4.0.6-rc.1/dist/css/select2.min.css" />
+    <title>攻略</title>
+    <link rel="stylesheet" href="../vendors/select2-4.0.6-rc.1/dist/css/select2.min.css"/>
     <link rel="stylesheet" href="../font/iconfont.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/strategy.css">
@@ -32,11 +32,11 @@
                 <option value="0">全部</option>
             </select>
         </span>
-    <span class="durTab">
+        <span class="durTab">
             时长:
             <select class="js-example-basic-single duration" name="state">
                 <option>全部</option>
-            </select>
+            </select>天
         </span>
 </div>
 

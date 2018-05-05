@@ -22,4 +22,6 @@ public interface HelpInfoMapper {
     List<HelpInfo> listByUpload();
 
     List<HelpInfo> search(String content);
+
+    int verify(String title);
 }

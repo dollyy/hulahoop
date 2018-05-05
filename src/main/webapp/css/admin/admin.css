@@ -117,7 +117,7 @@ body{
 .right ul{
     flex: 1;
 }
-.indexContainer,.helpContainer,.resContainer,.feedbackContainer,.strategyContainer{
+.indexContainer,.helpContainer,.feedbackContainer,.strategyContainer{
     height: 100%;
     padding: 0 100px;
 }
@@ -161,7 +161,7 @@ body{
     left: 50%;
     transform: translateX(-50%);
     top: 25%;
-    z-index: 3;
+    z-index: 13;
     padding: 15px;
     box-sizing: border-box;
     border-radius: 5px;
@@ -218,11 +218,6 @@ table td,table th{
 }
 /* 2-3-1.table end */
 /* 2-3.helpContainer end */
-/* 2-4.resContainer start */
-.resContainer{
-    display: none;
-}
-/* 2-4.resContainer end */
 
 /* feedbackContainer */
 .feedbackContainer{

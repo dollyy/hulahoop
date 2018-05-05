@@ -104,8 +104,15 @@
     </select>
 
     <select id="search" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM help_info
         WHERE content LIKE #{content} OR title LIKE #{content}
+    </select>
+
+    <select id="verify" parameterType="string" resultType="int">
+        SELECT count(*)
+        FROM help_info
+        WHERE title = #{title}
     </select>
 </mapper>

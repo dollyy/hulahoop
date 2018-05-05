@@ -19,7 +19,7 @@
 <!-- 导航 -->
 <nav>
     <div class="nav">
-        <a href="index.jsp"><img src="../images/icons/icon1.jpg"></a>
+        <a href="index.jsp"><img src="../images/logo.png"></a>
         <div class="search">
             <input type="text" id="searchInp">
             <span class="iconfont icon-fangdajing"></span>

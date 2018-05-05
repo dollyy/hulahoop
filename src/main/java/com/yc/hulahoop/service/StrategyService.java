@@ -29,6 +29,4 @@ public interface StrategyService {
     ServerResponse queryUserStrategy(Integer userId);
 
     ServerResponse queryUserCollection(int userId, int pageSize, int pageNum, String orderBy);
-
-    ServerResponse<Integer> queryStrategyCount();
 }

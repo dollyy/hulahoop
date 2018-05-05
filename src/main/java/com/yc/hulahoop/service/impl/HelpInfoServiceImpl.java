@@ -124,4 +124,17 @@ public class HelpInfoServiceImpl implements HelpInfoService {
         PageInfo pageInfo = new PageInfo(helpInfoList);
         return ServerResponse.createBySuccessData(pageInfo);
     }
+
+    @Override
+    public ServerResponse verify(String title) {
+        if (StringUtils.isBlank(title)) {
+            return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.ILLEGAL_PARAMETER.getCode(),
+                    Const.ResponseCode.ILLEGAL_PARAMETER.getDescription());
+        }
+        int count = helpInfoMapper.verify(title);
+        if(count > 0){
+            return ServerResponse.createByErrorMessage("参数已存在");
+        }
+        return ServerResponse.createBySuccessMessage("校验成功");
+    }
 }

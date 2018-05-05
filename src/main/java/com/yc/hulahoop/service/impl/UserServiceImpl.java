@@ -77,6 +77,8 @@ public class UserServiceImpl implements UserService {
         user.setRole(Const.Role.USER);
         //设置默认头像
         user.setAvatar(PropertiesUtil.getProperty("ftp.avatar.default"));
+        //设置性别
+        user.setGender("unknown");
 
         //注册
         int count = userMapper.insert(user);
@@ -153,12 +155,12 @@ public class UserServiceImpl implements UserService {
         }
         //token校验
         String resetToken = TokenCache.getKey(TokenCache.TOKEN_PREFIX + email);
-        System.out.println("reset-->"+resetToken+",token->"+token);
-        if(StringUtils.isBlank(resetToken)){
+        System.out.println("reset-->" + resetToken + ",token->" + token);
+        if (StringUtils.isBlank(resetToken)) {
             System.out.println("service token过期=================");
             return ServerResponse.createByErrorMessage("token过期");
         }
-        if(!resetToken.equals(token)){
+        if (!resetToken.equals(token)) {
             System.out.println("service token错误=================");
             return ServerResponse.createByErrorMessage("token错误");
         }
@@ -193,7 +195,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServerResponse updateUserInformation(Integer userId, String username, String bio, String gender, String city) {
-        User user=new User();
+        User user = new User();
         user.setId(userId);
         user.setUsername(username);
         user.setBio(bio);
@@ -261,6 +263,8 @@ public class UserServiceImpl implements UserService {
         admin.setRole(Const.Role.ADMIN);
         //admin的email为用户名加邮箱后缀,eg:admin@163.com
         admin.setEmail(admin.getUsername() + "@163.com");
+        //admin的avatar为默认
+        admin.setAvatar(PropertiesUtil.getProperty("ftp.avatar.default"));
         count = userMapper.insert(admin);
         //获取user的信息
         user = userMapper.selectByPrimaryKey(admin.getId());

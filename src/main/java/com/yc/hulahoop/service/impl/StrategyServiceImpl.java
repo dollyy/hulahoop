@@ -60,7 +60,7 @@ public class StrategyServiceImpl implements StrategyService {
         if (userId != 0) {
             //查询用户的推荐列表
             String recommendList = userMapper.queryRecommendByUerId(userId);    //获取用户的推荐列表
-            if (recommendList != null && recommendList.contains(",")) {  //有推荐列表
+            if (recommendList != null) {  //有推荐列表
                 List<Integer> strategyId = Lists.newArrayList();    //推荐的攻略id的list
                 String[] recommends = recommendList.split(",");
                 for (String str : recommends) {
@@ -129,7 +129,7 @@ public class StrategyServiceImpl implements StrategyService {
         return ServerResponse.createBySuccessData(pageInfo);
     }
 
-    private void recordBehaviours(Integer userId, Integer strategyId, BigDecimal preference, String type) {
+    private boolean recordBehaviours(Integer userId, Integer strategyId, BigDecimal preference, String type) {
         int count;
         BigDecimal oldPreference = userBehaviourMapper.existBehaviour(userId, strategyId);   //这条记录是否存在
         if (oldPreference == null) {    //添加新纪录
@@ -149,23 +149,17 @@ public class StrategyServiceImpl implements StrategyService {
             }
             count = userBehaviourMapper.updateByUserIdAndStrategyId(userId, strategyId, newPreference);
         }
-        //重新生成用户行为文件
-        if (count > 0) {
-            File file = new File("D:/" + Const.BEHAVIOUR_FILE);
-            if (file.exists()) {
-                System.out.println("---------delete---------");
-                file.delete();
-            }
-            //将路径中的'\'变成'/'
-            //String filePath = file.getAbsolutePath().replaceAll("\\\\", "/");
-            userBehaviourMapper.generateCSVFile("D:/" + Const.BEHAVIOUR_FILE);
-        }
+
         //重新计算用户推荐列表
-        StringBuilder recommend = RecommendUtil.recommend(userId);
-        if (StringUtils.isNotBlank(recommend)) {
-            userMapper.updateRecommend(userId, recommend);
+        if (count > 0) {
+            String recommend = RecommendUtil.recommend(userId);
+            if (StringUtils.isNotBlank(recommend)) {
+                userMapper.updateRecommend(userId, recommend);
+            }
+            System.out.println("recommend------------------>" + recommend);
+            return true;
         }
-        System.out.println("recommend------------------>" + recommend);
+        return false;
     }
 
     @Override
@@ -286,7 +280,7 @@ public class StrategyServiceImpl implements StrategyService {
         int count = strategyMapper.insert(strategy);
         //新增成功
         if (count > 0) {
-            //todo 添加到strategy_item中
+            //添加到strategy_item中
             count = addStrategyItem(strategy.getId(), strategy.getCityId());
             if (count > 0) {
                 return ServerResponse.createBySuccessMessage("新增成功");
@@ -468,11 +462,6 @@ public class StrategyServiceImpl implements StrategyService {
             PageInfo pageInfo = new PageInfo(collectionVoList);
             return ServerResponse.createBySuccessData(pageInfo);
         }
-    }
-
-    @Override
-    public ServerResponse<Integer> queryStrategyCount() {
-        return ServerResponse.createBySuccessData(strategyMapper.queryStrategyCount());
     }
 
     //操作攻略主图

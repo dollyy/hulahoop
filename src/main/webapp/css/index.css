@@ -5,23 +5,24 @@ body > div:nth-child(3) {
 .banner {
     width: 100%;
     height: 500px;
-    box-shadow: 0 0 15px #999;
+    background: url("../images/index.jpg");
 }
 
 .recommendContainer, .newestContainer, .hottestContainer {
     width: 100%;
-    height: 600px;
     margin: 0 auto;
     background: #fff;
-    padding: 10px 0 0 0;
+    padding: 10px 100px 0 100px;
     box-sizing: border-box;
-    text-align: center;
     box-shadow: 0 0 15px #ccc inset;
 }
 
 .title {
     font-size: 30px;
     color: #E7273C;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
 }
 
 .strategy {

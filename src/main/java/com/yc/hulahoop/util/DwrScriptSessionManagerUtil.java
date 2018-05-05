@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 public class DwrScriptSessionManagerUtil extends DwrServlet {
 
-    Logger logger= LoggerFactory.getLogger(DwrScriptSessionManagerUtil.class);
+    private Logger logger= LoggerFactory.getLogger(DwrScriptSessionManagerUtil.class);
 
     public void init(){
         Container container= ServerContextFactory.get().getContainer();

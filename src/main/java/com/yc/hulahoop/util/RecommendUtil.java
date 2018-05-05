@@ -1,5 +1,6 @@
 package com.yc.hulahoop.util;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.yc.hulahoop.common.Const;
 import com.yc.hulahoop.pojo.StrategyItem;
 import com.yc.hulahoop.pojo.UserBehaviour;
@@ -7,30 +8,29 @@ import com.yc.hulahoop.vo.UserBehaviourVo;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.mahout.cf.taste.common.TasteException;
-import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+import org.apache.mahout.cf.taste.impl.model.jdbc.ConnectionPoolDataSource;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
-import org.apache.mahout.cf.taste.model.DataModel;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class RecommendUtil {
 
     //混合推荐
-    public static StringBuilder recommend(Integer userId) {
+    public static String recommend(Integer userId) {
         List<UserBehaviour> existBehaviour = DBUtil.queryBehaviourByUserId(userId);
         if (existBehaviour.size() == 0) {
             System.out.println("==========no record, nothing to recommend");
-            return new StringBuilder("");
+            return "";
         }
 
         //1.基于用户的协同过滤
@@ -49,7 +49,7 @@ public class RecommendUtil {
         }
         if (recommendedItems.size() == 0) {
             System.out.println("==========nothing to recommend");
-            return new StringBuilder("");
+            return "";
         }
 
         //将已经有过评分的物品从list中移除
@@ -70,7 +70,7 @@ public class RecommendUtil {
 
         //没有推荐列表
         if (recommendedItems.size() == 0) {
-            return new StringBuilder("");
+            return "";
         }
 
         //将list排序
@@ -88,28 +88,36 @@ public class RecommendUtil {
         if (recommends.length() > 0) {
             recommends.deleteCharAt(recommends.length() - 1);
         }
-        return recommends;
+        return recommends.toString();
     }
 
     //1.基于用户的协同过滤
     private static List<RecommendedItem> userCFRecommend(Integer userId) {
-        DataModel model;
+        //连接MySQL
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setServerName(PropertiesUtil.getProperty("server"));
+        dataSource.setPort(PropertiesUtil.getIntProperty("port"));          //端口号
+        dataSource.setUser(PropertiesUtil.getProperty("username"));         //数据库用户名
+        dataSource.setPassword(PropertiesUtil.getProperty("password"));     //数据库密码
+        dataSource.setDatabaseName(PropertiesUtil.getProperty("database")); //数据库
+        //使用ConnectionPoolDataSource避免因数据库数据量太大影响性能
+        ConnectionPoolDataSource connectionPoolDataSource = new ConnectionPoolDataSource(dataSource);
+        //根据user_behaviours表建立数据模型
+        JDBCDataModel dataModel = new MySQLJDBCDataModel(connectionPoolDataSource,
+                PropertiesUtil.getProperty("recommendTable"), PropertiesUtil.getProperty("userId"),
+                PropertiesUtil.getProperty("itemId"), PropertiesUtil.getProperty("preference"),
+                PropertiesUtil.getProperty("date"));
         try {
-            //根据文件建立数据模型
-            File file = new File("D:/behaviours.csv");
-            model = new FileDataModel(file);
             //计算用户相似度，使用基于皮尔逊相关系数计算相似度
-            UserSimilarity similarity = new PearsonCorrelationSimilarity(model);
+            UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
             //选择邻居用户，使用NearestNUserNeighborhood选择临近的USER_NUM个用户
-            UserNeighborhood neighborhood = new NearestNUserNeighborhood(Const.USER_NUM, similarity, model);
+            UserNeighborhood neighborhood = new NearestNUserNeighborhood(Const.USER_NUM, similarity, dataModel);
             //确定相邻用户后，一个普通的user-based推荐器被构建
             //使用协同过滤算法中基于用户的推荐
-            Recommender recommender = new GenericUserBasedRecommender(model, neighborhood, similarity);
+            Recommender recommender = new GenericUserBasedRecommender(dataModel, neighborhood, similarity);
             //向userId推荐howMany个item
             return recommender.recommend(userId, Const.HOW_MANY);
         } catch (TasteException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -176,18 +184,20 @@ public class RecommendUtil {
         double denominator1;            //分母, 用户Ui的长度
         double denominator2;            //分母, 攻略Ii的长度
         double[][] userItem = new double[userCount][strategyCount];   //用户对物品的喜好程度
-        for (i = 0; i < userProfile.length; i++) {
+        for (i = 0; i < userCount; i++) {
             numerator = 0;
             denominator1 = 0;
             denominator2 = 0;
-            for (j = 0; j < userProfile[i].length; j++) {
-                numerator += userProfile[i][j] * itemProfile[i][j];
-                denominator1 += userProfile[i][j] * userProfile[i][j];
-                denominator2 += itemProfile[i][j] * itemProfile[i][j];
-                if (denominator1 == 0 || denominator2 == 0 || numerator == 0) {
-                    userItem[i][j] = 0;
-                } else {
-                    userItem[i][j] = numerator / denominator1 * denominator2;
+            for (j = 0; j < strategyCount; j++) {
+                for (int k = 0; k < Const.ITEM_FEATURE; k++) {
+                    numerator += userProfile[i][k] * itemProfile[j][k];
+                    denominator1 += userProfile[i][k] * userProfile[i][k];
+                    denominator2 += itemProfile[j][k] * itemProfile[j][k];
+                    if (denominator1 == 0 || denominator2 == 0 || numerator == 0) {
+                        userItem[i][j] = 0;
+                    } else {
+                        userItem[i][j] = numerator / denominator1 * denominator2;
+                    }
                 }
             }
         }
@@ -228,21 +238,32 @@ public class RecommendUtil {
         }
 
         //7.根据order获得物品的id
-        List<Integer> strategyId=DBUtil.queryStrategy();
-        int userItemId=itemId.get(userId-1);
+        List<Integer> strategyId = DBUtil.queryStrategy();
+        int userItemId = itemId.get(userId - 1);
         return userItemId == -1 ? -1 : strategyId.get(userItemId);
     }
 
     //2.2基于物品的协同过滤
     private static List<RecommendedItem> itemCFRecommend(Integer userId) {
-        DataModel model;
+        //连接MySQL
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setServerName(PropertiesUtil.getProperty("server"));
+        dataSource.setPort(PropertiesUtil.getIntProperty("port"));          //端口号
+        dataSource.setUser(PropertiesUtil.getProperty("username"));         //数据库用户名
+        dataSource.setPassword(PropertiesUtil.getProperty("password"));     //数据库密码
+        dataSource.setDatabaseName(PropertiesUtil.getProperty("database")); //数据库
+        //使用ConnectionPoolDataSource避免因数据库数据量太大影响性能
+        ConnectionPoolDataSource connectionPoolDataSource = new ConnectionPoolDataSource(dataSource);
+        //根据文件建立数据模型
+        JDBCDataModel dataModel = new MySQLJDBCDataModel(connectionPoolDataSource,
+                PropertiesUtil.getProperty("recommendTable"), PropertiesUtil.getProperty("userId"),
+                PropertiesUtil.getProperty("itemId"), PropertiesUtil.getProperty("preference"),
+                PropertiesUtil.getProperty("date"));
         try {
-            //根据文件建立数据模型
-            model = new FileDataModel(new File("D:/behaviours.csv"));
             //计算用户相似度，使用基于皮尔逊相关系数计算相似度
-            ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+            ItemSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
             //构建推荐器，协同过滤推荐有两种，分别是基于用户的和基于物品的，这里使用基于物品的协同过滤推荐
-            GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+            GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, similarity);
             //向userId推荐howMany个item
             Integer itemId = contentBased(userId);
             if (itemId == -1) {   //没有攻略不进行推荐
@@ -251,10 +272,7 @@ public class RecommendUtil {
             return recommender.recommendedBecause(userId, itemId, Const.HOW_MANY);
         } catch (TasteException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }
-
 }

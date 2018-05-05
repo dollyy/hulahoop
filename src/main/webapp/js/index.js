@@ -1,6 +1,5 @@
 //todo
-//4 index页面 (index页面.jsp)
-//5 admin上传一些图片什么的 (StrategyManageController)
+//删除几个攻略看看推荐会不会报错
 var i;
 $(function () {
     $.ajax({
@@ -19,7 +18,7 @@ $(function () {
                         "<img class='mainImg' src='" + data.data.recommend[i].mainImg + "'><span class='info'>" +
                         "<span class=strategyTitle'>" + data.data.recommend[i].strategyName + "</span>" +
                         "<span class='strategyInfo'><span>" + data.data.recommend[i].username + "</span><span>"
-                        + data.data.recommend[i].cityName + "</span><span>" + data.data.recommend[i].duration + "</span></span>" +
+                        + data.data.recommend[i].cityName + "</span><span>" + data.data.recommend[i].duration + "天</span></span>" +
                         "<span class='strategyDate'>" + data.data.recommend[i].createTime + "</span></span></div>");
                 }
 
@@ -35,7 +34,7 @@ $(function () {
                         "<img class='mainImg' src='" + data.data.latest[i].mainImg + "'><span class='info'>" +
                         "<span class=strategyTitle'>" + data.data.latest[i].strategyName + "</span>" +
                         "<span class='strategyInfo'><span>" + data.data.latest[i].username + "</span><span>"
-                        + data.data.latest[i].cityName + "</span><span>" + data.data.latest[i].duration + "</span></span>" +
+                        + data.data.latest[i].cityName + "</span><span>" + data.data.latest[i].duration + "天</span></span>" +
                         "<span class='strategyDate'>" + data.data.latest[i].createTime + "</span></span></div>");
                 }
 
@@ -51,7 +50,7 @@ $(function () {
                         "<img class='mainImg' src='" + data.data.hottest[i].mainImg + "'><span class='info'>" +
                         "<span class=strategyTitle'>" + data.data.hottest[i].strategyName + "</span>" +
                         "<span class='strategyInfo'><span>" + data.data.hottest[i].username + "</span><span>"
-                        + data.data.hottest[i].cityName + "</span><span>" + data.data.hottest[i].duration + "</span></span>" +
+                        + data.data.hottest[i].cityName + "</span><span>" + data.data.hottest[i].duration + "天</span></span>" +
                         "<span class='strategyDate'>" + data.data.hottest[i].createTime + "</span></span></div>");
                 }
 

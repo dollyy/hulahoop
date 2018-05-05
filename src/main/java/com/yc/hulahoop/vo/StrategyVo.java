@@ -3,6 +3,7 @@ package com.yc.hulahoop.vo;
 public class StrategyVo {
 
     private int strategyId;
+    private int userId;
     private String username;
     private String avatar;
     private String strategyName;
@@ -21,6 +22,14 @@ public class StrategyVo {
 
     public void setStrategyId(int strategyId) {
         this.strategyId = strategyId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {

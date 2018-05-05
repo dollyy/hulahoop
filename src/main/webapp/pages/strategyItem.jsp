@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>strategyItem</title>
+    <title>攻略详情</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../font/iconfont.css">
     <link rel="stylesheet" href="../css/strategyItem.css">

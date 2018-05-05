@@ -28,7 +28,7 @@ $(function () {
         }
     });
 
-    //查看消息
+    //查看反馈信息
     $(".icon-lingdang").click(feedClick);
 
     //获取用户信息
@@ -41,7 +41,7 @@ $(function () {
                 window.location.href = "adminSignin.html";
                 return;
             }
-            if (data.data.id != 8) {
+            if (data.data.id != 1) {
                 window.location.href = "adminSignin.html";
             }
             adminAvatar = data.data.avatar;
@@ -125,13 +125,10 @@ $(function () {
         $(".opeContainer").slideDown();
     });
 
-    /* 3.res */
-    $(".res").click(resClick);
-
-    /* 4.feeback */
+    /* 3.feeback */
     $(".feedback").click(feedClick);
 
-    /* 5.strategy*/
+    /* 4.strategy*/
     $(".strategy").click(strategyClick);
     //'操作'
     $(".strategyOpe").click(function () {
@@ -190,12 +187,9 @@ $(function () {
             helpClick();
             break;
         case 3:
-            resClick();
-            break;
-        case 4:
             feedClick();
             break;
-        case 5:
+        case 4:
             strategyClick();
             break;
         default:
@@ -206,6 +200,7 @@ $(function () {
 
 /* 1 */
 function indexClick() {
+    $(".nothing").hide();
     $(".indexContainer").show().siblings().hide();
     $(".catalog li").eq(0).addClass("clicked").siblings().removeClass("clicked");
     $(".right .location span").html($(this).children().last().html());
@@ -214,13 +209,18 @@ function indexClick() {
 }
 
 /* 2 */
-function helpClick() {  //可以搜索
+function helpClick() {
+    var that=$(this);
+    //可以搜索
     $("#searchInp").removeAttr("disabled").val("");
     $.ajax({
         type: "get",
         url: "/manage/helpInfo/list.action",
         dataType: "json",
         success: function (data) {
+            $(".helpContainer").show().siblings().hide();
+            $(".catalog li").eq(1).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html(that.children().last().html());
             if (data.status == -2) {    //用户未登录
                 window.location.href = "adminSignin.html";
                 return;
@@ -233,11 +233,9 @@ function helpClick() {  //可以搜索
             if (data.status == -1) {    //没有匹配信息
                 $(".helpTable").hide();
                 $(".nothing").show();
+                $(".page").hide();
                 return;
             }
-            $(".helpContainer").show().siblings().hide();
-            $(".catalog li").eq(1).addClass("clicked").siblings().removeClass("clicked");
-            $(".right .location span").html($(this).children().last().html());
             //封装信息
             packHelp(data.data);
         },
@@ -271,6 +269,7 @@ function helpSearch(searchInp) {
             if (data.status == -1) {    //没有匹配信息
                 $(".helpTable").hide();
                 $(".nothing").show();
+                $(".page").hide();
                 return;
             }
             packSearchHelp(data.data);
@@ -302,6 +301,7 @@ function feedSearch(searchInp) {
             if (data.status == -1) {    //没有匹配信息
                 $("#feedbackTable").hide();
                 $(".nothing").show();
+                $(".page").hide();
                 return;
             }
             packSearchFeedback(data.data);
@@ -335,6 +335,7 @@ function strategySearch(searchInp) {
             $(".strategies").empty();
             if (data.status == -1) {    //没有匹配信息
                 $(".nothing").show();
+                $(".page").hide();
                 return;
             }
             packSearchStrategy(data.data);
@@ -405,6 +406,7 @@ function packHelp(data) {
             "<td colspan='5' style='padding: 0'><div class='inner'>" + data.list[i].content + "</div></td></tr>");
     }
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.pages,
         callback: function (num) {
@@ -426,6 +428,7 @@ function packHelp(data) {
                     if (data.status == -1) {    //没有匹配信息
                         $(".helpTable").hide();
                         $(".nothing").show();
+                        $(".page").hide();
                         return;
                     }
                     packUpdateHelp(data.data);
@@ -473,6 +476,7 @@ function packSearchHelp(data) {
             "<td colspan='5' style='padding: 0'><div class='inner'>" + data.list[i].content + "</div></td></tr>");
     }
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.pages,
         callback: function (num) {
@@ -494,6 +498,7 @@ function packSearchHelp(data) {
                     if (data.status == -1) {    //没有匹配信息
                         $(".helpTable").hide();
                         $(".nothing").show();
+                        $(".page").hide();
                         return;
                     }
                     packSearchHelp(data.data);
@@ -513,7 +518,7 @@ function addHelp() {
     var text = editor.txt.text();
     var content = editor.txt.html();
     //输入框中内容不为空
-    if (text != "" && text != null) {
+    if (text != "" && text != null && titleFlag) {
         $.ajax({
             type: "post",
             url: "/manage/helpInfo/add.action",
@@ -588,12 +593,39 @@ function helpSave() {
     }
 }
 
-//修改子标题 todo 判断重复
+//修改子标题
+var titleFlag=true;
 function titleChange() {
     if ($(this).val().trim() == "") {
         $("#subTitle").css("border-color", "red");
     } else {
-        $("#subTitle").css("border-color", "#333");
+        $.ajax({
+            type:"post",
+            url:"/manage/helpInfo/verify.action",
+            data:{"title":$(this).val()},
+            dataType:"json",
+            success:function (data) {
+                if(data.status == -4){    //非管理员
+                    window.location.href = "../pages/index.jsp";
+                    return;
+                }
+                if(data.status == -3){  //参数错误
+                    alert(data.msg);
+                    return;
+                }
+                if(data.status == 0){   //参数重复
+                    alert(data.msg);
+                    $("#subTitle").css("border-color", "red");
+                    titleFlag=false;
+                    return;
+                }
+                titleFlag=true;
+                $("#subTitle").css("border-color", "#333");
+            },
+            error:function () {
+                window.location.href="../pages/systemError.jsp";
+            }
+        });
     }
 }
 
@@ -612,23 +644,18 @@ function helpDelete() {
 }
 
 
-/* 3 */
-function resClick() {
-    $(".resContainer").show().siblings().hide();
-    $(".catalog li").eq(2).addClass("clicked").siblings().removeClass("clicked");
-    $(".right .location span").html($(this).children().last().html());
-    //禁止搜索
-    $("#searchInp").attr("disabled", true);
-}
-
 /* 4 */
 function feedClick() {
+    var that=$(this);
     $("#searchInp").removeAttr("disabled").val("");
     $.ajax({
         type: "get",
         url: "/manage/feedback/list.action",
         dataType: "json",
         success: function (data) {
+            $(".feedbackContainer").show().siblings().hide();
+            $(".catalog li").eq(2).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html(that.children().last().html());
             if (data.status == -2) {    //用户未登录
                 window.location.href = "adminSignin.html";
                 return;
@@ -645,11 +672,9 @@ function feedClick() {
             if (data.status == -1) {
                 $("#feedbackTable").hide();
                 $(".nothing").show();
+                $(".page").hide();
                 return;
             }
-            $(".feedbackContainer").show().siblings().hide();
-            $(".catalog li").eq(3).addClass("clicked").siblings().removeClass("clicked");
-            $(".right .location span").html($(this).children().last().html());
             packFeedback(data.data);
         },
         error: function () {
@@ -673,6 +698,7 @@ function packFeedback(data) {
     }
     $("#feedbackTable tbody tr").off("click").on("click", feedDetail);
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.pages,
         callback: function (num) {
@@ -698,6 +724,7 @@ function packFeedback(data) {
                     if (data.status == -1) {    //没有匹配信息
                         $("#feedbackTable").hide();
                         $(".nothing").show();
+                        $(".page").hide();
                         return;
                     }
                     packUpdateFeedback(data.data);
@@ -737,6 +764,7 @@ function packSearchFeedback(data) {
     }
     $("#feedbackTable tbody tr").off("click").on("click", feedDetail);
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.pages,
         callback: function (num) {
@@ -762,6 +790,7 @@ function packSearchFeedback(data) {
                     if (data.status == -1) {    //没有匹配信息
                         $("#feedbackTable").hide();
                         $(".nothing").show();
+                        $(".page").hide();
                         return;
                     }
                     packSearchFeedback(data.data);
@@ -781,7 +810,6 @@ var level;
 function feedDetail() {
     var that = $(this);
     level = $(this).attr("level");
-    alert(that.find(".feedSend").attr("value"));
     $.ajax({
         type: "get",
         url: "/manage/feedback/updateFeedStatus.action",
@@ -794,6 +822,7 @@ function feedDetail() {
             }
             if (data.status == -3) {  //参数错误
                 alert(data.msg);
+                return;
             }
             that.addClass("read");
         },
@@ -878,12 +907,16 @@ function showMessage(data) {
 
 /* 5 */
 function strategyClick() {
+    var that=$(this);
     $("#searchInp").removeAttr("disabled").val("");
     $.ajax({
         type: "get",
         url: "/manage/strategy/list.action",
         dataType: "json",
         success: function (data) {
+            $(".strategyContainer").show().siblings().hide();
+            $(".catalog li").eq(3).addClass("clicked").siblings().removeClass("clicked");
+            $(".right .location span").html(that.children().last().html());
             if (data.status == -2) {    //用户未登录
                 window.location.href = "adminSignin.html";
                 return;
@@ -898,9 +931,6 @@ function strategyClick() {
                 return;
             }
             packStrategy(data.data);
-            $(".strategyContainer").show().siblings().hide();
-            $(".catalog li").eq(4).addClass("clicked").siblings().removeClass("clicked");
-            $(".right .location span").html($(this).children().last().html());
         },
         error: function () {
             console.log("admin strategy error");
@@ -934,6 +964,7 @@ function packStrategy(data) {
             "</span></div></div>");
     }
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.strategies.pages,
         callback: function (num) {
@@ -994,6 +1025,7 @@ function packCityDurationStrategy(data) {
     }
     $(".strategies .strategyItem").off("click").on("click", strategyDetail);
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.strategies.pages,
         callback: function (num) {
@@ -1036,6 +1068,7 @@ function packSearchStrategy(data) {
             "</span><span>" + data.list[i].cityName + " " + data.list[i].duration + "</span></div></div>");
     }
     //4.pages
+    $(".page").show();
     $(".page").paging({
         totalPage: data.pages,
         callback: function (num) {
@@ -1060,6 +1093,7 @@ function packSearchStrategy(data) {
                     $(".strategies").empty();
                     if (data.status == -1) {
                         $(".nothing").show();
+                        $(".page").hide();
                         return;
                     }
                     packSearchStrategy(data.data);

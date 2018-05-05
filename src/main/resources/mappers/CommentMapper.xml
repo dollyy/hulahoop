@@ -167,7 +167,7 @@
             c.against_num                             AS againstNum
         FROM comments c
             JOIN users u ON c.user_id = u.id
-        WHERE c.level LIKE #{level}
+        WHERE c.level LIKE #{levelStr} OR level = #{level}
         ORDER BY level
     </select>
 

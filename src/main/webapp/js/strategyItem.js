@@ -1,6 +1,28 @@
-var strategyId, i;
+var strategyId, i, strategyUserId, userId;
 $(function () {
     var parameter = getQueryStringArgs();
+
+    //获取当前用户信息
+    $.ajax({
+        type: "get",
+        url: "/user/queryUserInformation.action",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == -2) {    //用户未登录
+                window.location.href = "index.jsp";
+                return;
+            }
+            if (data.status == 0) {
+                alert(data.msg);
+                return;
+            }
+            userId = data.data.id;
+        },
+        error: function () {
+            window.location.href = "systemError.jsp";
+        }
+    });
+
     $.ajax({
         type: "get",
         url: "/strategy/detail.action",
@@ -40,6 +62,7 @@ $(function () {
 
             $(".title").html(data.data.strategy.strategyName);
             $(".author").html(data.data.strategy.username);
+            strategyUserId=data.data.strategy.userId;
 
             //3.content
             strategyId = data.data.strategy.strategyId;
@@ -65,8 +88,8 @@ $(function () {
             //for click
             $(".commOperation .icon-zan11").unbind("click").bind("click", calNumber);
             //点击查看评论
-            $(".comments .comment").off("click").on("click", function () {
-                window.location.href="comment.jsp?level="+$(this).attr("level");
+            $(".comments .commContent").off("click").on("click", function () {
+                window.location.href="comment.jsp?level="+$(this).parent().parent().attr("level");
             });
         },
         error: function () {
@@ -74,7 +97,6 @@ $(function () {
         }
     });
 
-    //todo 隐式评分：页面停留达到30s加0.5分
 
     $("#addCommentBtn").click(function () {
         var comment = $("#addComment").val().trim();
@@ -87,9 +109,13 @@ $(function () {
             data: {"strategyId": $(".content").attr("value"), "content": comment},
             dataType: "json",
             success: function (data) {
+                console.log(JSON.stringify(data));
                 if (data.status == 0) {
                     alert(data.msg);
                     return;
+                }
+                if(data.status == 1){
+                    dwrMessage.publishComment(userId + "@=" + comment + "@=" + data.data, strategyUserId);
                 }
                 history.go(0);
             },

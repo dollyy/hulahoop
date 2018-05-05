@@ -1,13 +1,6 @@
 var navUserId;
 $(function () {
 
-    //回车事件
-/*    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            userLogin();
-        }
-    });*/
-
     //获取当前用户的信息
     $.ajax({
         type: "get",

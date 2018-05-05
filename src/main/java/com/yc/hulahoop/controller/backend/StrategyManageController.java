@@ -101,28 +101,6 @@ public class StrategyManageController {
         return serverResponse;
     }
 
-    /**
-     * 富文本上传图片
-     *
-     * @param session  当前用户
-     * @param file     上传的图片
-     * @param request  request
-     * @param response response
-     * @return 上传成功/失败
-     */
-    @RequestMapping(value = "richtxt_img_upload.action", method = RequestMethod.GET)
-    @ResponseBody
-    private ServerResponse richtxtImgUpload(HttpSession session, MultipartFile file,
-                                            HttpServletRequest request, HttpServletResponse response) {
-        //身份校验
-        ServerResponse serverResponse = isAdmin(session);
-        if (serverResponse.isSuccess()) {   //身份校验成功
-            //todo upload
-            return null;
-        }
-        return serverResponse;
-    }
-
     private ServerResponse<Object> isAdmin(HttpSession session) {
         //检查用户是否登录
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);

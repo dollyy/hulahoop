@@ -121,6 +121,17 @@ public class HelpInfoManageController {
     }
 
 
+    @RequestMapping(value = "verify.action", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse verify(HttpSession session, String title){
+        //身份校验
+        ServerResponse serverResponse = isAdmin(session);
+        if (serverResponse.isSuccess()) {   //身份校验成功
+            return helpInfoService.verify(title);
+        }
+        return serverResponse;
+    }
+
     @RequestMapping(value = "richtext_img_upload.action", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> richtextImgUpload(HttpSession session, MultipartFile file) {

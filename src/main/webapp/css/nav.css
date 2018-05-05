@@ -17,7 +17,7 @@ nav{
     align-items: center;
 }
 #strategy{
-    color: #C8C9B4;
+    color: #fff;
     margin-left: 50px;
 }
 nav img{
@@ -98,7 +98,7 @@ nav img{
 }
 #signinContainer{
     width: 400px;
-    background: url("../images/sign/signin.jpg");
+    background: url("../images/signin.jpg");
 }
 #signWarn{
     width: 100%;
@@ -145,7 +145,7 @@ nav img{
 /* signupContainer */
 #signupContainer{
     width: 254px;
-    background: url(../images/sign/signup.jpg);
+    background: url(../images/signup.jpg);
     text-align: center;
 }
 #upName,#upPwd,#upPwdRe,#upEmail,#upBtn{

@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>comment</title>
+    <title>评论</title>
     <link rel="stylesheet" type="text/css" href="../css/common.css">
     <link rel="stylesheet" type="text/css" href="../css/comment.css">
     <link rel="stylesheet" type="text/css" href="../font/iconfont.css">

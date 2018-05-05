@@ -9,11 +9,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>search</title>
+    <title>搜索攻略</title>
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/search.css">
 </head>
 <body>
+
+<!--side tools-->
+<div class="sideTool">
+    <span class="iconfont icon-fankui"></span>
+    <span class="iconfont icon-fanhuidingbu"></span>
+</div>
 
 <jsp:include page="nav.jsp"/>
 
