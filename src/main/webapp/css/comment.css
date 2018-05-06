@@ -1,11 +1,20 @@
 /*list comments --start*/
 /*the div of all comments*/
+.strategy{
+    width: 1000px;
+    margin: 30px auto 5px auto;
+    font-size: 15px;
+}
+.strategyTitle:hover{
+    text-decoration: underline;
+    color: #687ddd;
+}
 #comments{
     background: #fff;
     padding: 10px;
     box-sizing: border-box;
     width: 1000px;
-    margin: 30px auto;
+    margin: 0 auto 30px auto;
 }
 /*each comment*/
 #comments>div{

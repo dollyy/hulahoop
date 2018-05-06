@@ -46,9 +46,9 @@ $(function () {
                 alert(data.msg);
                 return;
             }
+            $(".strategyTitle").html(data.data[0][0].strategyName).attr("href", "strategyItem.jsp?strategyId=" + data.data[0][0].strategyId);
             $("#comments").append("<div class='comment'></div>");
-            console.log(data.data.length);
-            for(var i=0;i<data.data.length;i++){
+            for (var i = 0; i < data.data.length; i++) {
                 for (var j = 0; j < data.data[i].length; j++) {
                     level = data.data[i][j].level;
                     //calculate the padding-left

@@ -172,10 +172,23 @@ CREATE TABLE dwr_record(
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-TRUNCATE TABLE dwr_record;
-
-SELECT c.id, c.strategy_id AS strategyId, c.level, c.parent, u.avatar, u.id AS responseId, u.username AS responseName, c.content, DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime, c.for_num AS forNum, c.against_num AS againstNum FROM comments c JOIN users u ON c.user_id = u.id WHERE c.level LIKE '2.%' OR level = '2' ORDER BY level;
-
+SELECT
+  c.id,
+  c.strategy_id                             AS strategyId,
+  c.level,
+  c.parent,
+  u.avatar,
+  u.id                                      AS responseId,
+  u.username                                AS responseName,
+  c.content,
+  DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime,
+  c.for_num                                 AS forNum,
+  c.against_num                             AS againstNum,
+  s.name
+FROM comments c
+  JOIN users u ON c.user_id = u.id JOIN strategies s ON c.strategy_id=s.id
+WHERE c.level LIKE '2.%' OR level = 2
+ORDER BY level;
 
 DROP TABLE IF EXISTS user_behaviours;
 -- ------------------------------------

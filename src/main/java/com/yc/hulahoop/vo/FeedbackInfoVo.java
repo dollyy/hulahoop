@@ -12,6 +12,7 @@ public class FeedbackInfoVo {
     private String avatar;
     private String content;
     private String createTime;
+    private String updateTime;
     private int status;
 
     public int getId() {
@@ -84,6 +85,14 @@ public class FeedbackInfoVo {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public int getStatus() {

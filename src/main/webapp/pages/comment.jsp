@@ -18,7 +18,9 @@
 
 <jsp:include page="nav.jsp"/>
 
-<div class="tips"></div>
+<div class="strategy">
+    <a class="strategyTitle" href=""></a>
+</div>
 <div id="comments"></div>
 
 <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>

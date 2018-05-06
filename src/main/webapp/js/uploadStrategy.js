@@ -56,7 +56,7 @@ $(function () {
 
     $.ajax({
         type: "get",
-        url: "/helpInfo/listByUpload.action",
+        url: "/helpInfo/list.action",
         dataType: "json",
         success: function (data) {
             if (data.status == -2) {  //用户未登录

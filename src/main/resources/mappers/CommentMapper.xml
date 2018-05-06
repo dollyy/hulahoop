@@ -164,9 +164,11 @@
             c.content,
             DATE_FORMAT(c.create_time, '%Y-%m-%d %T') AS createTime,
             c.for_num                                 AS forNum,
-            c.against_num                             AS againstNum
+            c.against_num                             AS againstNum,
+            s.name                                    AS strategyName
         FROM comments c
             JOIN users u ON c.user_id = u.id
+            JOIN strategies s ON c.strategy_id = s.id
         WHERE c.level LIKE #{levelStr} OR level = #{level}
         ORDER BY level
     </select>
@@ -202,7 +204,7 @@
     <select id="querySequenceByAdd" resultType="int">
         SELECT count(*)
         FROM comments
-        WHERE parent=0
+        WHERE parent = 0
     </select>
 
     <select id="querySequenceByReply" parameterType="string" resultType="int">

@@ -35,7 +35,7 @@ public class MailServiceImpl implements MailService {
         if (code.equals(trueCode)) {
             //返回一个token标记当前用户
             String resetToken = UUID.randomUUID().toString();
-            //TokenCache.setKey(TokenCache.TOKEN_PREFIX + recipient, resetToken);
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX + recipient, resetToken);
             System.out.println("token--------------"+resetToken);
             return ServerResponse.createBySuccessData(resetToken);
         }

@@ -184,7 +184,7 @@ $(function () {
         var currentId = "";
         days.each(function () {
             var that = $(this);
-            if (top > that.offset().top - 300) {
+            if (top > that.offset().top - 350) {
                 currentId = "." + that.attr("id");
             } else {
                 return false;

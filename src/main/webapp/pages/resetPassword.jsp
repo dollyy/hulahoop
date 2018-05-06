@@ -54,7 +54,7 @@
             <input type="password" id="passwordRe" placeholder="Password Again">
             <input type="button" id="resetBtn" value="确 认" disabled>
         </div>
-        <div class="step step3">重置密码成功，<span id="counttime">5</span>s后返回首页</div>
+        <div class="step step3">重置密码成功，<span id="counttime">3</span>s后返回首页</div>
     </div>
 </div>
 

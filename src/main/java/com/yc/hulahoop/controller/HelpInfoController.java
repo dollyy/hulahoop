@@ -25,7 +25,7 @@ public class HelpInfoController {
      * @param session 当前用户
      * @return list
      */
-    @RequestMapping(value = "listByUpload.action", method = RequestMethod.GET)
+    @RequestMapping(value = "list.action", method = RequestMethod.GET)
     @ResponseBody
     private ServerResponse listByUpload(HttpSession session) {
         //检查用户是否登录
@@ -34,7 +34,7 @@ public class HelpInfoController {
             return ServerResponse.createByErrorCodeMessage(Const.ResponseCode.NEED_LOGIN.getCode(),
                     Const.ResponseCode.NEED_LOGIN.getDescription());
         }
-        return helpInfoService.listByUpload();
+        return helpInfoService.list();
     }
 
 }

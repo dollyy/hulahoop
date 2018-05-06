@@ -13,7 +13,7 @@ public interface HelpInfoService {
 
     ServerResponse delete(Integer helpInfoId);
 
-    ServerResponse listByUpload();
+    ServerResponse list();
 
     ServerResponse search(Integer pageNum, String content);
 

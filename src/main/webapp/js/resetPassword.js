@@ -4,6 +4,22 @@ $(function () {
     $("#email").focusout(checkAccountValue);
     //发送邮件
     $("#queryCode").click(function () {
+        $(this).val("60后重新获取").attr("disabled", "true");
+        var countDown = setInterval(function () {
+            var val = $("#queryCode").val();
+            var num;
+            if (val.length == 7) {
+                num = val.substr(0, 2);
+            } else if (val.length == 6) {
+                num = val.substr(0, 1);
+            }
+            if (num > 0) {
+                $("#queryCode").val((--num) + "后重新获取");
+            } else if (num == 0) {
+                $("#queryCode").val("获取验证码").removeAttr("disabled");
+                clearInterval(countDown);
+            }
+        }, 1000);
         $.ajax({
             type: "post",
             url: "/mail/sendMail.action",

@@ -100,7 +100,7 @@
     <select id="listByUpload" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM help_info WHERE id IN (1,2)
+        FROM help_info
     </select>
 
     <select id="search" resultMap="BaseResultMap">

@@ -41,7 +41,7 @@ public class HelpInfoServiceImpl implements HelpInfoService {
     }
 
     @Override
-    public ServerResponse listByUpload() {
+    public ServerResponse list() {
         Map<String, Object> result = Maps.newHashMap();
         //帮助信息
         List<HelpInfo> helpInfoList = helpInfoMapper.listByUpload();

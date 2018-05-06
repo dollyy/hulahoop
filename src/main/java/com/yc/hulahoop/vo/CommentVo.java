@@ -5,6 +5,7 @@ import java.util.Date;
 public class CommentVo {
     private int id;
     private int StrategyId;
+    private String strategyName;
     private String level;
     private String avatar;
     private String parent;
@@ -32,6 +33,14 @@ public class CommentVo {
 
     public void setStrategyId(int strategyId) {
         StrategyId = strategyId;
+    }
+
+    public String getStrategyName() {
+        return strategyName;
+    }
+
+    public void setStrategyName(String strategyName) {
+        this.strategyName = strategyName;
     }
 
     public String getLevel() {

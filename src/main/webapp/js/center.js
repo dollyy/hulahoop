@@ -355,6 +355,9 @@ $(function () {
                     alert(data.msg);
                     return;
                 }
+                if(data.status == 1){   //更新成功
+                    alert(data.msg);
+                }
                 history.go(0);
             },
             error: function () {
@@ -387,6 +390,22 @@ $(function () {
     });
     //更换邮箱获取验证码
     $("#updateBtn").click(function () {
+        $(this).val("60后重新获取").attr("disabled", "true");
+        var countDown = setInterval(function () {
+            var val = $("#updateBtn").val();
+            var num;
+            if (val.length == 7) {
+                num = val.substr(0, 2);
+            } else if (val.length == 6) {
+                num = val.substr(0, 1);
+            }
+            if (num > 0) {
+                $("#updateBtn").val((--num) + "后重新获取");
+            } else if (num == 0) {
+                $("#updateBtn").val("获取验证码").removeAttr("disabled");
+                clearInterval(countDown);
+            }
+        }, 1000);
         $.ajax({
             type: "post",
             url: "/mail/sendMail.action",
@@ -944,7 +963,7 @@ function sendFeedback() {
             $(".chats").append("<div parent='" + parent + "' sequence='" + sequence + "' class='rightSide'>" +
                 "<div class='date'>" + getformatDate() + "</div><img src='" + userAvatar + "'>" +
                 "<span class='feedContent'>" + response + "</span></div>");
-            dwrMessage.publishFeed(8);
+            dwrMessage.publishFeed(1);
         },
         error: function () {
             window.location.href = "systemError.jsp";
