@@ -27,4 +27,6 @@ public interface UserBehaviourMapper {
     List<UserBehaviour> queryBehaviourByUserId(Integer userId);
 
     List<Integer> queryStrategyIdByUserId(Integer userId);
+
+    int deleteItem(@Param("strategyList") List<Integer> strategyList);
 }

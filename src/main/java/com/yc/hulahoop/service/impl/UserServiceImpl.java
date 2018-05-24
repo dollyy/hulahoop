@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(null); //禁止修改密码
         int count = userMapper.updateByPrimaryKeySelective(user);
         if (count > 0) {
-            return ServerResponse.createBySuccessData(user);
+            return ServerResponse.createBySuccess("更新用户信息成功", user);
         }
         return ServerResponse.createByErrorMessage("更新用户信息失败");
     }

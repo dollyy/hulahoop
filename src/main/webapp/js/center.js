@@ -191,7 +191,7 @@ $(function () {
                     forClass = data.data.list[i].forStatus == 1 ? "iconfont icon-zan1 forNum navColor" : "iconfont icon-zan1 forNum";
                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
                         "<img id='mainImg' src='" + data.data.list[i].mainImg + "'><div class='collectInfo'><span>" +
-                        "<span class='title'>" + data.data.list[i].strategyName + "</span><span class='author'>" +
+                        "<span class='title'><a href='strategyItem.jsp?strategyId=" + data.data.list[i].id + "'>" + data.data.list[i].strategyName + "</a></span><span class='author'>" +
                         data.data.list[i].username + "</span><span class='city'>" + data.data.list[i].cityName + "</span></span>" +
                         "<span class='bot'><span class='date'>" + data.data.list[i].createTime + "</span><span>" +
                         "<span class='" + forClass + "'></span><span>" + data.data.list[i].forNum + "</span>&nbsp;&nbsp;" +
@@ -358,7 +358,7 @@ $(function () {
                 if(data.status == 1){   //更新成功
                     alert(data.msg);
                 }
-                history.go(0);
+                //history.go(0);
             },
             error: function () {
                 window.location.href = "systemError.jsp";
@@ -384,8 +384,30 @@ $(function () {
             $("#updateBtn").attr("disabled", "true");
             $("#editBtn").attr("disabled", "true");
         } else {
-            $("#updateBtn").removeAttr("disabled");
-            $("#editBtn").removeAttr("disabled");
+            $.ajax({
+                type:"post",
+                url:"/user/verify.action",
+                data: {"val": newEmail, "type": "email"},
+                dataType:"json",
+                success:function (data) {
+                    if (data.status == -3) {  //参数错误
+                        alert(data.msg);
+                        return;
+                    }
+                    //邮箱校验失败
+                    if (data.status == 0) {
+                        $(".emailWarn").html("邮箱已存在");
+                        $("#updateBtn").attr("disabled", "true");
+                        $("#editBtn").attr("disabled", "true");
+                        return;
+                    }
+                    $("#updateBtn").removeAttr("disabled");
+                    $("#editBtn").removeAttr("disabled");
+                },
+                error:function () {
+                    window.location.href = "systemError.jsp";
+                }
+            });
         }
     });
     //更换邮箱获取验证码

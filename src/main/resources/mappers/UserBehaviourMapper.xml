@@ -131,4 +131,16 @@
         FROM user_behaviours
         WHERE user_id = #{userId}
     </select>
+
+    <delete id="deleteItem" parameterType="map">
+        DELETE FROM user_behaviours
+        <where>
+            <if test="strategyList != null">
+                strategy_id IN
+                <foreach collection="strategyList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
 </mapper>

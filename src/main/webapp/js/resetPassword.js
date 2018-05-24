@@ -1,7 +1,46 @@
 var email, value, passwordNew;
 $(function () {
     //step1
-    $("#email").focusout(checkAccountValue);
+    $("#email").focusout(function () {
+        email = $("#email").val();
+        if (email == null || email == "") {
+            $("#confirmBtn").attr("disabled", "true");
+            return;
+        }
+        if (!checkEmailFormat(email)) {
+            $(".error").html("邮箱错误").show();
+            $("#queryCode").attr("disabled", "true");
+            return;
+        }
+        $(".error").hide();
+        $.ajax({
+            type:"post",
+            url:"/user/verify.action",
+            data: {"val": email, "type": "email"},
+            dataType:"json",
+            success:function (data) {
+                if (data.status == -3) {  //参数错误
+                    alert(data.msg);
+                    return;
+                }
+                //邮箱已存在
+                if (data.status == 0) {
+                    $(".error").hide();
+                    $("#queryCode").removeAttr("disabled");
+                    if (value == null || value == "") {
+                        $("#confirmBtn").attr("disabled", "true");
+                        return;
+                    }
+                    $("#confirmBtn").removeAttr("disabled");
+                    return;
+                }
+                $(".error").html("邮箱不存在，快去注册吧").show();
+            },
+            error:function () {
+                window.location.href = "systemError.jsp";
+            }
+        });
+    });
     //发送邮件
     $("#queryCode").click(function () {
         $(this).val("60后重新获取").attr("disabled", "true");
@@ -33,7 +72,14 @@ $(function () {
         });
     });
     var token;
-    $("#code").keyup(checkAccountValue);
+    $("#code").keyup(function () {
+        value = $("#code").val();
+        if (value == null || value == "") {
+            $("#confirmBtn").attr("disabled", "true");
+            return;
+        }
+        $("#confirmBtn").removeAttr("disabled");
+    });
     $("#confirmBtn").click(function () {
         $.ajax({
             type: "post",
@@ -92,27 +138,6 @@ $(function () {
         });
     });
 });
-
-function checkAccountValue() {
-    email = $("#email").val();
-    value = $("#code").val();
-    if (email == null || email == "") {
-        $("#confirmBtn").attr("disabled", "true");
-        return;
-    }
-    if (!checkEmailFormat(email)) {
-        $(".error").html("邮箱错误").show();
-        $("#queryCode").attr("disabled", "true");
-        return;
-    }
-    $(".error").hide();
-    $("#queryCode").removeAttr("disabled");
-    if (value == null || value == "") {
-        $("#confirmBtn").attr("disabled", "true");
-        return;
-    }
-    $("#confirmBtn").removeAttr("disabled");
-}
 
 function checkPasswordValue() {
     passwordNew = $("#password").val();

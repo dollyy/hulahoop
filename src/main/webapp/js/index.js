@@ -1,5 +1,3 @@
-//todo
-//删除几个攻略看看推荐会不会报错
 var i;
 $(function () {
     $.ajax({

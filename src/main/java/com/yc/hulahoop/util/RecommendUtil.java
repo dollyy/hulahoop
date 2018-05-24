@@ -153,6 +153,7 @@ public class RecommendUtil {
 
         //2.建立用户评分矩阵, 行:用户总数, 列:攻略总数
         double[][] userScore = new double[userCount][strategyCount];
+        System.out.println(userScore.length+","+userScore[0].length);
         //为用户评分矩阵赋值
         List<UserBehaviourVo> records;
         for (i = 0; i < userCount; i++) {
@@ -166,6 +167,7 @@ public class RecommendUtil {
             }
             //为有评分的攻略赋值
             for (UserBehaviourVo record : records) {
+                System.out.println(record.getStrategyId()+","+record.getOrder());
                 userScore[i][record.getOrder() - 1] = record.getPreference().doubleValue();
             }
         }

@@ -44,7 +44,7 @@
     </div>
     <input type="text" id="title" placeholder="攻略标题，不超过20字">
 </div>
-<input type="text" id="subTitle" placeholder="子标题，不超过10字">
+<input type="text" id="subTitle" placeholder="子标题">
 <!-- wangEditor -->
 <div id="editor"></div>
 <div class="addContainer">

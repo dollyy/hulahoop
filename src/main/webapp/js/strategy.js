@@ -90,6 +90,7 @@ function packageData(data) {
                 dataType: "json",
                 success: function (data) {
                     updateList(data.data);
+                    $("body,html").animate({scrollTop:0},0);
                 },
                 error: function () {
                     window.location.href = "systemError.jsp";
@@ -177,6 +178,7 @@ function packUpdateList(data) {
                 dataType: "json",
                 success: function (data) {
                     packUpdateList(data.data);
+                    $("body,html").animate({scrollTop:0},0);
                 },
                 error: function () {
                     window.location.href = "systemError.jsp";

@@ -315,8 +315,10 @@ public class StrategyServiceImpl implements StrategyService {
             //删除时添加user_id防止横向越权
             strategyMapper.deleteByUserIdAndStrategyId(userId, strategyList);
         }
-        //todo 从strategy_item中删除
+        //从strategy_item中删除
         strategyItemMapper.deleteItem(strategyList);
+        //从user_behaviours中删除
+        userBehaviourMapper.deleteItem(strategyList);
         //删除用户收藏
         int count = collectionMapper.deleteByStrategyId(strategyList);
         //删除成功

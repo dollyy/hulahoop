@@ -18,7 +18,7 @@ public interface StrategyItemMapper {
 
     int updateByPrimaryKey(StrategyItem record);
 
-    int deleteItem(@Param("strategyIdList") List<Integer> strategyIdList);
+    int deleteItem(@Param("strategyList") List<Integer> strategyList);
 
     List<StrategyItem> queryStrategyItem();
 
