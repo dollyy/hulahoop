@@ -66,8 +66,8 @@ $(function () {
                         + data.data[i][j].againstNum + "</span><span class='addComment'>回复</span></div></div></div>" +
                         "<div class='commentContent' style='padding-left: " + commentPadding + "px'><div>" +
                         "<span class='currentUser'>" + username + "</span><textarea class='currentComment'></textarea></div>" +
-                        "<div class='btns'><input type='button' class='btnAdd' value='add'>" +
-                        "<input type='button' class='btnCancle' value='cancle'></div></div></div>");
+                        "<div class='btns'><input type='button' class='btnAdd' value='添加'>" +
+                        "<input type='button' class='btnCancle' value='取消'></div></div></div>");
 
                     //click 回复 to show the addComment div
                     $(".addComment").unbind("click").bind("click", showAddComment);
@@ -145,8 +145,8 @@ function addComment() {
                 "<span class='addComment'>回复</span></div></div></div>" +
                 "<div class='commentContent' style='padding-left: " + commentPadding + "px'><div>" +
                 "<span class='currentUser'>" + username + "</span><textarea class='currentComment'></textarea></div>" +
-                "<div class='btns'><input type='button' class='btnAdd' value='add'>" +
-                "<input type='button' class='btnCancle' value='cancle'></div></div></div>");
+                "<div class='btns'><input type='button' class='btnAdd' value='添加'>" +
+                "<input type='button' class='btnCancle' value='取消'></div></div></div>");
 
             //clean the comment textarea
             that.parent().parent().hide();

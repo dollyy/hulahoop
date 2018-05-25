@@ -29,7 +29,10 @@ $(function () {
     });
 
     //查看反馈信息
-    $(".icon-lingdang").click(feedClick);
+    //$(".icon-lingdang").click(feedClick);
+    $(".icon-lingdang").click(function () {
+        window.location.href="admin.html?feedback"
+    });
 
     //获取用户信息
     $.ajax({
@@ -76,12 +79,14 @@ $(function () {
     //click bg
     $("#bg").height($(document).height()).width($(document).width());
     $("#bg").click(function () {
-        $(this).slideUp();
+/*        $(this).slideUp();
         $(".opeContainer").slideUp();
         $(".feedbackDetail").slideUp();
         $(".strategyDetail").slideUp();
         $("#subTitle").val("");
+        $(".opeContainer .w-e-text").html("");*/
         $(".opeContainer .w-e-text").html("");
+        history.go(0);
     });
 
     //搜索
@@ -179,17 +184,18 @@ $(function () {
         });
     });
 
-    switch (parseInt(getQueryStringArgs())) {
-        case 1:
+    var index=location.search.length > 0 ? location.search.substring(1) : "";
+    switch (index) {
+        case "index":
             indexClick();
             break;
-        case 2:
+        case "help":
             helpClick();
             break;
-        case 3:
+        case "feedback":
             feedClick();
             break;
-        case 4:
+        case "strategy":
             strategyClick();
             break;
         default:

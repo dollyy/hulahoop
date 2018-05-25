@@ -73,11 +73,6 @@ public class RecommendUtil {
             return "";
         }
 
-        //将list排序
-        //Collections.sort(recommendedItems);
-        for (RecommendedItem recommendedItem : recommendedItems) {
-            System.out.println("===========" + recommendedItem.getItemID() + "," + recommendedItem.getValue());
-        }
         //将strategy_id组合起来存进数据库
         int recommendSize = recommendedItems.size();
         int recommendLength = recommendSize > 10 ? Const.HOW_MANY : recommendSize;    //推荐列表不足10个则有多少推荐多少
@@ -153,7 +148,6 @@ public class RecommendUtil {
 
         //2.建立用户评分矩阵, 行:用户总数, 列:攻略总数
         double[][] userScore = new double[userCount][strategyCount];
-        System.out.println(userScore.length+","+userScore[0].length);
         //为用户评分矩阵赋值
         List<UserBehaviourVo> records;
         for (i = 0; i < userCount; i++) {
@@ -167,7 +161,6 @@ public class RecommendUtil {
             }
             //为有评分的攻略赋值
             for (UserBehaviourVo record : records) {
-                System.out.println(record.getStrategyId()+","+record.getOrder());
                 userScore[i][record.getOrder() - 1] = record.getPreference().doubleValue();
             }
         }
@@ -256,13 +249,13 @@ public class RecommendUtil {
         dataSource.setDatabaseName(PropertiesUtil.getProperty("database")); //数据库
         //使用ConnectionPoolDataSource避免因数据库数据量太大影响性能
         ConnectionPoolDataSource connectionPoolDataSource = new ConnectionPoolDataSource(dataSource);
-        //根据文件建立数据模型
+        //根据user_behaviours表建立数据模型
         JDBCDataModel dataModel = new MySQLJDBCDataModel(connectionPoolDataSource,
                 PropertiesUtil.getProperty("recommendTable"), PropertiesUtil.getProperty("userId"),
                 PropertiesUtil.getProperty("itemId"), PropertiesUtil.getProperty("preference"),
                 PropertiesUtil.getProperty("date"));
         try {
-            //计算用户相似度，使用基于皮尔逊相关系数计算相似度
+            //计算物品相似度，使用基于皮尔逊相关系数计算相似度
             ItemSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
             //构建推荐器，协同过滤推荐有两种，分别是基于用户的和基于物品的，这里使用基于物品的协同过滤推荐
             GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(dataModel, similarity);

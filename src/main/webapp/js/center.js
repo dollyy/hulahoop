@@ -217,8 +217,8 @@ $(function () {
                                     forClass = data.data.list[i].forStatus == 1 ? "forNum navColor" : "forNum";
                                     $(".collects").append("<div class='collect' value='" + data.data.list[i].id + "'>" +
                                         "<img id='mainImg' src='" + data.data.list[i].mainImg + "'>" +
-                                        "<div class='collectInfo'><span><span class='title'>"
-                                        + data.data.list[i].strategyName + "</span><span class='author'>" +
+                                        "<div class='collectInfo'><span><span class='title'><a href='strategyItem.jsp?strategyId=" + data.data.list[i].id + "'>"
+                                        + data.data.list[i].strategyName + "</a></span><span class='author'>" +
                                         data.data.list[i].username + "</span><span class='city'>" +
                                         data.data.list[i].cityName + "</span></span><span class='bot'><span class='date'>"
                                         + data.data.list[i].createTime + "</span><span><span class='iconfont icon-zan1'>" +

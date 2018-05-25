@@ -22,7 +22,7 @@ $(function () {
             packUpdateList(data.data);
         },
         error: function () {
-            console.log("search error");
+            window.location.href = "systemError.jsp";
         }
     });
 });
@@ -42,7 +42,24 @@ function packUpdateList(data) {
     }
     //strategies click
     $(".searchContainer .strategy").off("click").on("click", function () {
-        window.location.href = "strategyItem.jsp?strategyId=" + $(this).attr("value");
+        var that = $(this);
+        //获取当前用户的信息
+        $.ajax({
+            type: "get",
+            url: "/user/queryUserInformation.action",
+            dataType: "json",
+            success: function (data) {
+                if (data.status == -2) {    //用户未登录
+                    $("#signinContainer").slideDown();  //显示登录框
+                    $("#bg").slideDown();   //显示背景
+                    return;
+                }
+                window.location.href = "strategyItem.jsp?strategyId=" + that.attr("value");
+            },
+            error: function () {
+                window.location.href = "systemError.jsp";
+            }
+        });
     });
     //pages
     $("#page").paging({
@@ -57,7 +74,7 @@ function packUpdateList(data) {
                     packUpdateList(data.data);
                 },
                 error: function () {
-                    console.log("page error");
+                    window.location.href = "systemError.jsp";
                 }
             });
         }

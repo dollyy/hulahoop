@@ -16,8 +16,6 @@ public class DWRController {
     @Autowired
     DwrRecordService dwrRecordService;
 
-    /*@RemoteMethod*/
-
     public void onPageLoad(int userId) {
         ScriptSession scriptSession = WebContextFactory.get().getScriptSession();
         scriptSession.setAttribute("userId", userId);   //将标识唯一用户的userId存进scriptSession
@@ -54,7 +52,6 @@ public class DWRController {
 
     //推送反馈
     public void publishFeed(final Integer userId){
-        System.out.println("=================publishFeed"+userId);
         //dwr推送
         Browser.withAllSessionsFiltered(new ScriptSessionFilter() {
             @Override

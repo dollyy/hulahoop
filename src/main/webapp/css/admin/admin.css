@@ -64,6 +64,12 @@ body{
     font-weight: bold;
     font-size: 15px;
 }
+.catalog li a{
+    color: #B3B3B3;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
 .catalog li:hover{
     background: #4a4a4a;
     color: #B3B3B3;
@@ -123,8 +129,9 @@ body{
 }
 /* 2-2.indexContainer start */
 .indexContainer{
+    font-size: 50px;
+    line-height: 618px;
     text-align: center;
-    /*display: none;*/
 }
 /* 2-2.indexContainer end */
 /* 2-3.helpContainer start */

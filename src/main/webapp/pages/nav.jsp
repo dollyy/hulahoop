@@ -57,8 +57,8 @@
     <!--登录容器-->
     <form id="signinContainer">
         <a id="goUp">去注册</a>
-        <input type="text" id="inName" name="username" placeholder="Username or email"><br>
-        <input type="password" id="inPwd" name="password" placeholder="Password"><br>
+        <input type="text" id="inName" name="username" placeholder="username or email"><br>
+        <input type="password" id="inPwd" name="password" placeholder="password"><br>
         <span id="pwdOperation">
                 <a href="resetPassword.jsp" id="resetPwd">忘记密码 </a>
             </span><br>
@@ -67,10 +67,10 @@
     <!--注册容器-->
     <form id="signupContainer">
         <a id="goIn">去登录</a>
-        <input type="text" id="upName" name="username" placeholder="Username"><br>
-        <input type="password" id="upPwd" name="password" placeholder="Password"><br>
-        <input type="password" id="upPwdRe" name="passwordRe" placeholder="Password again"><br>
-        <input type="text" id="upEmail" name="email" placeholder="Email"><br>
+        <input type="text" id="upName" name="username" placeholder="username"><br>
+        <input type="password" id="upPwd" name="password" placeholder="password"><br>
+        <input type="password" id="upPwdRe" name="passwordRe" placeholder="password again"><br>
+        <input type="text" id="upEmail" name="email" placeholder="email"><br>
         <input type="button" id="upBtn" value="注 册" disabled>
     </form>
 </div>
